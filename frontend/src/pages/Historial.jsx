@@ -7,11 +7,16 @@ function Historial() {
   const [historial, setHistorial] = useState([]);
   const [filtroCampo, setFiltroCampo] = useState('');
   const [filtroUsuario, setFiltroUsuario] = useState('');
+  const [filtroEntidad, setFiltroEntidad] = useState('todos');
   const navigate = useNavigate();
 
   const camposDisponibles = [
-    '', 'nombre', 'usuario', 'correo', 'contrasena', 'rol', 'estado'
+    '', 'nombre', 'usuario', 'correo', 'contrasena', 'rol', 'estado', 'precio', 'categoria'
   ];
+
+  useEffect(() => {
+    obtenerHistorial();
+  }, []);
 
   const obtenerHistorial = async () => {
     try {
@@ -22,20 +27,14 @@ function Historial() {
     }
   };
 
-  useEffect(() => {
-    obtenerHistorial();
-  }, []);
-
   const getDescripcionAccion = (accion, campo, valorAnterior, valorNuevo) => {
-    if (accion.startsWith('eliminación de')) {
-      return `${accion}`;
-    }
+    if (accion.startsWith('eliminación de')) return accion;
 
     if (accion === 'creación') {
-      return `Usuario creado: ${valorNuevo}`;
+      return `Creación: ${valorNuevo}`;
     }
 
-    if (accion === 'modificación') {
+    if (accion === 'modificación' || accion.includes('Modificación de platillo')) {
       if (campo === 'rol') {
         return `Cambio de rol: ${valorAnterior} → ${valorNuevo}`;
       } else if (campo === 'contrasena') {
@@ -46,13 +45,7 @@ function Historial() {
     }
 
     if (accion === 'eliminación') {
-      if (campo === 'estado') {
-        return `Usuario eliminado: ${valorAnterior} → ${valorNuevo}`;
-      } else if (campo === 'usuario') {
-        return `Usuario eliminado: ${valorAnterior}`;
-      } else {
-        return `Eliminación de ${campo}: ${valorAnterior || '—'}`;
-      }
+      return `Eliminación de ${campo}: ${valorAnterior || '—'}`;
     }
 
     return accion;
@@ -60,7 +53,13 @@ function Historial() {
 
   const historialFiltrado = historial.filter(h =>
     (!filtroCampo || h.campo === filtroCampo) &&
-    (!filtroUsuario || h.accion.toLowerCase().includes(filtroUsuario.toLowerCase()))
+    (!filtroUsuario || (
+      (h.usuario?.nombre && h.usuario.nombre.toLowerCase().includes(filtroUsuario.toLowerCase())) ||
+      (h.platillo?.nombre && h.platillo.nombre.toLowerCase().includes(filtroUsuario.toLowerCase()))
+    )) &&
+    (filtroEntidad === 'todos' ||
+      (filtroEntidad === 'usuarios' && h.usuario) ||
+      (filtroEntidad === 'platillos' && h.platillo))
   );
 
   return (
@@ -95,6 +94,15 @@ function Historial() {
         flexWrap: 'wrap'
       }}>
         <div>
+          <label style={{ marginRight: '0.5rem' }}>Filtrar por entidad:</label>
+          <select value={filtroEntidad} onChange={(e) => setFiltroEntidad(e.target.value)} style={inputStyle}>
+            <option value="todos">Todos</option>
+            <option value="usuarios">Usuarios</option>
+            <option value="platillos">Platillos</option>
+          </select>
+        </div>
+
+        <div>
           <label style={{ marginRight: '0.5rem' }}>Filtrar por campo:</label>
           <select value={filtroCampo} onChange={(e) => setFiltroCampo(e.target.value)} style={inputStyle}>
             {camposDisponibles.map((campo, i) => (
@@ -106,10 +114,10 @@ function Historial() {
         </div>
 
         <div>
-          <label style={{ marginRight: '0.5rem' }}>Filtrar por usuario:</label>
+          <label style={{ marginRight: '0.5rem' }}>Filtrar por afectado:</label>
           <input
             type="text"
-            placeholder="Nombre o usuario afectado"
+            placeholder="Nombre de usuario o platillo"
             value={filtroUsuario}
             onChange={(e) => setFiltroUsuario(e.target.value)}
             style={inputStyle}
@@ -129,6 +137,7 @@ function Historial() {
           <thead>
             <tr>
               <th style={thStyle}>ID</th>
+              <th style={thStyle}>Entidad</th>
               <th style={thStyle}>Campo</th>
               <th style={thStyle}>Valor anterior</th>
               <th style={thStyle}>Valor nuevo</th>
@@ -141,6 +150,11 @@ function Historial() {
             {historialFiltrado.map((h) => (
               <tr key={h.id}>
                 <td style={tdStyle}>{h.id}</td>
+                <td style={tdStyle}>
+                  {h.usuario?.nombre ? `Usuario: ${h.usuario.nombre}` :
+                    h.platillo?.nombre ? `Platillo: ${h.platillo.nombre}` :
+                      '—'}
+                </td>
                 <td style={tdStyle}>{h.campo}</td>
                 <td style={tdStyle}>{h.valorAnterior || '—'}</td>
                 <td style={tdStyle}>{h.valorNuevo || '—'}</td>

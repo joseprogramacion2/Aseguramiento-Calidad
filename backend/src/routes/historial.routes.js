@@ -10,9 +10,9 @@ router.get('/', async (req, res) => {
     const historial = await prisma.historialModificacion.findMany({
       orderBy: { fecha: 'desc' },
       include: {
-        responsable: {
-          select: { nombre: true }
-        }
+        responsable: { select: { nombre: true } },
+        platillo: { select: { nombre: true } },
+        usuario: { select: { nombre: true } }
       }
     });
     res.json(historial);

@@ -11,6 +11,12 @@ function Platillos() {
     precio: '',
     categoria: ''
   });
+  const [modoEdicion, setModoEdicion] = useState(false);
+  const [idEditando, setIdEditando] = useState(null);
+
+  // 🔐 Obtener ID del usuario logueado
+  const usuarioLogueado = JSON.parse(localStorage.getItem('usuario'));
+  const responsableId = usuarioLogueado?.id;
 
   const obtenerPlatillos = async () => {
     try {
@@ -32,12 +38,45 @@ function Platillos() {
   const crearPlatillo = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3001/platillos', formData);
-      alert('Platillo registrado correctamente');
+      if (modoEdicion) {
+        // 🔄 ACTUALIZAR con historial
+        await axios.put(`http://localhost:3001/platillos/${idEditando}`, {
+          ...formData,
+          responsableId
+        });
+        alert('Platillo actualizado correctamente');
+      } else {
+        // ➕ CREAR
+        await axios.post('http://localhost:3001/platillos', formData);
+        alert('Platillo registrado correctamente');
+      }
       setFormData({ nombre: '', precio: '', categoria: '' });
+      setModoEdicion(false);
+      setIdEditando(null);
       obtenerPlatillos();
     } catch (error) {
-      alert(error.response?.data?.error || 'Error al registrar platillo');
+      alert(error.response?.data?.error || 'Error al guardar platillo');
+    }
+  };
+
+  const editarPlatillo = (platillo) => {
+    setModoEdicion(true);
+    setIdEditando(platillo.id);
+    setFormData({
+      nombre: platillo.nombre,
+      precio: platillo.precio,
+      categoria: platillo.categoria
+    });
+  };
+
+  const eliminarPlatillo = async (id) => {
+    if (!window.confirm('¿Deseas eliminar este platillo?')) return;
+    try {
+      await axios.delete(`http://localhost:3001/platillos/${id}`);
+      obtenerPlatillos();
+      alert('Platillo eliminado');
+    } catch (error) {
+      alert('Error al eliminar');
     }
   };
 
@@ -48,9 +87,6 @@ function Platillos() {
       backgroundColor: '#f9f9f9',
       minHeight: '100vh'
     }}>
-
-
-        {/* Botón regresar */}
       <div style={{ marginBottom: '1.5rem' }}>
         <button onClick={() => navigate('/admin')} style={{
           backgroundColor: '#004d4d',
@@ -64,9 +100,7 @@ function Platillos() {
         </button>
       </div>
 
-        <h2 style={{ color: '#333',marginBottom: '1.5rem' }}>Gestión de Platillos</h2>
-        
-
+      <h2 style={{ color: '#333', marginBottom: '1.5rem' }}>Gestión de Platillos</h2>
 
       <section style={{
         backgroundColor: '#ffffff',
@@ -84,6 +118,8 @@ function Platillos() {
               paddingBottom: '0.5rem'
             }}>
               <strong>{p.nombre}</strong> - Q{p.precio} - <em>{p.categoria}</em>
+              <button onClick={() => editarPlatillo(p)} style={{ marginLeft: '1rem' }}>Editar</button>
+              <button onClick={() => eliminarPlatillo(p.id)} style={{ marginLeft: '0.5rem', color: 'red' }}>Eliminar</button>
             </li>
           ))}
         </ul>
@@ -95,7 +131,9 @@ function Platillos() {
         borderRadius: '10px',
         boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
       }}>
-        <h3 style={{ marginBottom: '1rem' }}>Registrar nuevo platillo</h3>
+        <h3 style={{ marginBottom: '1rem' }}>
+          {modoEdicion ? 'Editar platillo' : 'Registrar nuevo platillo'}
+        </h3>
         <form onSubmit={crearPlatillo} style={{
           display: 'flex',
           flexDirection: 'column',
@@ -112,7 +150,7 @@ function Platillos() {
             borderRadius: '5px',
             cursor: 'pointer'
           }}>
-            Registrar Platillo
+            {modoEdicion ? 'Actualizar Platillo' : 'Registrar Platillo'}
           </button>
         </form>
       </section>
