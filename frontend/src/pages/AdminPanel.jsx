@@ -1,4 +1,3 @@
-//adminpanel
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -66,6 +65,7 @@ function AdminPanel() {
         <Link to="/admin/usuarios" style={linkStyle}>👥 Usuarios</Link>
         <Link to="/admin/platillos" style={linkStyle}>🍽 Platillos</Link>
         <Link to="/admin/historial" style={linkStyle}>📜 Historial</Link>
+        <Link to="/admin/menu" style={linkStyle}>📋 Menú</Link> {/* ✅ NUEVO LINK */}
       </nav>
     </div>
   );

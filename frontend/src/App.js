@@ -8,6 +8,7 @@ import Usuarios from './pages/Usuarios';
 import Platillos from './pages/Platillos';
 import Historial from './pages/Historial';
 import PanelBasico from './pages/PanelBasico';
+import MenuAdmin from './pages/MenuAdmin'; // ✅ IMPORTACIÓN NUEVA
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/admin/usuarios" element={<Usuarios />} />
         <Route path="/admin/platillos" element={<Platillos />} />
         <Route path="/admin/historial" element={<Historial />} />
+        <Route path="/admin/menu" element={<MenuAdmin />} /> {/* ✅ NUEVA RUTA */}
         <Route path="/panel" element={<PanelBasico />} />
       </Routes>
     </Router>
