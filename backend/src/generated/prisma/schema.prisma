@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id            Int      @id @default(autoincrement())
+  nombre        String
+  usuario       String   @unique
+  correo        String   @unique
+  contrasena    String
+  estado        Boolean  @default(true)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  rolId Int
+  rol   Rol @relation(fields: [rolId], references: [id])
+
+  historialModificaciones HistorialModificacion[] @relation("ModificacionesDelUsuario")
+  historialResponsable    HistorialModificacion[] @relation("ModificacionesHechasPor")
+}
+
+model Rol {
+  id     Int    @id @default(autoincrement())
+  nombre String @unique
+
+  usuarios Usuario[]
+}
+
+model HistorialModificacion {
+  id            Int      @id @default(autoincrement())
+  usuarioId     Int
+  campo         String
+  valorAnterior String?
+  valorNuevo    String?
+  fecha         DateTime @default(now())
+  accion        String
+  responsableId Int
+
+  usuario     Usuario @relation("ModificacionesDelUsuario", fields: [usuarioId], references: [id])
+  responsable Usuario @relation("ModificacionesHechasPor", fields: [responsableId], references: [id])
+}
+
+model Platillo {
+  id         Int      @id @default(autoincrement())
+  nombre     String   @unique
+  precio     Float
+  categoria  String
+  creadoEn   DateTime @default(now())
+  disponible Boolean  @default(true)
+}
