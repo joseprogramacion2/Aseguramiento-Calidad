@@ -132,22 +132,6 @@ exports.Prisma.UsuarioScalarFieldEnum = {
   rolId: 'rolId'
 };
 
-exports.Prisma.RolScalarFieldEnum = {
-  id: 'id',
-  nombre: 'nombre'
-};
-
-exports.Prisma.HistorialModificacionScalarFieldEnum = {
-  id: 'id',
-  usuarioId: 'usuarioId',
-  campo: 'campo',
-  valorAnterior: 'valorAnterior',
-  valorNuevo: 'valorNuevo',
-  fecha: 'fecha',
-  accion: 'accion',
-  responsableId: 'responsableId'
-};
-
 exports.Prisma.PlatilloScalarFieldEnum = {
   id: 'id',
   nombre: 'nombre',
@@ -155,6 +139,23 @@ exports.Prisma.PlatilloScalarFieldEnum = {
   categoria: 'categoria',
   creadoEn: 'creadoEn',
   disponible: 'disponible'
+};
+
+exports.Prisma.RolScalarFieldEnum = {
+  id: 'id',
+  nombre: 'nombre'
+};
+
+exports.Prisma.HistorialModificacionScalarFieldEnum = {
+  id: 'id',
+  campo: 'campo',
+  valorAnterior: 'valorAnterior',
+  valorNuevo: 'valorNuevo',
+  fecha: 'fecha',
+  accion: 'accion',
+  responsableId: 'responsableId',
+  usuarioId: 'usuarioId',
+  platilloId: 'platilloId'
 };
 
 exports.Prisma.SortOrder = {
@@ -175,9 +176,9 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.ModelName = {
   Usuario: 'Usuario',
+  Platillo: 'Platillo',
   Rol: 'Rol',
-  HistorialModificacion: 'HistorialModificacion',
-  Platillo: 'Platillo'
+  HistorialModificacion: 'HistorialModificacion'
 };
 
 /**

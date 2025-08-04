@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Usuario = $Result.DefaultSelection<Prisma.$UsuarioPayload>
 /**
+ * Model Platillo
+ * 
+ */
+export type Platillo = $Result.DefaultSelection<Prisma.$PlatilloPayload>
+/**
  * Model Rol
  * 
  */
@@ -28,11 +33,6 @@ export type Rol = $Result.DefaultSelection<Prisma.$RolPayload>
  * 
  */
 export type HistorialModificacion = $Result.DefaultSelection<Prisma.$HistorialModificacionPayload>
-/**
- * Model Platillo
- * 
- */
-export type Platillo = $Result.DefaultSelection<Prisma.$PlatilloPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -170,6 +170,16 @@ export class PrismaClient<
   get usuario(): Prisma.UsuarioDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.platillo`: Exposes CRUD operations for the **Platillo** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Platillos
+    * const platillos = await prisma.platillo.findMany()
+    * ```
+    */
+  get platillo(): Prisma.PlatilloDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.rol`: Exposes CRUD operations for the **Rol** model.
     * Example usage:
     * ```ts
@@ -188,16 +198,6 @@ export class PrismaClient<
     * ```
     */
   get historialModificacion(): Prisma.HistorialModificacionDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.platillo`: Exposes CRUD operations for the **Platillo** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Platillos
-    * const platillos = await prisma.platillo.findMany()
-    * ```
-    */
-  get platillo(): Prisma.PlatilloDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -639,9 +639,9 @@ export namespace Prisma {
 
   export const ModelName: {
     Usuario: 'Usuario',
+    Platillo: 'Platillo',
     Rol: 'Rol',
-    HistorialModificacion: 'HistorialModificacion',
-    Platillo: 'Platillo'
+    HistorialModificacion: 'HistorialModificacion'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -660,7 +660,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "usuario" | "rol" | "historialModificacion" | "platillo"
+      modelProps: "usuario" | "platillo" | "rol" | "historialModificacion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -735,6 +735,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UsuarioCountArgs<ExtArgs>
             result: $Utils.Optional<UsuarioCountAggregateOutputType> | number
+          }
+        }
+      }
+      Platillo: {
+        payload: Prisma.$PlatilloPayload<ExtArgs>
+        fields: Prisma.PlatilloFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PlatilloFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PlatilloFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>
+          }
+          findFirst: {
+            args: Prisma.PlatilloFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PlatilloFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>
+          }
+          findMany: {
+            args: Prisma.PlatilloFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>[]
+          }
+          create: {
+            args: Prisma.PlatilloCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>
+          }
+          createMany: {
+            args: Prisma.PlatilloCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PlatilloCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>[]
+          }
+          delete: {
+            args: Prisma.PlatilloDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>
+          }
+          update: {
+            args: Prisma.PlatilloUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>
+          }
+          deleteMany: {
+            args: Prisma.PlatilloDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PlatilloUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PlatilloUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>[]
+          }
+          upsert: {
+            args: Prisma.PlatilloUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>
+          }
+          aggregate: {
+            args: Prisma.PlatilloAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePlatillo>
+          }
+          groupBy: {
+            args: Prisma.PlatilloGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PlatilloGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PlatilloCountArgs<ExtArgs>
+            result: $Utils.Optional<PlatilloCountAggregateOutputType> | number
           }
         }
       }
@@ -886,80 +960,6 @@ export namespace Prisma {
           }
         }
       }
-      Platillo: {
-        payload: Prisma.$PlatilloPayload<ExtArgs>
-        fields: Prisma.PlatilloFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.PlatilloFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.PlatilloFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>
-          }
-          findFirst: {
-            args: Prisma.PlatilloFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.PlatilloFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>
-          }
-          findMany: {
-            args: Prisma.PlatilloFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>[]
-          }
-          create: {
-            args: Prisma.PlatilloCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>
-          }
-          createMany: {
-            args: Prisma.PlatilloCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.PlatilloCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>[]
-          }
-          delete: {
-            args: Prisma.PlatilloDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>
-          }
-          update: {
-            args: Prisma.PlatilloUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>
-          }
-          deleteMany: {
-            args: Prisma.PlatilloDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.PlatilloUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.PlatilloUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>[]
-          }
-          upsert: {
-            args: Prisma.PlatilloUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatilloPayload>
-          }
-          aggregate: {
-            args: Prisma.PlatilloAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregatePlatillo>
-          }
-          groupBy: {
-            args: Prisma.PlatilloGroupByArgs<ExtArgs>
-            result: $Utils.Optional<PlatilloGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.PlatilloCountArgs<ExtArgs>
-            result: $Utils.Optional<PlatilloCountAggregateOutputType> | number
-          }
-        }
-      }
     }
   } & {
     other: {
@@ -1053,9 +1053,9 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     usuario?: UsuarioOmit
+    platillo?: PlatilloOmit
     rol?: RolOmit
     historialModificacion?: HistorialModificacionOmit
-    platillo?: PlatilloOmit
   }
 
   /* Types for Logging */
@@ -1186,6 +1186,37 @@ export namespace Prisma {
    * UsuarioCountOutputType without action
    */
   export type UsuarioCountOutputTypeCountHistorialResponsableArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HistorialModificacionWhereInput
+  }
+
+
+  /**
+   * Count Type PlatilloCountOutputType
+   */
+
+  export type PlatilloCountOutputType = {
+    historialModificaciones: number
+  }
+
+  export type PlatilloCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    historialModificaciones?: boolean | PlatilloCountOutputTypeCountHistorialModificacionesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PlatilloCountOutputType without action
+   */
+  export type PlatilloCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatilloCountOutputType
+     */
+    select?: PlatilloCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PlatilloCountOutputType without action
+   */
+  export type PlatilloCountOutputTypeCountHistorialModificacionesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: HistorialModificacionWhereInput
   }
 
@@ -2432,6 +2463,1127 @@ export namespace Prisma {
 
 
   /**
+   * Model Platillo
+   */
+
+  export type AggregatePlatillo = {
+    _count: PlatilloCountAggregateOutputType | null
+    _avg: PlatilloAvgAggregateOutputType | null
+    _sum: PlatilloSumAggregateOutputType | null
+    _min: PlatilloMinAggregateOutputType | null
+    _max: PlatilloMaxAggregateOutputType | null
+  }
+
+  export type PlatilloAvgAggregateOutputType = {
+    id: number | null
+    precio: number | null
+  }
+
+  export type PlatilloSumAggregateOutputType = {
+    id: number | null
+    precio: number | null
+  }
+
+  export type PlatilloMinAggregateOutputType = {
+    id: number | null
+    nombre: string | null
+    precio: number | null
+    categoria: string | null
+    creadoEn: Date | null
+    disponible: boolean | null
+  }
+
+  export type PlatilloMaxAggregateOutputType = {
+    id: number | null
+    nombre: string | null
+    precio: number | null
+    categoria: string | null
+    creadoEn: Date | null
+    disponible: boolean | null
+  }
+
+  export type PlatilloCountAggregateOutputType = {
+    id: number
+    nombre: number
+    precio: number
+    categoria: number
+    creadoEn: number
+    disponible: number
+    _all: number
+  }
+
+
+  export type PlatilloAvgAggregateInputType = {
+    id?: true
+    precio?: true
+  }
+
+  export type PlatilloSumAggregateInputType = {
+    id?: true
+    precio?: true
+  }
+
+  export type PlatilloMinAggregateInputType = {
+    id?: true
+    nombre?: true
+    precio?: true
+    categoria?: true
+    creadoEn?: true
+    disponible?: true
+  }
+
+  export type PlatilloMaxAggregateInputType = {
+    id?: true
+    nombre?: true
+    precio?: true
+    categoria?: true
+    creadoEn?: true
+    disponible?: true
+  }
+
+  export type PlatilloCountAggregateInputType = {
+    id?: true
+    nombre?: true
+    precio?: true
+    categoria?: true
+    creadoEn?: true
+    disponible?: true
+    _all?: true
+  }
+
+  export type PlatilloAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Platillo to aggregate.
+     */
+    where?: PlatilloWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Platillos to fetch.
+     */
+    orderBy?: PlatilloOrderByWithRelationInput | PlatilloOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PlatilloWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Platillos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Platillos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Platillos
+    **/
+    _count?: true | PlatilloCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PlatilloAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PlatilloSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PlatilloMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PlatilloMaxAggregateInputType
+  }
+
+  export type GetPlatilloAggregateType<T extends PlatilloAggregateArgs> = {
+        [P in keyof T & keyof AggregatePlatillo]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePlatillo[P]>
+      : GetScalarType<T[P], AggregatePlatillo[P]>
+  }
+
+
+
+
+  export type PlatilloGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlatilloWhereInput
+    orderBy?: PlatilloOrderByWithAggregationInput | PlatilloOrderByWithAggregationInput[]
+    by: PlatilloScalarFieldEnum[] | PlatilloScalarFieldEnum
+    having?: PlatilloScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PlatilloCountAggregateInputType | true
+    _avg?: PlatilloAvgAggregateInputType
+    _sum?: PlatilloSumAggregateInputType
+    _min?: PlatilloMinAggregateInputType
+    _max?: PlatilloMaxAggregateInputType
+  }
+
+  export type PlatilloGroupByOutputType = {
+    id: number
+    nombre: string
+    precio: number
+    categoria: string
+    creadoEn: Date
+    disponible: boolean
+    _count: PlatilloCountAggregateOutputType | null
+    _avg: PlatilloAvgAggregateOutputType | null
+    _sum: PlatilloSumAggregateOutputType | null
+    _min: PlatilloMinAggregateOutputType | null
+    _max: PlatilloMaxAggregateOutputType | null
+  }
+
+  type GetPlatilloGroupByPayload<T extends PlatilloGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PlatilloGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PlatilloGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PlatilloGroupByOutputType[P]>
+            : GetScalarType<T[P], PlatilloGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PlatilloSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nombre?: boolean
+    precio?: boolean
+    categoria?: boolean
+    creadoEn?: boolean
+    disponible?: boolean
+    historialModificaciones?: boolean | Platillo$historialModificacionesArgs<ExtArgs>
+    _count?: boolean | PlatilloCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["platillo"]>
+
+  export type PlatilloSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nombre?: boolean
+    precio?: boolean
+    categoria?: boolean
+    creadoEn?: boolean
+    disponible?: boolean
+  }, ExtArgs["result"]["platillo"]>
+
+  export type PlatilloSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nombre?: boolean
+    precio?: boolean
+    categoria?: boolean
+    creadoEn?: boolean
+    disponible?: boolean
+  }, ExtArgs["result"]["platillo"]>
+
+  export type PlatilloSelectScalar = {
+    id?: boolean
+    nombre?: boolean
+    precio?: boolean
+    categoria?: boolean
+    creadoEn?: boolean
+    disponible?: boolean
+  }
+
+  export type PlatilloOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nombre" | "precio" | "categoria" | "creadoEn" | "disponible", ExtArgs["result"]["platillo"]>
+  export type PlatilloInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    historialModificaciones?: boolean | Platillo$historialModificacionesArgs<ExtArgs>
+    _count?: boolean | PlatilloCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PlatilloIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type PlatilloIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $PlatilloPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Platillo"
+    objects: {
+      historialModificaciones: Prisma.$HistorialModificacionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      nombre: string
+      precio: number
+      categoria: string
+      creadoEn: Date
+      disponible: boolean
+    }, ExtArgs["result"]["platillo"]>
+    composites: {}
+  }
+
+  type PlatilloGetPayload<S extends boolean | null | undefined | PlatilloDefaultArgs> = $Result.GetResult<Prisma.$PlatilloPayload, S>
+
+  type PlatilloCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PlatilloFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PlatilloCountAggregateInputType | true
+    }
+
+  export interface PlatilloDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Platillo'], meta: { name: 'Platillo' } }
+    /**
+     * Find zero or one Platillo that matches the filter.
+     * @param {PlatilloFindUniqueArgs} args - Arguments to find a Platillo
+     * @example
+     * // Get one Platillo
+     * const platillo = await prisma.platillo.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PlatilloFindUniqueArgs>(args: SelectSubset<T, PlatilloFindUniqueArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Platillo that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PlatilloFindUniqueOrThrowArgs} args - Arguments to find a Platillo
+     * @example
+     * // Get one Platillo
+     * const platillo = await prisma.platillo.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PlatilloFindUniqueOrThrowArgs>(args: SelectSubset<T, PlatilloFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Platillo that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatilloFindFirstArgs} args - Arguments to find a Platillo
+     * @example
+     * // Get one Platillo
+     * const platillo = await prisma.platillo.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PlatilloFindFirstArgs>(args?: SelectSubset<T, PlatilloFindFirstArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Platillo that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatilloFindFirstOrThrowArgs} args - Arguments to find a Platillo
+     * @example
+     * // Get one Platillo
+     * const platillo = await prisma.platillo.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PlatilloFindFirstOrThrowArgs>(args?: SelectSubset<T, PlatilloFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Platillos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatilloFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Platillos
+     * const platillos = await prisma.platillo.findMany()
+     * 
+     * // Get first 10 Platillos
+     * const platillos = await prisma.platillo.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const platilloWithIdOnly = await prisma.platillo.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PlatilloFindManyArgs>(args?: SelectSubset<T, PlatilloFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Platillo.
+     * @param {PlatilloCreateArgs} args - Arguments to create a Platillo.
+     * @example
+     * // Create one Platillo
+     * const Platillo = await prisma.platillo.create({
+     *   data: {
+     *     // ... data to create a Platillo
+     *   }
+     * })
+     * 
+     */
+    create<T extends PlatilloCreateArgs>(args: SelectSubset<T, PlatilloCreateArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Platillos.
+     * @param {PlatilloCreateManyArgs} args - Arguments to create many Platillos.
+     * @example
+     * // Create many Platillos
+     * const platillo = await prisma.platillo.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PlatilloCreateManyArgs>(args?: SelectSubset<T, PlatilloCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Platillos and returns the data saved in the database.
+     * @param {PlatilloCreateManyAndReturnArgs} args - Arguments to create many Platillos.
+     * @example
+     * // Create many Platillos
+     * const platillo = await prisma.platillo.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Platillos and only return the `id`
+     * const platilloWithIdOnly = await prisma.platillo.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PlatilloCreateManyAndReturnArgs>(args?: SelectSubset<T, PlatilloCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Platillo.
+     * @param {PlatilloDeleteArgs} args - Arguments to delete one Platillo.
+     * @example
+     * // Delete one Platillo
+     * const Platillo = await prisma.platillo.delete({
+     *   where: {
+     *     // ... filter to delete one Platillo
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PlatilloDeleteArgs>(args: SelectSubset<T, PlatilloDeleteArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Platillo.
+     * @param {PlatilloUpdateArgs} args - Arguments to update one Platillo.
+     * @example
+     * // Update one Platillo
+     * const platillo = await prisma.platillo.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PlatilloUpdateArgs>(args: SelectSubset<T, PlatilloUpdateArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Platillos.
+     * @param {PlatilloDeleteManyArgs} args - Arguments to filter Platillos to delete.
+     * @example
+     * // Delete a few Platillos
+     * const { count } = await prisma.platillo.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PlatilloDeleteManyArgs>(args?: SelectSubset<T, PlatilloDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Platillos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatilloUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Platillos
+     * const platillo = await prisma.platillo.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PlatilloUpdateManyArgs>(args: SelectSubset<T, PlatilloUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Platillos and returns the data updated in the database.
+     * @param {PlatilloUpdateManyAndReturnArgs} args - Arguments to update many Platillos.
+     * @example
+     * // Update many Platillos
+     * const platillo = await prisma.platillo.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Platillos and only return the `id`
+     * const platilloWithIdOnly = await prisma.platillo.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PlatilloUpdateManyAndReturnArgs>(args: SelectSubset<T, PlatilloUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Platillo.
+     * @param {PlatilloUpsertArgs} args - Arguments to update or create a Platillo.
+     * @example
+     * // Update or create a Platillo
+     * const platillo = await prisma.platillo.upsert({
+     *   create: {
+     *     // ... data to create a Platillo
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Platillo we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PlatilloUpsertArgs>(args: SelectSubset<T, PlatilloUpsertArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Platillos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatilloCountArgs} args - Arguments to filter Platillos to count.
+     * @example
+     * // Count the number of Platillos
+     * const count = await prisma.platillo.count({
+     *   where: {
+     *     // ... the filter for the Platillos we want to count
+     *   }
+     * })
+    **/
+    count<T extends PlatilloCountArgs>(
+      args?: Subset<T, PlatilloCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PlatilloCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Platillo.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatilloAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PlatilloAggregateArgs>(args: Subset<T, PlatilloAggregateArgs>): Prisma.PrismaPromise<GetPlatilloAggregateType<T>>
+
+    /**
+     * Group by Platillo.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatilloGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PlatilloGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PlatilloGroupByArgs['orderBy'] }
+        : { orderBy?: PlatilloGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PlatilloGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlatilloGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Platillo model
+   */
+  readonly fields: PlatilloFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Platillo.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PlatilloClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    historialModificaciones<T extends Platillo$historialModificacionesArgs<ExtArgs> = {}>(args?: Subset<T, Platillo$historialModificacionesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HistorialModificacionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Platillo model
+   */
+  interface PlatilloFieldRefs {
+    readonly id: FieldRef<"Platillo", 'Int'>
+    readonly nombre: FieldRef<"Platillo", 'String'>
+    readonly precio: FieldRef<"Platillo", 'Float'>
+    readonly categoria: FieldRef<"Platillo", 'String'>
+    readonly creadoEn: FieldRef<"Platillo", 'DateTime'>
+    readonly disponible: FieldRef<"Platillo", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Platillo findUnique
+   */
+  export type PlatilloFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Platillo
+     */
+    select?: PlatilloSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Platillo
+     */
+    omit?: PlatilloOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatilloInclude<ExtArgs> | null
+    /**
+     * Filter, which Platillo to fetch.
+     */
+    where: PlatilloWhereUniqueInput
+  }
+
+  /**
+   * Platillo findUniqueOrThrow
+   */
+  export type PlatilloFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Platillo
+     */
+    select?: PlatilloSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Platillo
+     */
+    omit?: PlatilloOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatilloInclude<ExtArgs> | null
+    /**
+     * Filter, which Platillo to fetch.
+     */
+    where: PlatilloWhereUniqueInput
+  }
+
+  /**
+   * Platillo findFirst
+   */
+  export type PlatilloFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Platillo
+     */
+    select?: PlatilloSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Platillo
+     */
+    omit?: PlatilloOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatilloInclude<ExtArgs> | null
+    /**
+     * Filter, which Platillo to fetch.
+     */
+    where?: PlatilloWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Platillos to fetch.
+     */
+    orderBy?: PlatilloOrderByWithRelationInput | PlatilloOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Platillos.
+     */
+    cursor?: PlatilloWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Platillos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Platillos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Platillos.
+     */
+    distinct?: PlatilloScalarFieldEnum | PlatilloScalarFieldEnum[]
+  }
+
+  /**
+   * Platillo findFirstOrThrow
+   */
+  export type PlatilloFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Platillo
+     */
+    select?: PlatilloSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Platillo
+     */
+    omit?: PlatilloOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatilloInclude<ExtArgs> | null
+    /**
+     * Filter, which Platillo to fetch.
+     */
+    where?: PlatilloWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Platillos to fetch.
+     */
+    orderBy?: PlatilloOrderByWithRelationInput | PlatilloOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Platillos.
+     */
+    cursor?: PlatilloWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Platillos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Platillos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Platillos.
+     */
+    distinct?: PlatilloScalarFieldEnum | PlatilloScalarFieldEnum[]
+  }
+
+  /**
+   * Platillo findMany
+   */
+  export type PlatilloFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Platillo
+     */
+    select?: PlatilloSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Platillo
+     */
+    omit?: PlatilloOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatilloInclude<ExtArgs> | null
+    /**
+     * Filter, which Platillos to fetch.
+     */
+    where?: PlatilloWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Platillos to fetch.
+     */
+    orderBy?: PlatilloOrderByWithRelationInput | PlatilloOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Platillos.
+     */
+    cursor?: PlatilloWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Platillos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Platillos.
+     */
+    skip?: number
+    distinct?: PlatilloScalarFieldEnum | PlatilloScalarFieldEnum[]
+  }
+
+  /**
+   * Platillo create
+   */
+  export type PlatilloCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Platillo
+     */
+    select?: PlatilloSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Platillo
+     */
+    omit?: PlatilloOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatilloInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Platillo.
+     */
+    data: XOR<PlatilloCreateInput, PlatilloUncheckedCreateInput>
+  }
+
+  /**
+   * Platillo createMany
+   */
+  export type PlatilloCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Platillos.
+     */
+    data: PlatilloCreateManyInput | PlatilloCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Platillo createManyAndReturn
+   */
+  export type PlatilloCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Platillo
+     */
+    select?: PlatilloSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Platillo
+     */
+    omit?: PlatilloOmit<ExtArgs> | null
+    /**
+     * The data used to create many Platillos.
+     */
+    data: PlatilloCreateManyInput | PlatilloCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Platillo update
+   */
+  export type PlatilloUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Platillo
+     */
+    select?: PlatilloSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Platillo
+     */
+    omit?: PlatilloOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatilloInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Platillo.
+     */
+    data: XOR<PlatilloUpdateInput, PlatilloUncheckedUpdateInput>
+    /**
+     * Choose, which Platillo to update.
+     */
+    where: PlatilloWhereUniqueInput
+  }
+
+  /**
+   * Platillo updateMany
+   */
+  export type PlatilloUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Platillos.
+     */
+    data: XOR<PlatilloUpdateManyMutationInput, PlatilloUncheckedUpdateManyInput>
+    /**
+     * Filter which Platillos to update
+     */
+    where?: PlatilloWhereInput
+    /**
+     * Limit how many Platillos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Platillo updateManyAndReturn
+   */
+  export type PlatilloUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Platillo
+     */
+    select?: PlatilloSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Platillo
+     */
+    omit?: PlatilloOmit<ExtArgs> | null
+    /**
+     * The data used to update Platillos.
+     */
+    data: XOR<PlatilloUpdateManyMutationInput, PlatilloUncheckedUpdateManyInput>
+    /**
+     * Filter which Platillos to update
+     */
+    where?: PlatilloWhereInput
+    /**
+     * Limit how many Platillos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Platillo upsert
+   */
+  export type PlatilloUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Platillo
+     */
+    select?: PlatilloSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Platillo
+     */
+    omit?: PlatilloOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatilloInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Platillo to update in case it exists.
+     */
+    where: PlatilloWhereUniqueInput
+    /**
+     * In case the Platillo found by the `where` argument doesn't exist, create a new Platillo with this data.
+     */
+    create: XOR<PlatilloCreateInput, PlatilloUncheckedCreateInput>
+    /**
+     * In case the Platillo was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PlatilloUpdateInput, PlatilloUncheckedUpdateInput>
+  }
+
+  /**
+   * Platillo delete
+   */
+  export type PlatilloDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Platillo
+     */
+    select?: PlatilloSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Platillo
+     */
+    omit?: PlatilloOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatilloInclude<ExtArgs> | null
+    /**
+     * Filter which Platillo to delete.
+     */
+    where: PlatilloWhereUniqueInput
+  }
+
+  /**
+   * Platillo deleteMany
+   */
+  export type PlatilloDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Platillos to delete
+     */
+    where?: PlatilloWhereInput
+    /**
+     * Limit how many Platillos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Platillo.historialModificaciones
+   */
+  export type Platillo$historialModificacionesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialModificacion
+     */
+    select?: HistorialModificacionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialModificacion
+     */
+    omit?: HistorialModificacionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialModificacionInclude<ExtArgs> | null
+    where?: HistorialModificacionWhereInput
+    orderBy?: HistorialModificacionOrderByWithRelationInput | HistorialModificacionOrderByWithRelationInput[]
+    cursor?: HistorialModificacionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HistorialModificacionScalarFieldEnum | HistorialModificacionScalarFieldEnum[]
+  }
+
+  /**
+   * Platillo without action
+   */
+  export type PlatilloDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Platillo
+     */
+    select?: PlatilloSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Platillo
+     */
+    omit?: PlatilloOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatilloInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Rol
    */
 
@@ -3510,94 +4662,104 @@ export namespace Prisma {
 
   export type HistorialModificacionAvgAggregateOutputType = {
     id: number | null
-    usuarioId: number | null
     responsableId: number | null
+    usuarioId: number | null
+    platilloId: number | null
   }
 
   export type HistorialModificacionSumAggregateOutputType = {
     id: number | null
-    usuarioId: number | null
     responsableId: number | null
+    usuarioId: number | null
+    platilloId: number | null
   }
 
   export type HistorialModificacionMinAggregateOutputType = {
     id: number | null
-    usuarioId: number | null
     campo: string | null
     valorAnterior: string | null
     valorNuevo: string | null
     fecha: Date | null
     accion: string | null
     responsableId: number | null
+    usuarioId: number | null
+    platilloId: number | null
   }
 
   export type HistorialModificacionMaxAggregateOutputType = {
     id: number | null
-    usuarioId: number | null
     campo: string | null
     valorAnterior: string | null
     valorNuevo: string | null
     fecha: Date | null
     accion: string | null
     responsableId: number | null
+    usuarioId: number | null
+    platilloId: number | null
   }
 
   export type HistorialModificacionCountAggregateOutputType = {
     id: number
-    usuarioId: number
     campo: number
     valorAnterior: number
     valorNuevo: number
     fecha: number
     accion: number
     responsableId: number
+    usuarioId: number
+    platilloId: number
     _all: number
   }
 
 
   export type HistorialModificacionAvgAggregateInputType = {
     id?: true
-    usuarioId?: true
     responsableId?: true
+    usuarioId?: true
+    platilloId?: true
   }
 
   export type HistorialModificacionSumAggregateInputType = {
     id?: true
-    usuarioId?: true
     responsableId?: true
+    usuarioId?: true
+    platilloId?: true
   }
 
   export type HistorialModificacionMinAggregateInputType = {
     id?: true
-    usuarioId?: true
     campo?: true
     valorAnterior?: true
     valorNuevo?: true
     fecha?: true
     accion?: true
     responsableId?: true
+    usuarioId?: true
+    platilloId?: true
   }
 
   export type HistorialModificacionMaxAggregateInputType = {
     id?: true
-    usuarioId?: true
     campo?: true
     valorAnterior?: true
     valorNuevo?: true
     fecha?: true
     accion?: true
     responsableId?: true
+    usuarioId?: true
+    platilloId?: true
   }
 
   export type HistorialModificacionCountAggregateInputType = {
     id?: true
-    usuarioId?: true
     campo?: true
     valorAnterior?: true
     valorNuevo?: true
     fecha?: true
     accion?: true
     responsableId?: true
+    usuarioId?: true
+    platilloId?: true
     _all?: true
   }
 
@@ -3689,13 +4851,14 @@ export namespace Prisma {
 
   export type HistorialModificacionGroupByOutputType = {
     id: number
-    usuarioId: number
     campo: string
     valorAnterior: string | null
     valorNuevo: string | null
     fecha: Date
     accion: string
     responsableId: number
+    usuarioId: number | null
+    platilloId: number | null
     _count: HistorialModificacionCountAggregateOutputType | null
     _avg: HistorialModificacionAvgAggregateOutputType | null
     _sum: HistorialModificacionSumAggregateOutputType | null
@@ -3719,83 +4882,95 @@ export namespace Prisma {
 
   export type HistorialModificacionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    usuarioId?: boolean
     campo?: boolean
     valorAnterior?: boolean
     valorNuevo?: boolean
     fecha?: boolean
     accion?: boolean
     responsableId?: boolean
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+    usuarioId?: boolean
+    platilloId?: boolean
     responsable?: boolean | UsuarioDefaultArgs<ExtArgs>
+    usuario?: boolean | HistorialModificacion$usuarioArgs<ExtArgs>
+    platillo?: boolean | HistorialModificacion$platilloArgs<ExtArgs>
   }, ExtArgs["result"]["historialModificacion"]>
 
   export type HistorialModificacionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    usuarioId?: boolean
     campo?: boolean
     valorAnterior?: boolean
     valorNuevo?: boolean
     fecha?: boolean
     accion?: boolean
     responsableId?: boolean
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+    usuarioId?: boolean
+    platilloId?: boolean
     responsable?: boolean | UsuarioDefaultArgs<ExtArgs>
+    usuario?: boolean | HistorialModificacion$usuarioArgs<ExtArgs>
+    platillo?: boolean | HistorialModificacion$platilloArgs<ExtArgs>
   }, ExtArgs["result"]["historialModificacion"]>
 
   export type HistorialModificacionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    usuarioId?: boolean
     campo?: boolean
     valorAnterior?: boolean
     valorNuevo?: boolean
     fecha?: boolean
     accion?: boolean
     responsableId?: boolean
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+    usuarioId?: boolean
+    platilloId?: boolean
     responsable?: boolean | UsuarioDefaultArgs<ExtArgs>
+    usuario?: boolean | HistorialModificacion$usuarioArgs<ExtArgs>
+    platillo?: boolean | HistorialModificacion$platilloArgs<ExtArgs>
   }, ExtArgs["result"]["historialModificacion"]>
 
   export type HistorialModificacionSelectScalar = {
     id?: boolean
-    usuarioId?: boolean
     campo?: boolean
     valorAnterior?: boolean
     valorNuevo?: boolean
     fecha?: boolean
     accion?: boolean
     responsableId?: boolean
+    usuarioId?: boolean
+    platilloId?: boolean
   }
 
-  export type HistorialModificacionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "usuarioId" | "campo" | "valorAnterior" | "valorNuevo" | "fecha" | "accion" | "responsableId", ExtArgs["result"]["historialModificacion"]>
+  export type HistorialModificacionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "campo" | "valorAnterior" | "valorNuevo" | "fecha" | "accion" | "responsableId" | "usuarioId" | "platilloId", ExtArgs["result"]["historialModificacion"]>
   export type HistorialModificacionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
     responsable?: boolean | UsuarioDefaultArgs<ExtArgs>
+    usuario?: boolean | HistorialModificacion$usuarioArgs<ExtArgs>
+    platillo?: boolean | HistorialModificacion$platilloArgs<ExtArgs>
   }
   export type HistorialModificacionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
     responsable?: boolean | UsuarioDefaultArgs<ExtArgs>
+    usuario?: boolean | HistorialModificacion$usuarioArgs<ExtArgs>
+    platillo?: boolean | HistorialModificacion$platilloArgs<ExtArgs>
   }
   export type HistorialModificacionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
     responsable?: boolean | UsuarioDefaultArgs<ExtArgs>
+    usuario?: boolean | HistorialModificacion$usuarioArgs<ExtArgs>
+    platillo?: boolean | HistorialModificacion$platilloArgs<ExtArgs>
   }
 
   export type $HistorialModificacionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "HistorialModificacion"
     objects: {
-      usuario: Prisma.$UsuarioPayload<ExtArgs>
       responsable: Prisma.$UsuarioPayload<ExtArgs>
+      usuario: Prisma.$UsuarioPayload<ExtArgs> | null
+      platillo: Prisma.$PlatilloPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      usuarioId: number
       campo: string
       valorAnterior: string | null
       valorNuevo: string | null
       fecha: Date
       accion: string
       responsableId: number
+      usuarioId: number | null
+      platilloId: number | null
     }, ExtArgs["result"]["historialModificacion"]>
     composites: {}
   }
@@ -4190,8 +5365,9 @@ export namespace Prisma {
    */
   export interface Prisma__HistorialModificacionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    usuario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     responsable<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    usuario<T extends HistorialModificacion$usuarioArgs<ExtArgs> = {}>(args?: Subset<T, HistorialModificacion$usuarioArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    platillo<T extends HistorialModificacion$platilloArgs<ExtArgs> = {}>(args?: Subset<T, HistorialModificacion$platilloArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4222,13 +5398,14 @@ export namespace Prisma {
    */
   interface HistorialModificacionFieldRefs {
     readonly id: FieldRef<"HistorialModificacion", 'Int'>
-    readonly usuarioId: FieldRef<"HistorialModificacion", 'Int'>
     readonly campo: FieldRef<"HistorialModificacion", 'String'>
     readonly valorAnterior: FieldRef<"HistorialModificacion", 'String'>
     readonly valorNuevo: FieldRef<"HistorialModificacion", 'String'>
     readonly fecha: FieldRef<"HistorialModificacion", 'DateTime'>
     readonly accion: FieldRef<"HistorialModificacion", 'String'>
     readonly responsableId: FieldRef<"HistorialModificacion", 'Int'>
+    readonly usuarioId: FieldRef<"HistorialModificacion", 'Int'>
+    readonly platilloId: FieldRef<"HistorialModificacion", 'Int'>
   }
     
 
@@ -4625,6 +5802,44 @@ export namespace Prisma {
   }
 
   /**
+   * HistorialModificacion.usuario
+   */
+  export type HistorialModificacion$usuarioArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Usuario
+     */
+    select?: UsuarioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Usuario
+     */
+    omit?: UsuarioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsuarioInclude<ExtArgs> | null
+    where?: UsuarioWhereInput
+  }
+
+  /**
+   * HistorialModificacion.platillo
+   */
+  export type HistorialModificacion$platilloArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Platillo
+     */
+    select?: PlatilloSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Platillo
+     */
+    omit?: PlatilloOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatilloInclude<ExtArgs> | null
+    where?: PlatilloWhereInput
+  }
+
+  /**
    * HistorialModificacion without action
    */
   export type HistorialModificacionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4640,1052 +5855,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: HistorialModificacionInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Platillo
-   */
-
-  export type AggregatePlatillo = {
-    _count: PlatilloCountAggregateOutputType | null
-    _avg: PlatilloAvgAggregateOutputType | null
-    _sum: PlatilloSumAggregateOutputType | null
-    _min: PlatilloMinAggregateOutputType | null
-    _max: PlatilloMaxAggregateOutputType | null
-  }
-
-  export type PlatilloAvgAggregateOutputType = {
-    id: number | null
-    precio: number | null
-  }
-
-  export type PlatilloSumAggregateOutputType = {
-    id: number | null
-    precio: number | null
-  }
-
-  export type PlatilloMinAggregateOutputType = {
-    id: number | null
-    nombre: string | null
-    precio: number | null
-    categoria: string | null
-    creadoEn: Date | null
-    disponible: boolean | null
-  }
-
-  export type PlatilloMaxAggregateOutputType = {
-    id: number | null
-    nombre: string | null
-    precio: number | null
-    categoria: string | null
-    creadoEn: Date | null
-    disponible: boolean | null
-  }
-
-  export type PlatilloCountAggregateOutputType = {
-    id: number
-    nombre: number
-    precio: number
-    categoria: number
-    creadoEn: number
-    disponible: number
-    _all: number
-  }
-
-
-  export type PlatilloAvgAggregateInputType = {
-    id?: true
-    precio?: true
-  }
-
-  export type PlatilloSumAggregateInputType = {
-    id?: true
-    precio?: true
-  }
-
-  export type PlatilloMinAggregateInputType = {
-    id?: true
-    nombre?: true
-    precio?: true
-    categoria?: true
-    creadoEn?: true
-    disponible?: true
-  }
-
-  export type PlatilloMaxAggregateInputType = {
-    id?: true
-    nombre?: true
-    precio?: true
-    categoria?: true
-    creadoEn?: true
-    disponible?: true
-  }
-
-  export type PlatilloCountAggregateInputType = {
-    id?: true
-    nombre?: true
-    precio?: true
-    categoria?: true
-    creadoEn?: true
-    disponible?: true
-    _all?: true
-  }
-
-  export type PlatilloAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Platillo to aggregate.
-     */
-    where?: PlatilloWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Platillos to fetch.
-     */
-    orderBy?: PlatilloOrderByWithRelationInput | PlatilloOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: PlatilloWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Platillos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Platillos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Platillos
-    **/
-    _count?: true | PlatilloCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: PlatilloAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: PlatilloSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: PlatilloMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: PlatilloMaxAggregateInputType
-  }
-
-  export type GetPlatilloAggregateType<T extends PlatilloAggregateArgs> = {
-        [P in keyof T & keyof AggregatePlatillo]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregatePlatillo[P]>
-      : GetScalarType<T[P], AggregatePlatillo[P]>
-  }
-
-
-
-
-  export type PlatilloGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PlatilloWhereInput
-    orderBy?: PlatilloOrderByWithAggregationInput | PlatilloOrderByWithAggregationInput[]
-    by: PlatilloScalarFieldEnum[] | PlatilloScalarFieldEnum
-    having?: PlatilloScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: PlatilloCountAggregateInputType | true
-    _avg?: PlatilloAvgAggregateInputType
-    _sum?: PlatilloSumAggregateInputType
-    _min?: PlatilloMinAggregateInputType
-    _max?: PlatilloMaxAggregateInputType
-  }
-
-  export type PlatilloGroupByOutputType = {
-    id: number
-    nombre: string
-    precio: number
-    categoria: string
-    creadoEn: Date
-    disponible: boolean
-    _count: PlatilloCountAggregateOutputType | null
-    _avg: PlatilloAvgAggregateOutputType | null
-    _sum: PlatilloSumAggregateOutputType | null
-    _min: PlatilloMinAggregateOutputType | null
-    _max: PlatilloMaxAggregateOutputType | null
-  }
-
-  type GetPlatilloGroupByPayload<T extends PlatilloGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<PlatilloGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof PlatilloGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], PlatilloGroupByOutputType[P]>
-            : GetScalarType<T[P], PlatilloGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type PlatilloSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nombre?: boolean
-    precio?: boolean
-    categoria?: boolean
-    creadoEn?: boolean
-    disponible?: boolean
-  }, ExtArgs["result"]["platillo"]>
-
-  export type PlatilloSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nombre?: boolean
-    precio?: boolean
-    categoria?: boolean
-    creadoEn?: boolean
-    disponible?: boolean
-  }, ExtArgs["result"]["platillo"]>
-
-  export type PlatilloSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nombre?: boolean
-    precio?: boolean
-    categoria?: boolean
-    creadoEn?: boolean
-    disponible?: boolean
-  }, ExtArgs["result"]["platillo"]>
-
-  export type PlatilloSelectScalar = {
-    id?: boolean
-    nombre?: boolean
-    precio?: boolean
-    categoria?: boolean
-    creadoEn?: boolean
-    disponible?: boolean
-  }
-
-  export type PlatilloOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nombre" | "precio" | "categoria" | "creadoEn" | "disponible", ExtArgs["result"]["platillo"]>
-
-  export type $PlatilloPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Platillo"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      nombre: string
-      precio: number
-      categoria: string
-      creadoEn: Date
-      disponible: boolean
-    }, ExtArgs["result"]["platillo"]>
-    composites: {}
-  }
-
-  type PlatilloGetPayload<S extends boolean | null | undefined | PlatilloDefaultArgs> = $Result.GetResult<Prisma.$PlatilloPayload, S>
-
-  type PlatilloCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<PlatilloFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: PlatilloCountAggregateInputType | true
-    }
-
-  export interface PlatilloDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Platillo'], meta: { name: 'Platillo' } }
-    /**
-     * Find zero or one Platillo that matches the filter.
-     * @param {PlatilloFindUniqueArgs} args - Arguments to find a Platillo
-     * @example
-     * // Get one Platillo
-     * const platillo = await prisma.platillo.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends PlatilloFindUniqueArgs>(args: SelectSubset<T, PlatilloFindUniqueArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Platillo that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {PlatilloFindUniqueOrThrowArgs} args - Arguments to find a Platillo
-     * @example
-     * // Get one Platillo
-     * const platillo = await prisma.platillo.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends PlatilloFindUniqueOrThrowArgs>(args: SelectSubset<T, PlatilloFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Platillo that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatilloFindFirstArgs} args - Arguments to find a Platillo
-     * @example
-     * // Get one Platillo
-     * const platillo = await prisma.platillo.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends PlatilloFindFirstArgs>(args?: SelectSubset<T, PlatilloFindFirstArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Platillo that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatilloFindFirstOrThrowArgs} args - Arguments to find a Platillo
-     * @example
-     * // Get one Platillo
-     * const platillo = await prisma.platillo.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends PlatilloFindFirstOrThrowArgs>(args?: SelectSubset<T, PlatilloFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Platillos that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatilloFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Platillos
-     * const platillos = await prisma.platillo.findMany()
-     * 
-     * // Get first 10 Platillos
-     * const platillos = await prisma.platillo.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const platilloWithIdOnly = await prisma.platillo.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends PlatilloFindManyArgs>(args?: SelectSubset<T, PlatilloFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Platillo.
-     * @param {PlatilloCreateArgs} args - Arguments to create a Platillo.
-     * @example
-     * // Create one Platillo
-     * const Platillo = await prisma.platillo.create({
-     *   data: {
-     *     // ... data to create a Platillo
-     *   }
-     * })
-     * 
-     */
-    create<T extends PlatilloCreateArgs>(args: SelectSubset<T, PlatilloCreateArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Platillos.
-     * @param {PlatilloCreateManyArgs} args - Arguments to create many Platillos.
-     * @example
-     * // Create many Platillos
-     * const platillo = await prisma.platillo.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends PlatilloCreateManyArgs>(args?: SelectSubset<T, PlatilloCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Platillos and returns the data saved in the database.
-     * @param {PlatilloCreateManyAndReturnArgs} args - Arguments to create many Platillos.
-     * @example
-     * // Create many Platillos
-     * const platillo = await prisma.platillo.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Platillos and only return the `id`
-     * const platilloWithIdOnly = await prisma.platillo.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends PlatilloCreateManyAndReturnArgs>(args?: SelectSubset<T, PlatilloCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Platillo.
-     * @param {PlatilloDeleteArgs} args - Arguments to delete one Platillo.
-     * @example
-     * // Delete one Platillo
-     * const Platillo = await prisma.platillo.delete({
-     *   where: {
-     *     // ... filter to delete one Platillo
-     *   }
-     * })
-     * 
-     */
-    delete<T extends PlatilloDeleteArgs>(args: SelectSubset<T, PlatilloDeleteArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Platillo.
-     * @param {PlatilloUpdateArgs} args - Arguments to update one Platillo.
-     * @example
-     * // Update one Platillo
-     * const platillo = await prisma.platillo.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends PlatilloUpdateArgs>(args: SelectSubset<T, PlatilloUpdateArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Platillos.
-     * @param {PlatilloDeleteManyArgs} args - Arguments to filter Platillos to delete.
-     * @example
-     * // Delete a few Platillos
-     * const { count } = await prisma.platillo.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends PlatilloDeleteManyArgs>(args?: SelectSubset<T, PlatilloDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Platillos.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatilloUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Platillos
-     * const platillo = await prisma.platillo.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends PlatilloUpdateManyArgs>(args: SelectSubset<T, PlatilloUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Platillos and returns the data updated in the database.
-     * @param {PlatilloUpdateManyAndReturnArgs} args - Arguments to update many Platillos.
-     * @example
-     * // Update many Platillos
-     * const platillo = await prisma.platillo.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Platillos and only return the `id`
-     * const platilloWithIdOnly = await prisma.platillo.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends PlatilloUpdateManyAndReturnArgs>(args: SelectSubset<T, PlatilloUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Platillo.
-     * @param {PlatilloUpsertArgs} args - Arguments to update or create a Platillo.
-     * @example
-     * // Update or create a Platillo
-     * const platillo = await prisma.platillo.upsert({
-     *   create: {
-     *     // ... data to create a Platillo
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Platillo we want to update
-     *   }
-     * })
-     */
-    upsert<T extends PlatilloUpsertArgs>(args: SelectSubset<T, PlatilloUpsertArgs<ExtArgs>>): Prisma__PlatilloClient<$Result.GetResult<Prisma.$PlatilloPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Platillos.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatilloCountArgs} args - Arguments to filter Platillos to count.
-     * @example
-     * // Count the number of Platillos
-     * const count = await prisma.platillo.count({
-     *   where: {
-     *     // ... the filter for the Platillos we want to count
-     *   }
-     * })
-    **/
-    count<T extends PlatilloCountArgs>(
-      args?: Subset<T, PlatilloCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], PlatilloCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Platillo.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatilloAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends PlatilloAggregateArgs>(args: Subset<T, PlatilloAggregateArgs>): Prisma.PrismaPromise<GetPlatilloAggregateType<T>>
-
-    /**
-     * Group by Platillo.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatilloGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends PlatilloGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: PlatilloGroupByArgs['orderBy'] }
-        : { orderBy?: PlatilloGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, PlatilloGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlatilloGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Platillo model
-   */
-  readonly fields: PlatilloFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Platillo.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__PlatilloClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Platillo model
-   */
-  interface PlatilloFieldRefs {
-    readonly id: FieldRef<"Platillo", 'Int'>
-    readonly nombre: FieldRef<"Platillo", 'String'>
-    readonly precio: FieldRef<"Platillo", 'Float'>
-    readonly categoria: FieldRef<"Platillo", 'String'>
-    readonly creadoEn: FieldRef<"Platillo", 'DateTime'>
-    readonly disponible: FieldRef<"Platillo", 'Boolean'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Platillo findUnique
-   */
-  export type PlatilloFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Platillo
-     */
-    select?: PlatilloSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Platillo
-     */
-    omit?: PlatilloOmit<ExtArgs> | null
-    /**
-     * Filter, which Platillo to fetch.
-     */
-    where: PlatilloWhereUniqueInput
-  }
-
-  /**
-   * Platillo findUniqueOrThrow
-   */
-  export type PlatilloFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Platillo
-     */
-    select?: PlatilloSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Platillo
-     */
-    omit?: PlatilloOmit<ExtArgs> | null
-    /**
-     * Filter, which Platillo to fetch.
-     */
-    where: PlatilloWhereUniqueInput
-  }
-
-  /**
-   * Platillo findFirst
-   */
-  export type PlatilloFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Platillo
-     */
-    select?: PlatilloSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Platillo
-     */
-    omit?: PlatilloOmit<ExtArgs> | null
-    /**
-     * Filter, which Platillo to fetch.
-     */
-    where?: PlatilloWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Platillos to fetch.
-     */
-    orderBy?: PlatilloOrderByWithRelationInput | PlatilloOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Platillos.
-     */
-    cursor?: PlatilloWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Platillos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Platillos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Platillos.
-     */
-    distinct?: PlatilloScalarFieldEnum | PlatilloScalarFieldEnum[]
-  }
-
-  /**
-   * Platillo findFirstOrThrow
-   */
-  export type PlatilloFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Platillo
-     */
-    select?: PlatilloSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Platillo
-     */
-    omit?: PlatilloOmit<ExtArgs> | null
-    /**
-     * Filter, which Platillo to fetch.
-     */
-    where?: PlatilloWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Platillos to fetch.
-     */
-    orderBy?: PlatilloOrderByWithRelationInput | PlatilloOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Platillos.
-     */
-    cursor?: PlatilloWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Platillos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Platillos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Platillos.
-     */
-    distinct?: PlatilloScalarFieldEnum | PlatilloScalarFieldEnum[]
-  }
-
-  /**
-   * Platillo findMany
-   */
-  export type PlatilloFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Platillo
-     */
-    select?: PlatilloSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Platillo
-     */
-    omit?: PlatilloOmit<ExtArgs> | null
-    /**
-     * Filter, which Platillos to fetch.
-     */
-    where?: PlatilloWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Platillos to fetch.
-     */
-    orderBy?: PlatilloOrderByWithRelationInput | PlatilloOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Platillos.
-     */
-    cursor?: PlatilloWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Platillos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Platillos.
-     */
-    skip?: number
-    distinct?: PlatilloScalarFieldEnum | PlatilloScalarFieldEnum[]
-  }
-
-  /**
-   * Platillo create
-   */
-  export type PlatilloCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Platillo
-     */
-    select?: PlatilloSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Platillo
-     */
-    omit?: PlatilloOmit<ExtArgs> | null
-    /**
-     * The data needed to create a Platillo.
-     */
-    data: XOR<PlatilloCreateInput, PlatilloUncheckedCreateInput>
-  }
-
-  /**
-   * Platillo createMany
-   */
-  export type PlatilloCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Platillos.
-     */
-    data: PlatilloCreateManyInput | PlatilloCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Platillo createManyAndReturn
-   */
-  export type PlatilloCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Platillo
-     */
-    select?: PlatilloSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Platillo
-     */
-    omit?: PlatilloOmit<ExtArgs> | null
-    /**
-     * The data used to create many Platillos.
-     */
-    data: PlatilloCreateManyInput | PlatilloCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Platillo update
-   */
-  export type PlatilloUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Platillo
-     */
-    select?: PlatilloSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Platillo
-     */
-    omit?: PlatilloOmit<ExtArgs> | null
-    /**
-     * The data needed to update a Platillo.
-     */
-    data: XOR<PlatilloUpdateInput, PlatilloUncheckedUpdateInput>
-    /**
-     * Choose, which Platillo to update.
-     */
-    where: PlatilloWhereUniqueInput
-  }
-
-  /**
-   * Platillo updateMany
-   */
-  export type PlatilloUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Platillos.
-     */
-    data: XOR<PlatilloUpdateManyMutationInput, PlatilloUncheckedUpdateManyInput>
-    /**
-     * Filter which Platillos to update
-     */
-    where?: PlatilloWhereInput
-    /**
-     * Limit how many Platillos to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Platillo updateManyAndReturn
-   */
-  export type PlatilloUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Platillo
-     */
-    select?: PlatilloSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Platillo
-     */
-    omit?: PlatilloOmit<ExtArgs> | null
-    /**
-     * The data used to update Platillos.
-     */
-    data: XOR<PlatilloUpdateManyMutationInput, PlatilloUncheckedUpdateManyInput>
-    /**
-     * Filter which Platillos to update
-     */
-    where?: PlatilloWhereInput
-    /**
-     * Limit how many Platillos to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Platillo upsert
-   */
-  export type PlatilloUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Platillo
-     */
-    select?: PlatilloSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Platillo
-     */
-    omit?: PlatilloOmit<ExtArgs> | null
-    /**
-     * The filter to search for the Platillo to update in case it exists.
-     */
-    where: PlatilloWhereUniqueInput
-    /**
-     * In case the Platillo found by the `where` argument doesn't exist, create a new Platillo with this data.
-     */
-    create: XOR<PlatilloCreateInput, PlatilloUncheckedCreateInput>
-    /**
-     * In case the Platillo was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<PlatilloUpdateInput, PlatilloUncheckedUpdateInput>
-  }
-
-  /**
-   * Platillo delete
-   */
-  export type PlatilloDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Platillo
-     */
-    select?: PlatilloSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Platillo
-     */
-    omit?: PlatilloOmit<ExtArgs> | null
-    /**
-     * Filter which Platillo to delete.
-     */
-    where: PlatilloWhereUniqueInput
-  }
-
-  /**
-   * Platillo deleteMany
-   */
-  export type PlatilloDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Platillos to delete
-     */
-    where?: PlatilloWhereInput
-    /**
-     * Limit how many Platillos to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Platillo without action
-   */
-  export type PlatilloDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Platillo
-     */
-    select?: PlatilloSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Platillo
-     */
-    omit?: PlatilloOmit<ExtArgs> | null
   }
 
 
@@ -5718,28 +5887,6 @@ export namespace Prisma {
   export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
 
 
-  export const RolScalarFieldEnum: {
-    id: 'id',
-    nombre: 'nombre'
-  };
-
-  export type RolScalarFieldEnum = (typeof RolScalarFieldEnum)[keyof typeof RolScalarFieldEnum]
-
-
-  export const HistorialModificacionScalarFieldEnum: {
-    id: 'id',
-    usuarioId: 'usuarioId',
-    campo: 'campo',
-    valorAnterior: 'valorAnterior',
-    valorNuevo: 'valorNuevo',
-    fecha: 'fecha',
-    accion: 'accion',
-    responsableId: 'responsableId'
-  };
-
-  export type HistorialModificacionScalarFieldEnum = (typeof HistorialModificacionScalarFieldEnum)[keyof typeof HistorialModificacionScalarFieldEnum]
-
-
   export const PlatilloScalarFieldEnum: {
     id: 'id',
     nombre: 'nombre',
@@ -5750,6 +5897,29 @@ export namespace Prisma {
   };
 
   export type PlatilloScalarFieldEnum = (typeof PlatilloScalarFieldEnum)[keyof typeof PlatilloScalarFieldEnum]
+
+
+  export const RolScalarFieldEnum: {
+    id: 'id',
+    nombre: 'nombre'
+  };
+
+  export type RolScalarFieldEnum = (typeof RolScalarFieldEnum)[keyof typeof RolScalarFieldEnum]
+
+
+  export const HistorialModificacionScalarFieldEnum: {
+    id: 'id',
+    campo: 'campo',
+    valorAnterior: 'valorAnterior',
+    valorNuevo: 'valorNuevo',
+    fecha: 'fecha',
+    accion: 'accion',
+    responsableId: 'responsableId',
+    usuarioId: 'usuarioId',
+    platilloId: 'platilloId'
+  };
+
+  export type HistorialModificacionScalarFieldEnum = (typeof HistorialModificacionScalarFieldEnum)[keyof typeof HistorialModificacionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -5930,6 +6100,68 @@ export namespace Prisma {
     rolId?: IntWithAggregatesFilter<"Usuario"> | number
   }
 
+  export type PlatilloWhereInput = {
+    AND?: PlatilloWhereInput | PlatilloWhereInput[]
+    OR?: PlatilloWhereInput[]
+    NOT?: PlatilloWhereInput | PlatilloWhereInput[]
+    id?: IntFilter<"Platillo"> | number
+    nombre?: StringFilter<"Platillo"> | string
+    precio?: FloatFilter<"Platillo"> | number
+    categoria?: StringFilter<"Platillo"> | string
+    creadoEn?: DateTimeFilter<"Platillo"> | Date | string
+    disponible?: BoolFilter<"Platillo"> | boolean
+    historialModificaciones?: HistorialModificacionListRelationFilter
+  }
+
+  export type PlatilloOrderByWithRelationInput = {
+    id?: SortOrder
+    nombre?: SortOrder
+    precio?: SortOrder
+    categoria?: SortOrder
+    creadoEn?: SortOrder
+    disponible?: SortOrder
+    historialModificaciones?: HistorialModificacionOrderByRelationAggregateInput
+  }
+
+  export type PlatilloWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    nombre?: string
+    AND?: PlatilloWhereInput | PlatilloWhereInput[]
+    OR?: PlatilloWhereInput[]
+    NOT?: PlatilloWhereInput | PlatilloWhereInput[]
+    precio?: FloatFilter<"Platillo"> | number
+    categoria?: StringFilter<"Platillo"> | string
+    creadoEn?: DateTimeFilter<"Platillo"> | Date | string
+    disponible?: BoolFilter<"Platillo"> | boolean
+    historialModificaciones?: HistorialModificacionListRelationFilter
+  }, "id" | "nombre">
+
+  export type PlatilloOrderByWithAggregationInput = {
+    id?: SortOrder
+    nombre?: SortOrder
+    precio?: SortOrder
+    categoria?: SortOrder
+    creadoEn?: SortOrder
+    disponible?: SortOrder
+    _count?: PlatilloCountOrderByAggregateInput
+    _avg?: PlatilloAvgOrderByAggregateInput
+    _max?: PlatilloMaxOrderByAggregateInput
+    _min?: PlatilloMinOrderByAggregateInput
+    _sum?: PlatilloSumOrderByAggregateInput
+  }
+
+  export type PlatilloScalarWhereWithAggregatesInput = {
+    AND?: PlatilloScalarWhereWithAggregatesInput | PlatilloScalarWhereWithAggregatesInput[]
+    OR?: PlatilloScalarWhereWithAggregatesInput[]
+    NOT?: PlatilloScalarWhereWithAggregatesInput | PlatilloScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Platillo"> | number
+    nombre?: StringWithAggregatesFilter<"Platillo"> | string
+    precio?: FloatWithAggregatesFilter<"Platillo"> | number
+    categoria?: StringWithAggregatesFilter<"Platillo"> | string
+    creadoEn?: DateTimeWithAggregatesFilter<"Platillo"> | Date | string
+    disponible?: BoolWithAggregatesFilter<"Platillo"> | boolean
+  }
+
   export type RolWhereInput = {
     AND?: RolWhereInput | RolWhereInput[]
     OR?: RolWhereInput[]
@@ -5977,28 +6209,32 @@ export namespace Prisma {
     OR?: HistorialModificacionWhereInput[]
     NOT?: HistorialModificacionWhereInput | HistorialModificacionWhereInput[]
     id?: IntFilter<"HistorialModificacion"> | number
-    usuarioId?: IntFilter<"HistorialModificacion"> | number
     campo?: StringFilter<"HistorialModificacion"> | string
     valorAnterior?: StringNullableFilter<"HistorialModificacion"> | string | null
     valorNuevo?: StringNullableFilter<"HistorialModificacion"> | string | null
     fecha?: DateTimeFilter<"HistorialModificacion"> | Date | string
     accion?: StringFilter<"HistorialModificacion"> | string
     responsableId?: IntFilter<"HistorialModificacion"> | number
-    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+    usuarioId?: IntNullableFilter<"HistorialModificacion"> | number | null
+    platilloId?: IntNullableFilter<"HistorialModificacion"> | number | null
     responsable?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+    usuario?: XOR<UsuarioNullableScalarRelationFilter, UsuarioWhereInput> | null
+    platillo?: XOR<PlatilloNullableScalarRelationFilter, PlatilloWhereInput> | null
   }
 
   export type HistorialModificacionOrderByWithRelationInput = {
     id?: SortOrder
-    usuarioId?: SortOrder
     campo?: SortOrder
     valorAnterior?: SortOrderInput | SortOrder
     valorNuevo?: SortOrderInput | SortOrder
     fecha?: SortOrder
     accion?: SortOrder
     responsableId?: SortOrder
-    usuario?: UsuarioOrderByWithRelationInput
+    usuarioId?: SortOrderInput | SortOrder
+    platilloId?: SortOrderInput | SortOrder
     responsable?: UsuarioOrderByWithRelationInput
+    usuario?: UsuarioOrderByWithRelationInput
+    platillo?: PlatilloOrderByWithRelationInput
   }
 
   export type HistorialModificacionWhereUniqueInput = Prisma.AtLeast<{
@@ -6006,26 +6242,29 @@ export namespace Prisma {
     AND?: HistorialModificacionWhereInput | HistorialModificacionWhereInput[]
     OR?: HistorialModificacionWhereInput[]
     NOT?: HistorialModificacionWhereInput | HistorialModificacionWhereInput[]
-    usuarioId?: IntFilter<"HistorialModificacion"> | number
     campo?: StringFilter<"HistorialModificacion"> | string
     valorAnterior?: StringNullableFilter<"HistorialModificacion"> | string | null
     valorNuevo?: StringNullableFilter<"HistorialModificacion"> | string | null
     fecha?: DateTimeFilter<"HistorialModificacion"> | Date | string
     accion?: StringFilter<"HistorialModificacion"> | string
     responsableId?: IntFilter<"HistorialModificacion"> | number
-    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+    usuarioId?: IntNullableFilter<"HistorialModificacion"> | number | null
+    platilloId?: IntNullableFilter<"HistorialModificacion"> | number | null
     responsable?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+    usuario?: XOR<UsuarioNullableScalarRelationFilter, UsuarioWhereInput> | null
+    platillo?: XOR<PlatilloNullableScalarRelationFilter, PlatilloWhereInput> | null
   }, "id">
 
   export type HistorialModificacionOrderByWithAggregationInput = {
     id?: SortOrder
-    usuarioId?: SortOrder
     campo?: SortOrder
     valorAnterior?: SortOrderInput | SortOrder
     valorNuevo?: SortOrderInput | SortOrder
     fecha?: SortOrder
     accion?: SortOrder
     responsableId?: SortOrder
+    usuarioId?: SortOrderInput | SortOrder
+    platilloId?: SortOrderInput | SortOrder
     _count?: HistorialModificacionCountOrderByAggregateInput
     _avg?: HistorialModificacionAvgOrderByAggregateInput
     _max?: HistorialModificacionMaxOrderByAggregateInput
@@ -6038,72 +6277,14 @@ export namespace Prisma {
     OR?: HistorialModificacionScalarWhereWithAggregatesInput[]
     NOT?: HistorialModificacionScalarWhereWithAggregatesInput | HistorialModificacionScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"HistorialModificacion"> | number
-    usuarioId?: IntWithAggregatesFilter<"HistorialModificacion"> | number
     campo?: StringWithAggregatesFilter<"HistorialModificacion"> | string
     valorAnterior?: StringNullableWithAggregatesFilter<"HistorialModificacion"> | string | null
     valorNuevo?: StringNullableWithAggregatesFilter<"HistorialModificacion"> | string | null
     fecha?: DateTimeWithAggregatesFilter<"HistorialModificacion"> | Date | string
     accion?: StringWithAggregatesFilter<"HistorialModificacion"> | string
     responsableId?: IntWithAggregatesFilter<"HistorialModificacion"> | number
-  }
-
-  export type PlatilloWhereInput = {
-    AND?: PlatilloWhereInput | PlatilloWhereInput[]
-    OR?: PlatilloWhereInput[]
-    NOT?: PlatilloWhereInput | PlatilloWhereInput[]
-    id?: IntFilter<"Platillo"> | number
-    nombre?: StringFilter<"Platillo"> | string
-    precio?: FloatFilter<"Platillo"> | number
-    categoria?: StringFilter<"Platillo"> | string
-    creadoEn?: DateTimeFilter<"Platillo"> | Date | string
-    disponible?: BoolFilter<"Platillo"> | boolean
-  }
-
-  export type PlatilloOrderByWithRelationInput = {
-    id?: SortOrder
-    nombre?: SortOrder
-    precio?: SortOrder
-    categoria?: SortOrder
-    creadoEn?: SortOrder
-    disponible?: SortOrder
-  }
-
-  export type PlatilloWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    nombre?: string
-    AND?: PlatilloWhereInput | PlatilloWhereInput[]
-    OR?: PlatilloWhereInput[]
-    NOT?: PlatilloWhereInput | PlatilloWhereInput[]
-    precio?: FloatFilter<"Platillo"> | number
-    categoria?: StringFilter<"Platillo"> | string
-    creadoEn?: DateTimeFilter<"Platillo"> | Date | string
-    disponible?: BoolFilter<"Platillo"> | boolean
-  }, "id" | "nombre">
-
-  export type PlatilloOrderByWithAggregationInput = {
-    id?: SortOrder
-    nombre?: SortOrder
-    precio?: SortOrder
-    categoria?: SortOrder
-    creadoEn?: SortOrder
-    disponible?: SortOrder
-    _count?: PlatilloCountOrderByAggregateInput
-    _avg?: PlatilloAvgOrderByAggregateInput
-    _max?: PlatilloMaxOrderByAggregateInput
-    _min?: PlatilloMinOrderByAggregateInput
-    _sum?: PlatilloSumOrderByAggregateInput
-  }
-
-  export type PlatilloScalarWhereWithAggregatesInput = {
-    AND?: PlatilloScalarWhereWithAggregatesInput | PlatilloScalarWhereWithAggregatesInput[]
-    OR?: PlatilloScalarWhereWithAggregatesInput[]
-    NOT?: PlatilloScalarWhereWithAggregatesInput | PlatilloScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Platillo"> | number
-    nombre?: StringWithAggregatesFilter<"Platillo"> | string
-    precio?: FloatWithAggregatesFilter<"Platillo"> | number
-    categoria?: StringWithAggregatesFilter<"Platillo"> | string
-    creadoEn?: DateTimeWithAggregatesFilter<"Platillo"> | Date | string
-    disponible?: BoolWithAggregatesFilter<"Platillo"> | boolean
+    usuarioId?: IntNullableWithAggregatesFilter<"HistorialModificacion"> | number | null
+    platilloId?: IntNullableWithAggregatesFilter<"HistorialModificacion"> | number | null
   }
 
   export type UsuarioCreateInput = {
@@ -6194,6 +6375,70 @@ export namespace Prisma {
     rolId?: IntFieldUpdateOperationsInput | number
   }
 
+  export type PlatilloCreateInput = {
+    nombre: string
+    precio: number
+    categoria: string
+    creadoEn?: Date | string
+    disponible?: boolean
+    historialModificaciones?: HistorialModificacionCreateNestedManyWithoutPlatilloInput
+  }
+
+  export type PlatilloUncheckedCreateInput = {
+    id?: number
+    nombre: string
+    precio: number
+    categoria: string
+    creadoEn?: Date | string
+    disponible?: boolean
+    historialModificaciones?: HistorialModificacionUncheckedCreateNestedManyWithoutPlatilloInput
+  }
+
+  export type PlatilloUpdateInput = {
+    nombre?: StringFieldUpdateOperationsInput | string
+    precio?: FloatFieldUpdateOperationsInput | number
+    categoria?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    disponible?: BoolFieldUpdateOperationsInput | boolean
+    historialModificaciones?: HistorialModificacionUpdateManyWithoutPlatilloNestedInput
+  }
+
+  export type PlatilloUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nombre?: StringFieldUpdateOperationsInput | string
+    precio?: FloatFieldUpdateOperationsInput | number
+    categoria?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    disponible?: BoolFieldUpdateOperationsInput | boolean
+    historialModificaciones?: HistorialModificacionUncheckedUpdateManyWithoutPlatilloNestedInput
+  }
+
+  export type PlatilloCreateManyInput = {
+    id?: number
+    nombre: string
+    precio: number
+    categoria: string
+    creadoEn?: Date | string
+    disponible?: boolean
+  }
+
+  export type PlatilloUpdateManyMutationInput = {
+    nombre?: StringFieldUpdateOperationsInput | string
+    precio?: FloatFieldUpdateOperationsInput | number
+    categoria?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    disponible?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type PlatilloUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nombre?: StringFieldUpdateOperationsInput | string
+    precio?: FloatFieldUpdateOperationsInput | number
+    categoria?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    disponible?: BoolFieldUpdateOperationsInput | boolean
+  }
+
   export type RolCreateInput = {
     nombre: string
     usuarios?: UsuarioCreateNestedManyWithoutRolInput
@@ -6236,19 +6481,21 @@ export namespace Prisma {
     valorNuevo?: string | null
     fecha?: Date | string
     accion: string
-    usuario: UsuarioCreateNestedOneWithoutHistorialModificacionesInput
     responsable: UsuarioCreateNestedOneWithoutHistorialResponsableInput
+    usuario?: UsuarioCreateNestedOneWithoutHistorialModificacionesInput
+    platillo?: PlatilloCreateNestedOneWithoutHistorialModificacionesInput
   }
 
   export type HistorialModificacionUncheckedCreateInput = {
     id?: number
-    usuarioId: number
     campo: string
     valorAnterior?: string | null
     valorNuevo?: string | null
     fecha?: Date | string
     accion: string
     responsableId: number
+    usuarioId?: number | null
+    platilloId?: number | null
   }
 
   export type HistorialModificacionUpdateInput = {
@@ -6257,30 +6504,33 @@ export namespace Prisma {
     valorNuevo?: NullableStringFieldUpdateOperationsInput | string | null
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
     accion?: StringFieldUpdateOperationsInput | string
-    usuario?: UsuarioUpdateOneRequiredWithoutHistorialModificacionesNestedInput
     responsable?: UsuarioUpdateOneRequiredWithoutHistorialResponsableNestedInput
+    usuario?: UsuarioUpdateOneWithoutHistorialModificacionesNestedInput
+    platillo?: PlatilloUpdateOneWithoutHistorialModificacionesNestedInput
   }
 
   export type HistorialModificacionUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    usuarioId?: IntFieldUpdateOperationsInput | number
     campo?: StringFieldUpdateOperationsInput | string
     valorAnterior?: NullableStringFieldUpdateOperationsInput | string | null
     valorNuevo?: NullableStringFieldUpdateOperationsInput | string | null
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
     accion?: StringFieldUpdateOperationsInput | string
     responsableId?: IntFieldUpdateOperationsInput | number
+    usuarioId?: NullableIntFieldUpdateOperationsInput | number | null
+    platilloId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type HistorialModificacionCreateManyInput = {
     id?: number
-    usuarioId: number
     campo: string
     valorAnterior?: string | null
     valorNuevo?: string | null
     fecha?: Date | string
     accion: string
     responsableId: number
+    usuarioId?: number | null
+    platilloId?: number | null
   }
 
   export type HistorialModificacionUpdateManyMutationInput = {
@@ -6293,73 +6543,14 @@ export namespace Prisma {
 
   export type HistorialModificacionUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    usuarioId?: IntFieldUpdateOperationsInput | number
     campo?: StringFieldUpdateOperationsInput | string
     valorAnterior?: NullableStringFieldUpdateOperationsInput | string | null
     valorNuevo?: NullableStringFieldUpdateOperationsInput | string | null
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
     accion?: StringFieldUpdateOperationsInput | string
     responsableId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type PlatilloCreateInput = {
-    nombre: string
-    precio: number
-    categoria: string
-    creadoEn?: Date | string
-    disponible?: boolean
-  }
-
-  export type PlatilloUncheckedCreateInput = {
-    id?: number
-    nombre: string
-    precio: number
-    categoria: string
-    creadoEn?: Date | string
-    disponible?: boolean
-  }
-
-  export type PlatilloUpdateInput = {
-    nombre?: StringFieldUpdateOperationsInput | string
-    precio?: FloatFieldUpdateOperationsInput | number
-    categoria?: StringFieldUpdateOperationsInput | string
-    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    disponible?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type PlatilloUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    nombre?: StringFieldUpdateOperationsInput | string
-    precio?: FloatFieldUpdateOperationsInput | number
-    categoria?: StringFieldUpdateOperationsInput | string
-    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    disponible?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type PlatilloCreateManyInput = {
-    id?: number
-    nombre: string
-    precio: number
-    categoria: string
-    creadoEn?: Date | string
-    disponible?: boolean
-  }
-
-  export type PlatilloUpdateManyMutationInput = {
-    nombre?: StringFieldUpdateOperationsInput | string
-    precio?: FloatFieldUpdateOperationsInput | number
-    categoria?: StringFieldUpdateOperationsInput | string
-    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    disponible?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type PlatilloUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    nombre?: StringFieldUpdateOperationsInput | string
-    precio?: FloatFieldUpdateOperationsInput | number
-    categoria?: StringFieldUpdateOperationsInput | string
-    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    disponible?: BoolFieldUpdateOperationsInput | boolean
+    usuarioId?: NullableIntFieldUpdateOperationsInput | number | null
+    platilloId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -6521,127 +6712,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type UsuarioListRelationFilter = {
-    every?: UsuarioWhereInput
-    some?: UsuarioWhereInput
-    none?: UsuarioWhereInput
-  }
-
-  export type UsuarioOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type RolCountOrderByAggregateInput = {
-    id?: SortOrder
-    nombre?: SortOrder
-  }
-
-  export type RolAvgOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type RolMaxOrderByAggregateInput = {
-    id?: SortOrder
-    nombre?: SortOrder
-  }
-
-  export type RolMinOrderByAggregateInput = {
-    id?: SortOrder
-    nombre?: SortOrder
-  }
-
-  export type RolSumOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type UsuarioScalarRelationFilter = {
-    is?: UsuarioWhereInput
-    isNot?: UsuarioWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
-  }
-
-  export type HistorialModificacionCountOrderByAggregateInput = {
-    id?: SortOrder
-    usuarioId?: SortOrder
-    campo?: SortOrder
-    valorAnterior?: SortOrder
-    valorNuevo?: SortOrder
-    fecha?: SortOrder
-    accion?: SortOrder
-    responsableId?: SortOrder
-  }
-
-  export type HistorialModificacionAvgOrderByAggregateInput = {
-    id?: SortOrder
-    usuarioId?: SortOrder
-    responsableId?: SortOrder
-  }
-
-  export type HistorialModificacionMaxOrderByAggregateInput = {
-    id?: SortOrder
-    usuarioId?: SortOrder
-    campo?: SortOrder
-    valorAnterior?: SortOrder
-    valorNuevo?: SortOrder
-    fecha?: SortOrder
-    accion?: SortOrder
-    responsableId?: SortOrder
-  }
-
-  export type HistorialModificacionMinOrderByAggregateInput = {
-    id?: SortOrder
-    usuarioId?: SortOrder
-    campo?: SortOrder
-    valorAnterior?: SortOrder
-    valorNuevo?: SortOrder
-    fecha?: SortOrder
-    accion?: SortOrder
-    responsableId?: SortOrder
-  }
-
-  export type HistorialModificacionSumOrderByAggregateInput = {
-    id?: SortOrder
-    usuarioId?: SortOrder
-    responsableId?: SortOrder
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -6704,6 +6774,169 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type UsuarioListRelationFilter = {
+    every?: UsuarioWhereInput
+    some?: UsuarioWhereInput
+    none?: UsuarioWhereInput
+  }
+
+  export type UsuarioOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RolCountOrderByAggregateInput = {
+    id?: SortOrder
+    nombre?: SortOrder
+  }
+
+  export type RolAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type RolMaxOrderByAggregateInput = {
+    id?: SortOrder
+    nombre?: SortOrder
+  }
+
+  export type RolMinOrderByAggregateInput = {
+    id?: SortOrder
+    nombre?: SortOrder
+  }
+
+  export type RolSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type UsuarioScalarRelationFilter = {
+    is?: UsuarioWhereInput
+    isNot?: UsuarioWhereInput
+  }
+
+  export type UsuarioNullableScalarRelationFilter = {
+    is?: UsuarioWhereInput | null
+    isNot?: UsuarioWhereInput | null
+  }
+
+  export type PlatilloNullableScalarRelationFilter = {
+    is?: PlatilloWhereInput | null
+    isNot?: PlatilloWhereInput | null
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type HistorialModificacionCountOrderByAggregateInput = {
+    id?: SortOrder
+    campo?: SortOrder
+    valorAnterior?: SortOrder
+    valorNuevo?: SortOrder
+    fecha?: SortOrder
+    accion?: SortOrder
+    responsableId?: SortOrder
+    usuarioId?: SortOrder
+    platilloId?: SortOrder
+  }
+
+  export type HistorialModificacionAvgOrderByAggregateInput = {
+    id?: SortOrder
+    responsableId?: SortOrder
+    usuarioId?: SortOrder
+    platilloId?: SortOrder
+  }
+
+  export type HistorialModificacionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    campo?: SortOrder
+    valorAnterior?: SortOrder
+    valorNuevo?: SortOrder
+    fecha?: SortOrder
+    accion?: SortOrder
+    responsableId?: SortOrder
+    usuarioId?: SortOrder
+    platilloId?: SortOrder
+  }
+
+  export type HistorialModificacionMinOrderByAggregateInput = {
+    id?: SortOrder
+    campo?: SortOrder
+    valorAnterior?: SortOrder
+    valorNuevo?: SortOrder
+    fecha?: SortOrder
+    accion?: SortOrder
+    responsableId?: SortOrder
+    usuarioId?: SortOrder
+    platilloId?: SortOrder
+  }
+
+  export type HistorialModificacionSumOrderByAggregateInput = {
+    id?: SortOrder
+    responsableId?: SortOrder
+    usuarioId?: SortOrder
+    platilloId?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type RolCreateNestedOneWithoutUsuariosInput = {
@@ -6824,6 +7057,56 @@ export namespace Prisma {
     deleteMany?: HistorialModificacionScalarWhereInput | HistorialModificacionScalarWhereInput[]
   }
 
+  export type HistorialModificacionCreateNestedManyWithoutPlatilloInput = {
+    create?: XOR<HistorialModificacionCreateWithoutPlatilloInput, HistorialModificacionUncheckedCreateWithoutPlatilloInput> | HistorialModificacionCreateWithoutPlatilloInput[] | HistorialModificacionUncheckedCreateWithoutPlatilloInput[]
+    connectOrCreate?: HistorialModificacionCreateOrConnectWithoutPlatilloInput | HistorialModificacionCreateOrConnectWithoutPlatilloInput[]
+    createMany?: HistorialModificacionCreateManyPlatilloInputEnvelope
+    connect?: HistorialModificacionWhereUniqueInput | HistorialModificacionWhereUniqueInput[]
+  }
+
+  export type HistorialModificacionUncheckedCreateNestedManyWithoutPlatilloInput = {
+    create?: XOR<HistorialModificacionCreateWithoutPlatilloInput, HistorialModificacionUncheckedCreateWithoutPlatilloInput> | HistorialModificacionCreateWithoutPlatilloInput[] | HistorialModificacionUncheckedCreateWithoutPlatilloInput[]
+    connectOrCreate?: HistorialModificacionCreateOrConnectWithoutPlatilloInput | HistorialModificacionCreateOrConnectWithoutPlatilloInput[]
+    createMany?: HistorialModificacionCreateManyPlatilloInputEnvelope
+    connect?: HistorialModificacionWhereUniqueInput | HistorialModificacionWhereUniqueInput[]
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type HistorialModificacionUpdateManyWithoutPlatilloNestedInput = {
+    create?: XOR<HistorialModificacionCreateWithoutPlatilloInput, HistorialModificacionUncheckedCreateWithoutPlatilloInput> | HistorialModificacionCreateWithoutPlatilloInput[] | HistorialModificacionUncheckedCreateWithoutPlatilloInput[]
+    connectOrCreate?: HistorialModificacionCreateOrConnectWithoutPlatilloInput | HistorialModificacionCreateOrConnectWithoutPlatilloInput[]
+    upsert?: HistorialModificacionUpsertWithWhereUniqueWithoutPlatilloInput | HistorialModificacionUpsertWithWhereUniqueWithoutPlatilloInput[]
+    createMany?: HistorialModificacionCreateManyPlatilloInputEnvelope
+    set?: HistorialModificacionWhereUniqueInput | HistorialModificacionWhereUniqueInput[]
+    disconnect?: HistorialModificacionWhereUniqueInput | HistorialModificacionWhereUniqueInput[]
+    delete?: HistorialModificacionWhereUniqueInput | HistorialModificacionWhereUniqueInput[]
+    connect?: HistorialModificacionWhereUniqueInput | HistorialModificacionWhereUniqueInput[]
+    update?: HistorialModificacionUpdateWithWhereUniqueWithoutPlatilloInput | HistorialModificacionUpdateWithWhereUniqueWithoutPlatilloInput[]
+    updateMany?: HistorialModificacionUpdateManyWithWhereWithoutPlatilloInput | HistorialModificacionUpdateManyWithWhereWithoutPlatilloInput[]
+    deleteMany?: HistorialModificacionScalarWhereInput | HistorialModificacionScalarWhereInput[]
+  }
+
+  export type HistorialModificacionUncheckedUpdateManyWithoutPlatilloNestedInput = {
+    create?: XOR<HistorialModificacionCreateWithoutPlatilloInput, HistorialModificacionUncheckedCreateWithoutPlatilloInput> | HistorialModificacionCreateWithoutPlatilloInput[] | HistorialModificacionUncheckedCreateWithoutPlatilloInput[]
+    connectOrCreate?: HistorialModificacionCreateOrConnectWithoutPlatilloInput | HistorialModificacionCreateOrConnectWithoutPlatilloInput[]
+    upsert?: HistorialModificacionUpsertWithWhereUniqueWithoutPlatilloInput | HistorialModificacionUpsertWithWhereUniqueWithoutPlatilloInput[]
+    createMany?: HistorialModificacionCreateManyPlatilloInputEnvelope
+    set?: HistorialModificacionWhereUniqueInput | HistorialModificacionWhereUniqueInput[]
+    disconnect?: HistorialModificacionWhereUniqueInput | HistorialModificacionWhereUniqueInput[]
+    delete?: HistorialModificacionWhereUniqueInput | HistorialModificacionWhereUniqueInput[]
+    connect?: HistorialModificacionWhereUniqueInput | HistorialModificacionWhereUniqueInput[]
+    update?: HistorialModificacionUpdateWithWhereUniqueWithoutPlatilloInput | HistorialModificacionUpdateWithWhereUniqueWithoutPlatilloInput[]
+    updateMany?: HistorialModificacionUpdateManyWithWhereWithoutPlatilloInput | HistorialModificacionUpdateManyWithWhereWithoutPlatilloInput[]
+    deleteMany?: HistorialModificacionScalarWhereInput | HistorialModificacionScalarWhereInput[]
+  }
+
   export type UsuarioCreateNestedManyWithoutRolInput = {
     create?: XOR<UsuarioCreateWithoutRolInput, UsuarioUncheckedCreateWithoutRolInput> | UsuarioCreateWithoutRolInput[] | UsuarioUncheckedCreateWithoutRolInput[]
     connectOrCreate?: UsuarioCreateOrConnectWithoutRolInput | UsuarioCreateOrConnectWithoutRolInput[]
@@ -6866,28 +7149,26 @@ export namespace Prisma {
     deleteMany?: UsuarioScalarWhereInput | UsuarioScalarWhereInput[]
   }
 
-  export type UsuarioCreateNestedOneWithoutHistorialModificacionesInput = {
-    create?: XOR<UsuarioCreateWithoutHistorialModificacionesInput, UsuarioUncheckedCreateWithoutHistorialModificacionesInput>
-    connectOrCreate?: UsuarioCreateOrConnectWithoutHistorialModificacionesInput
-    connect?: UsuarioWhereUniqueInput
-  }
-
   export type UsuarioCreateNestedOneWithoutHistorialResponsableInput = {
     create?: XOR<UsuarioCreateWithoutHistorialResponsableInput, UsuarioUncheckedCreateWithoutHistorialResponsableInput>
     connectOrCreate?: UsuarioCreateOrConnectWithoutHistorialResponsableInput
     connect?: UsuarioWhereUniqueInput
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
-  export type UsuarioUpdateOneRequiredWithoutHistorialModificacionesNestedInput = {
+  export type UsuarioCreateNestedOneWithoutHistorialModificacionesInput = {
     create?: XOR<UsuarioCreateWithoutHistorialModificacionesInput, UsuarioUncheckedCreateWithoutHistorialModificacionesInput>
     connectOrCreate?: UsuarioCreateOrConnectWithoutHistorialModificacionesInput
-    upsert?: UsuarioUpsertWithoutHistorialModificacionesInput
     connect?: UsuarioWhereUniqueInput
-    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutHistorialModificacionesInput, UsuarioUpdateWithoutHistorialModificacionesInput>, UsuarioUncheckedUpdateWithoutHistorialModificacionesInput>
+  }
+
+  export type PlatilloCreateNestedOneWithoutHistorialModificacionesInput = {
+    create?: XOR<PlatilloCreateWithoutHistorialModificacionesInput, PlatilloUncheckedCreateWithoutHistorialModificacionesInput>
+    connectOrCreate?: PlatilloCreateOrConnectWithoutHistorialModificacionesInput
+    connect?: PlatilloWhereUniqueInput
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type UsuarioUpdateOneRequiredWithoutHistorialResponsableNestedInput = {
@@ -6898,8 +7179,28 @@ export namespace Prisma {
     update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutHistorialResponsableInput, UsuarioUpdateWithoutHistorialResponsableInput>, UsuarioUncheckedUpdateWithoutHistorialResponsableInput>
   }
 
-  export type FloatFieldUpdateOperationsInput = {
-    set?: number
+  export type UsuarioUpdateOneWithoutHistorialModificacionesNestedInput = {
+    create?: XOR<UsuarioCreateWithoutHistorialModificacionesInput, UsuarioUncheckedCreateWithoutHistorialModificacionesInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutHistorialModificacionesInput
+    upsert?: UsuarioUpsertWithoutHistorialModificacionesInput
+    disconnect?: UsuarioWhereInput | boolean
+    delete?: UsuarioWhereInput | boolean
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutHistorialModificacionesInput, UsuarioUpdateWithoutHistorialModificacionesInput>, UsuarioUncheckedUpdateWithoutHistorialModificacionesInput>
+  }
+
+  export type PlatilloUpdateOneWithoutHistorialModificacionesNestedInput = {
+    create?: XOR<PlatilloCreateWithoutHistorialModificacionesInput, PlatilloUncheckedCreateWithoutHistorialModificacionesInput>
+    connectOrCreate?: PlatilloCreateOrConnectWithoutHistorialModificacionesInput
+    upsert?: PlatilloUpsertWithoutHistorialModificacionesInput
+    disconnect?: PlatilloWhereInput | boolean
+    delete?: PlatilloWhereInput | boolean
+    connect?: PlatilloWhereUniqueInput
+    update?: XOR<XOR<PlatilloUpdateToOneWithWhereWithoutHistorialModificacionesInput, PlatilloUpdateWithoutHistorialModificacionesInput>, PlatilloUncheckedUpdateWithoutHistorialModificacionesInput>
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
     increment?: number
     decrement?: number
     multiply?: number
@@ -7013,6 +7314,22 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -7025,6 +7342,17 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -7044,7 +7372,7 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -7052,23 +7380,23 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type RolCreateWithoutUsuariosInput = {
@@ -7092,6 +7420,7 @@ export namespace Prisma {
     fecha?: Date | string
     accion: string
     responsable: UsuarioCreateNestedOneWithoutHistorialResponsableInput
+    platillo?: PlatilloCreateNestedOneWithoutHistorialModificacionesInput
   }
 
   export type HistorialModificacionUncheckedCreateWithoutUsuarioInput = {
@@ -7102,6 +7431,7 @@ export namespace Prisma {
     fecha?: Date | string
     accion: string
     responsableId: number
+    platilloId?: number | null
   }
 
   export type HistorialModificacionCreateOrConnectWithoutUsuarioInput = {
@@ -7120,17 +7450,19 @@ export namespace Prisma {
     valorNuevo?: string | null
     fecha?: Date | string
     accion: string
-    usuario: UsuarioCreateNestedOneWithoutHistorialModificacionesInput
+    usuario?: UsuarioCreateNestedOneWithoutHistorialModificacionesInput
+    platillo?: PlatilloCreateNestedOneWithoutHistorialModificacionesInput
   }
 
   export type HistorialModificacionUncheckedCreateWithoutResponsableInput = {
     id?: number
-    usuarioId: number
     campo: string
     valorAnterior?: string | null
     valorNuevo?: string | null
     fecha?: Date | string
     accion: string
+    usuarioId?: number | null
+    platilloId?: number | null
   }
 
   export type HistorialModificacionCreateOrConnectWithoutResponsableInput = {
@@ -7184,13 +7516,14 @@ export namespace Prisma {
     OR?: HistorialModificacionScalarWhereInput[]
     NOT?: HistorialModificacionScalarWhereInput | HistorialModificacionScalarWhereInput[]
     id?: IntFilter<"HistorialModificacion"> | number
-    usuarioId?: IntFilter<"HistorialModificacion"> | number
     campo?: StringFilter<"HistorialModificacion"> | string
     valorAnterior?: StringNullableFilter<"HistorialModificacion"> | string | null
     valorNuevo?: StringNullableFilter<"HistorialModificacion"> | string | null
     fecha?: DateTimeFilter<"HistorialModificacion"> | Date | string
     accion?: StringFilter<"HistorialModificacion"> | string
     responsableId?: IntFilter<"HistorialModificacion"> | number
+    usuarioId?: IntNullableFilter<"HistorialModificacion"> | number | null
+    platilloId?: IntNullableFilter<"HistorialModificacion"> | number | null
   }
 
   export type HistorialModificacionUpsertWithWhereUniqueWithoutResponsableInput = {
@@ -7207,6 +7540,53 @@ export namespace Prisma {
   export type HistorialModificacionUpdateManyWithWhereWithoutResponsableInput = {
     where: HistorialModificacionScalarWhereInput
     data: XOR<HistorialModificacionUpdateManyMutationInput, HistorialModificacionUncheckedUpdateManyWithoutResponsableInput>
+  }
+
+  export type HistorialModificacionCreateWithoutPlatilloInput = {
+    campo: string
+    valorAnterior?: string | null
+    valorNuevo?: string | null
+    fecha?: Date | string
+    accion: string
+    responsable: UsuarioCreateNestedOneWithoutHistorialResponsableInput
+    usuario?: UsuarioCreateNestedOneWithoutHistorialModificacionesInput
+  }
+
+  export type HistorialModificacionUncheckedCreateWithoutPlatilloInput = {
+    id?: number
+    campo: string
+    valorAnterior?: string | null
+    valorNuevo?: string | null
+    fecha?: Date | string
+    accion: string
+    responsableId: number
+    usuarioId?: number | null
+  }
+
+  export type HistorialModificacionCreateOrConnectWithoutPlatilloInput = {
+    where: HistorialModificacionWhereUniqueInput
+    create: XOR<HistorialModificacionCreateWithoutPlatilloInput, HistorialModificacionUncheckedCreateWithoutPlatilloInput>
+  }
+
+  export type HistorialModificacionCreateManyPlatilloInputEnvelope = {
+    data: HistorialModificacionCreateManyPlatilloInput | HistorialModificacionCreateManyPlatilloInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type HistorialModificacionUpsertWithWhereUniqueWithoutPlatilloInput = {
+    where: HistorialModificacionWhereUniqueInput
+    update: XOR<HistorialModificacionUpdateWithoutPlatilloInput, HistorialModificacionUncheckedUpdateWithoutPlatilloInput>
+    create: XOR<HistorialModificacionCreateWithoutPlatilloInput, HistorialModificacionUncheckedCreateWithoutPlatilloInput>
+  }
+
+  export type HistorialModificacionUpdateWithWhereUniqueWithoutPlatilloInput = {
+    where: HistorialModificacionWhereUniqueInput
+    data: XOR<HistorialModificacionUpdateWithoutPlatilloInput, HistorialModificacionUncheckedUpdateWithoutPlatilloInput>
+  }
+
+  export type HistorialModificacionUpdateManyWithWhereWithoutPlatilloInput = {
+    where: HistorialModificacionScalarWhereInput
+    data: XOR<HistorialModificacionUpdateManyMutationInput, HistorialModificacionUncheckedUpdateManyWithoutPlatilloInput>
   }
 
   export type UsuarioCreateWithoutRolInput = {
@@ -7275,36 +7655,6 @@ export namespace Prisma {
     rolId?: IntFilter<"Usuario"> | number
   }
 
-  export type UsuarioCreateWithoutHistorialModificacionesInput = {
-    nombre: string
-    usuario: string
-    correo: string
-    contrasena: string
-    estado?: boolean
-    creadoEn?: Date | string
-    actualizadoEn?: Date | string
-    rol: RolCreateNestedOneWithoutUsuariosInput
-    historialResponsable?: HistorialModificacionCreateNestedManyWithoutResponsableInput
-  }
-
-  export type UsuarioUncheckedCreateWithoutHistorialModificacionesInput = {
-    id?: number
-    nombre: string
-    usuario: string
-    correo: string
-    contrasena: string
-    estado?: boolean
-    creadoEn?: Date | string
-    actualizadoEn?: Date | string
-    rolId: number
-    historialResponsable?: HistorialModificacionUncheckedCreateNestedManyWithoutResponsableInput
-  }
-
-  export type UsuarioCreateOrConnectWithoutHistorialModificacionesInput = {
-    where: UsuarioWhereUniqueInput
-    create: XOR<UsuarioCreateWithoutHistorialModificacionesInput, UsuarioUncheckedCreateWithoutHistorialModificacionesInput>
-  }
-
   export type UsuarioCreateWithoutHistorialResponsableInput = {
     nombre: string
     usuario: string
@@ -7335,40 +7685,56 @@ export namespace Prisma {
     create: XOR<UsuarioCreateWithoutHistorialResponsableInput, UsuarioUncheckedCreateWithoutHistorialResponsableInput>
   }
 
-  export type UsuarioUpsertWithoutHistorialModificacionesInput = {
-    update: XOR<UsuarioUpdateWithoutHistorialModificacionesInput, UsuarioUncheckedUpdateWithoutHistorialModificacionesInput>
+  export type UsuarioCreateWithoutHistorialModificacionesInput = {
+    nombre: string
+    usuario: string
+    correo: string
+    contrasena: string
+    estado?: boolean
+    creadoEn?: Date | string
+    actualizadoEn?: Date | string
+    rol: RolCreateNestedOneWithoutUsuariosInput
+    historialResponsable?: HistorialModificacionCreateNestedManyWithoutResponsableInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutHistorialModificacionesInput = {
+    id?: number
+    nombre: string
+    usuario: string
+    correo: string
+    contrasena: string
+    estado?: boolean
+    creadoEn?: Date | string
+    actualizadoEn?: Date | string
+    rolId: number
+    historialResponsable?: HistorialModificacionUncheckedCreateNestedManyWithoutResponsableInput
+  }
+
+  export type UsuarioCreateOrConnectWithoutHistorialModificacionesInput = {
+    where: UsuarioWhereUniqueInput
     create: XOR<UsuarioCreateWithoutHistorialModificacionesInput, UsuarioUncheckedCreateWithoutHistorialModificacionesInput>
-    where?: UsuarioWhereInput
   }
 
-  export type UsuarioUpdateToOneWithWhereWithoutHistorialModificacionesInput = {
-    where?: UsuarioWhereInput
-    data: XOR<UsuarioUpdateWithoutHistorialModificacionesInput, UsuarioUncheckedUpdateWithoutHistorialModificacionesInput>
+  export type PlatilloCreateWithoutHistorialModificacionesInput = {
+    nombre: string
+    precio: number
+    categoria: string
+    creadoEn?: Date | string
+    disponible?: boolean
   }
 
-  export type UsuarioUpdateWithoutHistorialModificacionesInput = {
-    nombre?: StringFieldUpdateOperationsInput | string
-    usuario?: StringFieldUpdateOperationsInput | string
-    correo?: StringFieldUpdateOperationsInput | string
-    contrasena?: StringFieldUpdateOperationsInput | string
-    estado?: BoolFieldUpdateOperationsInput | boolean
-    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    actualizadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    rol?: RolUpdateOneRequiredWithoutUsuariosNestedInput
-    historialResponsable?: HistorialModificacionUpdateManyWithoutResponsableNestedInput
+  export type PlatilloUncheckedCreateWithoutHistorialModificacionesInput = {
+    id?: number
+    nombre: string
+    precio: number
+    categoria: string
+    creadoEn?: Date | string
+    disponible?: boolean
   }
 
-  export type UsuarioUncheckedUpdateWithoutHistorialModificacionesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    nombre?: StringFieldUpdateOperationsInput | string
-    usuario?: StringFieldUpdateOperationsInput | string
-    correo?: StringFieldUpdateOperationsInput | string
-    contrasena?: StringFieldUpdateOperationsInput | string
-    estado?: BoolFieldUpdateOperationsInput | boolean
-    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    actualizadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    rolId?: IntFieldUpdateOperationsInput | number
-    historialResponsable?: HistorialModificacionUncheckedUpdateManyWithoutResponsableNestedInput
+  export type PlatilloCreateOrConnectWithoutHistorialModificacionesInput = {
+    where: PlatilloWhereUniqueInput
+    create: XOR<PlatilloCreateWithoutHistorialModificacionesInput, PlatilloUncheckedCreateWithoutHistorialModificacionesInput>
   }
 
   export type UsuarioUpsertWithoutHistorialResponsableInput = {
@@ -7407,6 +7773,70 @@ export namespace Prisma {
     historialModificaciones?: HistorialModificacionUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
+  export type UsuarioUpsertWithoutHistorialModificacionesInput = {
+    update: XOR<UsuarioUpdateWithoutHistorialModificacionesInput, UsuarioUncheckedUpdateWithoutHistorialModificacionesInput>
+    create: XOR<UsuarioCreateWithoutHistorialModificacionesInput, UsuarioUncheckedCreateWithoutHistorialModificacionesInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutHistorialModificacionesInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutHistorialModificacionesInput, UsuarioUncheckedUpdateWithoutHistorialModificacionesInput>
+  }
+
+  export type UsuarioUpdateWithoutHistorialModificacionesInput = {
+    nombre?: StringFieldUpdateOperationsInput | string
+    usuario?: StringFieldUpdateOperationsInput | string
+    correo?: StringFieldUpdateOperationsInput | string
+    contrasena?: StringFieldUpdateOperationsInput | string
+    estado?: BoolFieldUpdateOperationsInput | boolean
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    actualizadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    rol?: RolUpdateOneRequiredWithoutUsuariosNestedInput
+    historialResponsable?: HistorialModificacionUpdateManyWithoutResponsableNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutHistorialModificacionesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nombre?: StringFieldUpdateOperationsInput | string
+    usuario?: StringFieldUpdateOperationsInput | string
+    correo?: StringFieldUpdateOperationsInput | string
+    contrasena?: StringFieldUpdateOperationsInput | string
+    estado?: BoolFieldUpdateOperationsInput | boolean
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    actualizadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    rolId?: IntFieldUpdateOperationsInput | number
+    historialResponsable?: HistorialModificacionUncheckedUpdateManyWithoutResponsableNestedInput
+  }
+
+  export type PlatilloUpsertWithoutHistorialModificacionesInput = {
+    update: XOR<PlatilloUpdateWithoutHistorialModificacionesInput, PlatilloUncheckedUpdateWithoutHistorialModificacionesInput>
+    create: XOR<PlatilloCreateWithoutHistorialModificacionesInput, PlatilloUncheckedCreateWithoutHistorialModificacionesInput>
+    where?: PlatilloWhereInput
+  }
+
+  export type PlatilloUpdateToOneWithWhereWithoutHistorialModificacionesInput = {
+    where?: PlatilloWhereInput
+    data: XOR<PlatilloUpdateWithoutHistorialModificacionesInput, PlatilloUncheckedUpdateWithoutHistorialModificacionesInput>
+  }
+
+  export type PlatilloUpdateWithoutHistorialModificacionesInput = {
+    nombre?: StringFieldUpdateOperationsInput | string
+    precio?: FloatFieldUpdateOperationsInput | number
+    categoria?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    disponible?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type PlatilloUncheckedUpdateWithoutHistorialModificacionesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nombre?: StringFieldUpdateOperationsInput | string
+    precio?: FloatFieldUpdateOperationsInput | number
+    categoria?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    disponible?: BoolFieldUpdateOperationsInput | boolean
+  }
+
   export type HistorialModificacionCreateManyUsuarioInput = {
     id?: number
     campo: string
@@ -7415,16 +7845,18 @@ export namespace Prisma {
     fecha?: Date | string
     accion: string
     responsableId: number
+    platilloId?: number | null
   }
 
   export type HistorialModificacionCreateManyResponsableInput = {
     id?: number
-    usuarioId: number
     campo: string
     valorAnterior?: string | null
     valorNuevo?: string | null
     fecha?: Date | string
     accion: string
+    usuarioId?: number | null
+    platilloId?: number | null
   }
 
   export type HistorialModificacionUpdateWithoutUsuarioInput = {
@@ -7434,6 +7866,7 @@ export namespace Prisma {
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
     accion?: StringFieldUpdateOperationsInput | string
     responsable?: UsuarioUpdateOneRequiredWithoutHistorialResponsableNestedInput
+    platillo?: PlatilloUpdateOneWithoutHistorialModificacionesNestedInput
   }
 
   export type HistorialModificacionUncheckedUpdateWithoutUsuarioInput = {
@@ -7444,6 +7877,7 @@ export namespace Prisma {
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
     accion?: StringFieldUpdateOperationsInput | string
     responsableId?: IntFieldUpdateOperationsInput | number
+    platilloId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type HistorialModificacionUncheckedUpdateManyWithoutUsuarioInput = {
@@ -7454,6 +7888,7 @@ export namespace Prisma {
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
     accion?: StringFieldUpdateOperationsInput | string
     responsableId?: IntFieldUpdateOperationsInput | number
+    platilloId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type HistorialModificacionUpdateWithoutResponsableInput = {
@@ -7462,27 +7897,73 @@ export namespace Prisma {
     valorNuevo?: NullableStringFieldUpdateOperationsInput | string | null
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
     accion?: StringFieldUpdateOperationsInput | string
-    usuario?: UsuarioUpdateOneRequiredWithoutHistorialModificacionesNestedInput
+    usuario?: UsuarioUpdateOneWithoutHistorialModificacionesNestedInput
+    platillo?: PlatilloUpdateOneWithoutHistorialModificacionesNestedInput
   }
 
   export type HistorialModificacionUncheckedUpdateWithoutResponsableInput = {
     id?: IntFieldUpdateOperationsInput | number
-    usuarioId?: IntFieldUpdateOperationsInput | number
     campo?: StringFieldUpdateOperationsInput | string
     valorAnterior?: NullableStringFieldUpdateOperationsInput | string | null
     valorNuevo?: NullableStringFieldUpdateOperationsInput | string | null
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
     accion?: StringFieldUpdateOperationsInput | string
+    usuarioId?: NullableIntFieldUpdateOperationsInput | number | null
+    platilloId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type HistorialModificacionUncheckedUpdateManyWithoutResponsableInput = {
     id?: IntFieldUpdateOperationsInput | number
-    usuarioId?: IntFieldUpdateOperationsInput | number
     campo?: StringFieldUpdateOperationsInput | string
     valorAnterior?: NullableStringFieldUpdateOperationsInput | string | null
     valorNuevo?: NullableStringFieldUpdateOperationsInput | string | null
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
     accion?: StringFieldUpdateOperationsInput | string
+    usuarioId?: NullableIntFieldUpdateOperationsInput | number | null
+    platilloId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type HistorialModificacionCreateManyPlatilloInput = {
+    id?: number
+    campo: string
+    valorAnterior?: string | null
+    valorNuevo?: string | null
+    fecha?: Date | string
+    accion: string
+    responsableId: number
+    usuarioId?: number | null
+  }
+
+  export type HistorialModificacionUpdateWithoutPlatilloInput = {
+    campo?: StringFieldUpdateOperationsInput | string
+    valorAnterior?: NullableStringFieldUpdateOperationsInput | string | null
+    valorNuevo?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    accion?: StringFieldUpdateOperationsInput | string
+    responsable?: UsuarioUpdateOneRequiredWithoutHistorialResponsableNestedInput
+    usuario?: UsuarioUpdateOneWithoutHistorialModificacionesNestedInput
+  }
+
+  export type HistorialModificacionUncheckedUpdateWithoutPlatilloInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    campo?: StringFieldUpdateOperationsInput | string
+    valorAnterior?: NullableStringFieldUpdateOperationsInput | string | null
+    valorNuevo?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    accion?: StringFieldUpdateOperationsInput | string
+    responsableId?: IntFieldUpdateOperationsInput | number
+    usuarioId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type HistorialModificacionUncheckedUpdateManyWithoutPlatilloInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    campo?: StringFieldUpdateOperationsInput | string
+    valorAnterior?: NullableStringFieldUpdateOperationsInput | string | null
+    valorNuevo?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    accion?: StringFieldUpdateOperationsInput | string
+    responsableId?: IntFieldUpdateOperationsInput | number
+    usuarioId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type UsuarioCreateManyRolInput = {

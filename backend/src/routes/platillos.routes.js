@@ -18,6 +18,37 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Endpoint de prueba para verificar el estado
+router.get('/test', async (req, res) => {
+  try {
+    const platillos = await prisma.platillo.count();
+    const usuarios = await prisma.usuario.count();
+    const historial = await prisma.historialModificacion.count();
+    
+    // Obtener algunos registros de historial para verificar la estructura
+    const historialEjemplo = await prisma.historialModificacion.findMany({
+      take: 5,
+      orderBy: { fecha: 'desc' },
+      include: {
+        responsable: { select: { nombre: true } },
+        platillo: { select: { nombre: true } },
+        usuario: { select: { nombre: true } }
+      }
+    });
+    
+    res.json({
+      platillos: platillos,
+      usuarios: usuarios,
+      historial: historial,
+      historialEjemplo: historialEjemplo,
+      mensaje: 'Sistema funcionando correctamente'
+    });
+  } catch (error) {
+    console.error('Error en test:', error);
+    res.status(500).json({ error: 'Error en test' });
+  }
+});
+
 // Crear un nuevo platillo
 router.post('/', async (req, res) => {
   const { nombre, precio, categoria } = req.body;
@@ -71,6 +102,11 @@ router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { nombre, precio, categoria, responsableId } = req.body;
 
+  // Validar campos requeridos
+  if (!nombre || !precio || !categoria) {
+    return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+  }
+
   try {
     const platilloOriginal = await prisma.platillo.findUnique({
       where: { id: parseInt(id) }
@@ -81,6 +117,12 @@ router.put('/:id', async (req, res) => {
     }
 
     const cambios = [];
+    const precioNuevo = parseFloat(precio);
+
+    console.log('Comparando valores:');
+    console.log('Nombre - Original:', platilloOriginal.nombre, 'Nuevo:', nombre);
+    console.log('Precio - Original:', platilloOriginal.precio, 'Nuevo:', precioNuevo);
+    console.log('Categoría - Original:', platilloOriginal.categoria, 'Nuevo:', categoria);
 
     if (platilloOriginal.nombre !== nombre) {
       cambios.push({
@@ -90,7 +132,7 @@ router.put('/:id', async (req, res) => {
       });
     }
 
-    if (platilloOriginal.precio !== parseFloat(precio)) {
+    if (Math.abs(platilloOriginal.precio - precioNuevo) > 0.01) { // Usar tolerancia para comparación de floats
       cambios.push({
         campo: 'precio',
         valorAnterior: platilloOriginal.precio.toString(),
@@ -116,18 +158,42 @@ router.put('/:id', async (req, res) => {
       }
     });
 
-    // Registrar en historial si hubo cambios
-    for (const cambio of cambios) {
-      await prisma.historialModificacion.create({
-        data: {
-          campo: cambio.campo,
-          valorAnterior: cambio.valorAnterior,
-          valorNuevo: cambio.valorNuevo,
-          accion: `Modificación de platillo: campo '${cambio.campo}' actualizado.`,
-          responsableId: parseInt(responsableId),
-          platilloId: parseInt(id)
+    // Registrar en historial si hubo cambios y si hay responsableId
+    console.log('Cambios detectados:', cambios);
+    console.log('ResponsableId:', responsableId);
+    
+    if (cambios.length > 0 && responsableId) {
+      console.log('Creando registros en historial...');
+      for (const cambio of cambios) {
+        try {
+          // Crear registro de historial para platillo (usar platilloId, no usuarioId)
+          const historialEntry = await prisma.historialModificacion.create({
+            data: {
+              campo: cambio.campo,
+              valorAnterior: cambio.valorAnterior,
+              valorNuevo: cambio.valorNuevo,
+              accion: `Modificación de platillo: campo '${cambio.campo}' actualizado.`,
+              responsableId: parseInt(responsableId), // Quién hizo el cambio
+              platilloId: parseInt(id) // A qué platillo se le hizo el cambio
+            }
+          });
+          console.log('Registro de historial creado:', historialEntry);
+        } catch (error) {
+          console.error('Error al crear registro de historial:', error);
+          // Si falla, intentar con una consulta SQL directa
+          try {
+            await prisma.$executeRaw`
+              INSERT INTO "HistorialModificacion" ("campo", "valorAnterior", "valorNuevo", "accion", "responsableId", "platilloId", "fecha")
+              VALUES (${cambio.campo}, ${cambio.valorAnterior}, ${cambio.valorNuevo}, ${`Modificación de platillo: campo '${cambio.campo}' actualizado.`}, ${parseInt(responsableId)}, ${parseInt(id)}, NOW())
+            `;
+            console.log('Registro de historial creado con SQL directo');
+          } catch (sqlError) {
+            console.error('Error al crear registro con SQL directo:', sqlError);
+          }
         }
-      });
+      }
+    } else {
+      console.log('No se crearon registros de historial. Cambios:', cambios.length, 'ResponsableId:', responsableId);
     }
 
     res.json({ mensaje: 'Platillo actualizado', platillo: actualizado });

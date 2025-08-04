@@ -37,16 +37,29 @@ function Platillos() {
 
   const crearPlatillo = async (e) => {
     e.preventDefault();
+    
+    // Validar que todos los campos estén completos
+    if (!formData.nombre || !formData.precio || !formData.categoria) {
+      alert('Por favor completa todos los campos');
+      return;
+    }
+
     try {
       if (modoEdicion) {
         // 🔄 ACTUALIZAR con historial
-        await axios.put(`http://localhost:3001/platillos/${idEditando}`, {
-          ...formData,
-          responsableId
-        });
+        const updateData = {
+          nombre: formData.nombre,
+          precio: formData.precio,
+          categoria: formData.categoria,
+          responsableId: responsableId || 1 // Usar ID 1 como fallback si no hay usuario logueado
+        };
+        
+        console.log('Enviando datos de actualización:', updateData);
+        await axios.put(`http://localhost:3001/platillos/${idEditando}`, updateData);
         alert('Platillo actualizado correctamente');
       } else {
         // ➕ CREAR
+        console.log('Enviando datos de creación:', formData);
         await axios.post('http://localhost:3001/platillos', formData);
         alert('Platillo registrado correctamente');
       }
@@ -55,6 +68,7 @@ function Platillos() {
       setIdEditando(null);
       obtenerPlatillos();
     } catch (error) {
+      console.error('Error completo:', error);
       alert(error.response?.data?.error || 'Error al guardar platillo');
     }
   };

@@ -8,6 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// 1. Primero Usuario
 model Usuario {
   id            Int      @id @default(autoincrement())
   nombre        String
@@ -25,27 +26,7 @@ model Usuario {
   historialResponsable    HistorialModificacion[] @relation("ModificacionesHechasPor")
 }
 
-model Rol {
-  id     Int    @id @default(autoincrement())
-  nombre String @unique
-
-  usuarios Usuario[]
-}
-
-model HistorialModificacion {
-  id            Int      @id @default(autoincrement())
-  usuarioId     Int
-  campo         String
-  valorAnterior String?
-  valorNuevo    String?
-  fecha         DateTime @default(now())
-  accion        String
-  responsableId Int
-
-  usuario     Usuario @relation("ModificacionesDelUsuario", fields: [usuarioId], references: [id])
-  responsable Usuario @relation("ModificacionesHechasPor", fields: [responsableId], references: [id])
-}
-
+// 2. Luego Platillo
 model Platillo {
   id         Int      @id @default(autoincrement())
   nombre     String   @unique
@@ -53,4 +34,33 @@ model Platillo {
   categoria  String
   creadoEn   DateTime @default(now())
   disponible Boolean  @default(true)
+
+  historialModificaciones HistorialModificacion[]
+}
+
+// 3. Luego Rol
+model Rol {
+  id     Int    @id @default(autoincrement())
+  nombre String @unique
+
+  usuarios Usuario[]
+}
+
+// 4. Al final HistorialModificacion
+model HistorialModificacion {
+  id            Int      @id @default(autoincrement())
+  campo         String
+  valorAnterior String?
+  valorNuevo    String?
+  fecha         DateTime @default(now())
+  accion        String
+
+  responsableId Int
+  responsable   Usuario @relation("ModificacionesHechasPor", fields: [responsableId], references: [id])
+
+  usuarioId Int?
+  usuario   Usuario? @relation("ModificacionesDelUsuario", fields: [usuarioId], references: [id])
+
+  platilloId Int?
+  platillo   Platillo? @relation(fields: [platilloId], references: [id])
 }
