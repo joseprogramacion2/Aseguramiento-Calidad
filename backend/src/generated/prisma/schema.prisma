@@ -31,9 +31,11 @@ model Platillo {
   id         Int      @id @default(autoincrement())
   nombre     String   @unique
   precio     Float
-  categoria  String
   creadoEn   DateTime @default(now())
   disponible Boolean  @default(true)
+
+  categoriaId Int
+  categoria   Categoria @relation(fields: [categoriaId], references: [id])
 
   historialModificaciones HistorialModificacion[]
 }
@@ -63,4 +65,12 @@ model HistorialModificacion {
 
   platilloId Int?
   platillo   Platillo? @relation(fields: [platilloId], references: [id])
+}
+
+model Categoria {
+  id       Int      @id @default(autoincrement())
+  nombre   String   @unique
+  creadoEn DateTime @default(now())
+
+  platillos Platillo[] // Relación uno a muchos: una categoría puede tener muchos platillos
 }

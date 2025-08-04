@@ -1,7 +1,7 @@
-//usuarios
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import AdminHeader from '../components/AdminHeader';
 
 function Usuarios() {
   const navigate = useNavigate();
@@ -97,35 +97,36 @@ function Usuarios() {
       responsableId: 1
     });
   };
-const guardarCambios = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await axios.put(`http://localhost:3001/usuarios/${editando.id}`, formData);
-    alert('Usuario actualizado');
 
-    const usuarioActualizado = {
-      ...res.data.usuario,
-      rol: res.data.usuario.rol || { nombre: 'Desconocido' }
-    };
+  const guardarCambios = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.put(`http://localhost:3001/usuarios/${editando.id}`, formData);
+      alert('Usuario actualizado');
 
-    setUsuarios(prev =>
-      prev.map(u => (u.id === usuarioActualizado.id ? usuarioActualizado : u))
-    );
+      const usuarioActualizado = {
+        ...res.data.usuario,
+        rol: res.data.usuario.rol || { nombre: 'Desconocido' }
+      };
 
-    setEditando(null);
-    setFormData({
-      nombre: '',
-      usuario: '',
-      correo: '',
-      contrasena: '',
-      rolId: '',
-      responsableId: 1
-    });
-  } catch (error) {
-    const mensaje = error.response?.data?.error || 'Error al actualizar el usuario';
-    alert(mensaje);
-  }
-};
+      setUsuarios(prev =>
+        prev.map(u => (u.id === usuarioActualizado.id ? usuarioActualizado : u))
+      );
+
+      setEditando(null);
+      setFormData({
+        nombre: '',
+        usuario: '',
+        correo: '',
+        contrasena: '',
+        rolId: '',
+        responsableId: 1
+      });
+    } catch (error) {
+      const mensaje = error.response?.data?.error || 'Error al actualizar el usuario';
+      alert(mensaje);
+    }
+  };
 
   return (
     <div style={{
@@ -134,24 +135,10 @@ const guardarCambios = async (e) => {
       fontFamily: 'Segoe UI, sans-serif',
       padding: '2rem'
     }}>
-      {/* Botón regresar */}
-      <div style={{ marginBottom: '1.5rem' }}>
-        <button onClick={() => navigate('/admin')} style={{
-          backgroundColor: '#004d4d',
-          color: 'white',
-          border: 'none',
-          padding: '0.5rem 1rem',
-          borderRadius: '6px',
-          cursor: 'pointer'
-        }}>
-          ← Volver al panel
-        </button>
-      </div>
+      <AdminHeader titulo="👥 Gestión de Usuarios" />
 
-      {/* Título */}
       <h2 style={{ color: '#333', marginBottom: '1.5rem' }}>Usuarios Registrados</h2>
 
-      {/* Lista de usuarios */}
       <ul style={{
         backgroundColor: '#ffffff',
         padding: '1rem',
@@ -178,7 +165,6 @@ const guardarCambios = async (e) => {
         ))}
       </ul>
 
-      {/* Formulario */}
       <h3 style={{ marginBottom: '1rem' }}>{editando ? 'Editar Usuario' : 'Registrar Nuevo Usuario'}</h3>
       <form onSubmit={editando ? guardarCambios : crearUsuario} style={{
         display: 'flex',

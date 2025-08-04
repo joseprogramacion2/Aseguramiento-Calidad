@@ -136,9 +136,9 @@ exports.Prisma.PlatilloScalarFieldEnum = {
   id: 'id',
   nombre: 'nombre',
   precio: 'precio',
-  categoria: 'categoria',
   creadoEn: 'creadoEn',
-  disponible: 'disponible'
+  disponible: 'disponible',
+  categoriaId: 'categoriaId'
 };
 
 exports.Prisma.RolScalarFieldEnum = {
@@ -156,6 +156,12 @@ exports.Prisma.HistorialModificacionScalarFieldEnum = {
   responsableId: 'responsableId',
   usuarioId: 'usuarioId',
   platilloId: 'platilloId'
+};
+
+exports.Prisma.CategoriaScalarFieldEnum = {
+  id: 'id',
+  nombre: 'nombre',
+  creadoEn: 'creadoEn'
 };
 
 exports.Prisma.SortOrder = {
@@ -178,7 +184,8 @@ exports.Prisma.ModelName = {
   Usuario: 'Usuario',
   Platillo: 'Platillo',
   Rol: 'Rol',
-  HistorialModificacion: 'HistorialModificacion'
+  HistorialModificacion: 'HistorialModificacion',
+  Categoria: 'Categoria'
 };
 
 /**

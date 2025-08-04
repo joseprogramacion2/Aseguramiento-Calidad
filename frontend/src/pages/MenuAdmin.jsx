@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import AdminHeader from '../components/AdminHeader';
 
 function MenuAdmin() {
   const [platillos, setPlatillos] = useState([]);
+  const [categoriasAbiertas, setCategoriasAbiertas] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,42 +21,79 @@ function MenuAdmin() {
     }
   };
 
-  // Agrupar platillos por categoría
-  const categorias = [...new Set(platillos.map(p => p.categoria))];
+  // Agrupar por nombre de categoría (evita renderizar objetos)
+  const platillosPorCategoria = platillos.reduce((grupos, platillo) => {
+    const categoriaNombre = typeof platillo.categoria?.nombre === 'string'
+      ? platillo.categoria.nombre
+      : 'Sin categoría';
+
+    if (!grupos[categoriaNombre]) {
+      grupos[categoriaNombre] = [];
+    }
+    grupos[categoriaNombre].push(platillo);
+    return grupos;
+  }, {});
+
+  const categoriasOrdenadas = Object.keys(platillosPorCategoria).sort();
+
+  const toggleCategoria = (cat) => {
+    setCategoriasAbiertas((prev) => ({
+      ...prev,
+      [cat]: !prev[cat]
+    }));
+  };
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif', backgroundColor: '#f4f4f4', minHeight: '100vh' }}>
-      <button onClick={() => navigate('/admin')} style={{
-        backgroundColor: '#004d4d',
-        color: 'white',
-        border: 'none',
-        padding: '0.5rem 1rem',
-        borderRadius: '6px',
-        cursor: 'pointer',
-        marginBottom: '1rem'
-      }}>
-        ← Volver al panel
-      </button>
+    <div style={{
+      padding: '2rem',
+      fontFamily: 'Segoe UI, sans-serif',
+      backgroundColor: '#f4f4f4',
+      minHeight: '100vh'
+    }}>
+      <AdminHeader titulo="📋 Menú del Restaurante" />
 
-      <h2 style={{ marginBottom: '1rem', color: '#333' }}>📋 Menú del Restaurante</h2>
-
-      {categorias.map((cat, i) => (
+      {categoriasOrdenadas.map((cat, i) => (
         <div key={i} style={{ marginBottom: '2rem' }}>
-          <h3 style={{ borderBottom: '2px solid #006666', paddingBottom: '0.5rem', color: '#006666' }}>{cat}</h3>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '1rem' }}>
-            {platillos.filter(p => p.categoria === cat).map(p => (
-              <div key={p.id} style={{
-                backgroundColor: 'white',
-                borderRadius: '10px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                padding: '1rem',
-                width: '250px'
-              }}>
-                <h4 style={{ margin: '0 0 0.5rem' }}>{p.nombre}</h4>
-                <p style={{ margin: 0 }}>💰 <strong>Q{p.precio}</strong></p>
-              </div>
-            ))}
-          </div>
+          <h3
+            onClick={() => toggleCategoria(cat)}
+            style={{
+              borderBottom: '2px solid #006666',
+              paddingBottom: '0.5rem',
+              color: '#006666',
+              cursor: 'pointer',
+              userSelect: 'none',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
+            {cat}
+            <span style={{ fontSize: '1.2rem' }}>
+              {categoriasAbiertas[cat] ? '🔽' : '▶️'}
+            </span>
+          </h3>
+
+          {categoriasAbiertas[cat] && (
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '1rem',
+              marginTop: '1rem'
+            }}>
+              {platillosPorCategoria[cat].map(p => (
+                <div key={p.id} style={{
+                  backgroundColor: 'white',
+                  borderRadius: '10px',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                  padding: '1rem',
+                  width: '250px'
+                }}>
+                  <h4 style={{ margin: '0 0 0.5rem' }}>{p.nombre}</h4>
+                  <p style={{ margin: 0 }}>💰 <strong>Q{p.precio}</strong></p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       ))}
     </div>

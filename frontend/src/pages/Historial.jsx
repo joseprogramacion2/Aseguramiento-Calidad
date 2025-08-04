@@ -1,7 +1,7 @@
-// historial.jsx
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import AdminHeader from '../components/AdminHeader';
+import { useNavigate } from 'react-router-dom';
 
 function Historial() {
   const [historial, setHistorial] = useState([]);
@@ -29,25 +29,13 @@ function Historial() {
 
   const getDescripcionAccion = (accion, campo, valorAnterior, valorNuevo) => {
     if (accion.startsWith('eliminación de')) return accion;
-
-    if (accion === 'creación') {
-      return `Creación: ${valorNuevo}`;
-    }
-
+    if (accion === 'creación') return `Creación: ${valorNuevo}`;
     if (accion === 'modificación' || accion.includes('Modificación de platillo')) {
-      if (campo === 'rol') {
-        return `Cambio de rol: ${valorAnterior} → ${valorNuevo}`;
-      } else if (campo === 'contrasena') {
-        return `Cambio de contraseña`;
-      } else {
-        return `Cambio en ${campo}: ${valorAnterior || '—'} → ${valorNuevo || '—'}`;
-      }
+      if (campo === 'rol') return `Cambio de rol: ${valorAnterior} → ${valorNuevo}`;
+      if (campo === 'contrasena') return `Cambio de contraseña`;
+      return `Cambio en ${campo}: ${valorAnterior || '—'} → ${valorNuevo || '—'}`;
     }
-
-    if (accion === 'eliminación') {
-      return `Eliminación de ${campo}: ${valorAnterior || '—'}`;
-    }
-
+    if (accion === 'eliminación') return `Eliminación de ${campo}: ${valorAnterior || '—'}`;
     return accion;
   };
 
@@ -69,21 +57,7 @@ function Historial() {
       backgroundColor: '#f4f6f7',
       minHeight: '100vh'
     }}>
-      {/* Botón volver */}
-      <div style={{ marginBottom: '1rem' }}>
-        <button onClick={() => navigate('/admin')} style={{
-          backgroundColor: '#004d4d',
-          color: 'white',
-          border: 'none',
-          padding: '0.5rem 1rem',
-          borderRadius: '5px',
-          cursor: 'pointer'
-        }}>
-          ← Volver al panel
-        </button>
-      </div>
-
-      <h2 style={{ color: '#333', marginBottom: '1.5rem' }}>📜 Historial de Modificaciones</h2>
+      <AdminHeader titulo="📜 Historial de Modificaciones" />
 
       {/* Filtros */}
       <div style={{
@@ -125,7 +99,7 @@ function Historial() {
         </div>
       </div>
 
-      {/* Tabla de historial */}
+      {/* Tabla */}
       <div style={{
         overflowX: 'auto',
         backgroundColor: '#fff',

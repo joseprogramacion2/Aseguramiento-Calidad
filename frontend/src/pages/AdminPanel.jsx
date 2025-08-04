@@ -65,7 +65,8 @@ function AdminPanel() {
         <Link to="/admin/usuarios" style={linkStyle}>👥 Usuarios</Link>
         <Link to="/admin/platillos" style={linkStyle}>🍽 Platillos</Link>
         <Link to="/admin/historial" style={linkStyle}>📜 Historial</Link>
-        <Link to="/admin/menu" style={linkStyle}>📋 Menú</Link> {/* ✅ NUEVO LINK */}
+        <Link to="/admin/menu" style={linkStyle}>📋 Menú</Link> 
+        <Link to="/admin/categorias" style={linkStyle}>📂 Categorías</Link>
       </nav>
     </div>
   );

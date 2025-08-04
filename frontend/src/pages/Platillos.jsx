@@ -1,20 +1,18 @@
-//platillos
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'; 
 import axios from 'axios';
+import AdminHeader from '../components/AdminHeader';
 
 function Platillos() {
-  const navigate = useNavigate();
   const [platillos, setPlatillos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
   const [formData, setFormData] = useState({
     nombre: '',
     precio: '',
-    categoria: ''
+    categoriaId: ''
   });
   const [modoEdicion, setModoEdicion] = useState(false);
   const [idEditando, setIdEditando] = useState(null);
 
-  // 🔐 Obtener ID del usuario logueado
   const usuarioLogueado = JSON.parse(localStorage.getItem('usuario'));
   const responsableId = usuarioLogueado?.id;
 
@@ -27,8 +25,18 @@ function Platillos() {
     }
   };
 
+  const obtenerCategorias = async () => {
+    try {
+      const res = await axios.get('http://localhost:3001/categorias');
+      setCategorias(res.data);
+    } catch (error) {
+      console.error('Error al obtener categorías:', error);
+    }
+  };
+
   useEffect(() => {
     obtenerPlatillos();
+    obtenerCategorias();
   }, []);
 
   const handleChange = (e) => {
@@ -37,33 +45,32 @@ function Platillos() {
 
   const crearPlatillo = async (e) => {
     e.preventDefault();
-    
-    // Validar que todos los campos estén completos
-    if (!formData.nombre || !formData.precio || !formData.categoria) {
+
+    if (!formData.nombre || !formData.precio || !formData.categoriaId) {
       alert('Por favor completa todos los campos');
       return;
     }
 
     try {
       if (modoEdicion) {
-        // 🔄 ACTUALIZAR con historial
         const updateData = {
           nombre: formData.nombre,
           precio: formData.precio,
-          categoria: formData.categoria,
-          responsableId: responsableId || 1 // Usar ID 1 como fallback si no hay usuario logueado
+          categoriaId: formData.categoriaId,
+          responsableId: responsableId || 1
         };
-        
-        console.log('Enviando datos de actualización:', updateData);
         await axios.put(`http://localhost:3001/platillos/${idEditando}`, updateData);
         alert('Platillo actualizado correctamente');
       } else {
-        // ➕ CREAR
-        console.log('Enviando datos de creación:', formData);
-        await axios.post('http://localhost:3001/platillos', formData);
+        await axios.post('http://localhost:3001/platillos', {
+          nombre: formData.nombre,
+          precio: formData.precio,
+          categoriaId: formData.categoriaId
+        });
         alert('Platillo registrado correctamente');
       }
-      setFormData({ nombre: '', precio: '', categoria: '' });
+
+      setFormData({ nombre: '', precio: '', categoriaId: '' });
       setModoEdicion(false);
       setIdEditando(null);
       obtenerPlatillos();
@@ -79,7 +86,7 @@ function Platillos() {
     setFormData({
       nombre: platillo.nombre,
       precio: platillo.precio,
-      categoria: platillo.categoria
+      categoriaId: platillo.categoria?.id || ''
     });
   };
 
@@ -101,20 +108,7 @@ function Platillos() {
       backgroundColor: '#f9f9f9',
       minHeight: '100vh'
     }}>
-      <div style={{ marginBottom: '1.5rem' }}>
-        <button onClick={() => navigate('/admin')} style={{
-          backgroundColor: '#004d4d',
-          color: 'white',
-          border: 'none',
-          padding: '0.5rem 1rem',
-          borderRadius: '6px',
-          cursor: 'pointer'
-        }}>
-          ← Volver al panel
-        </button>
-      </div>
-
-      <h2 style={{ color: '#333', marginBottom: '1.5rem' }}>Gestión de Platillos</h2>
+      <AdminHeader titulo="🍽 Gestión de Platillos" />
 
       <section style={{
         backgroundColor: '#ffffff',
@@ -131,7 +125,7 @@ function Platillos() {
               borderBottom: '1px solid #ddd',
               paddingBottom: '0.5rem'
             }}>
-              <strong>{p.nombre}</strong> - Q{p.precio} - <em>{p.categoria}</em>
+              <strong>{p.nombre}</strong> - Q{p.precio} - <em>{p.categoria?.nombre || 'Sin categoría'}</em>
               <button onClick={() => editarPlatillo(p)} style={{ marginLeft: '1rem' }}>Editar</button>
               <button onClick={() => eliminarPlatillo(p.id)} style={{ marginLeft: '0.5rem', color: 'red' }}>Eliminar</button>
             </li>
@@ -153,9 +147,39 @@ function Platillos() {
           flexDirection: 'column',
           gap: '1rem'
         }}>
-          <input type="text" name="nombre" placeholder="Nombre del platillo" value={formData.nombre} onChange={handleChange} required style={inputStyle} />
-          <input type="number" step="0.01" name="precio" placeholder="Precio" value={formData.precio} onChange={handleChange} required style={inputStyle} />
-          <input type="text" name="categoria" placeholder="Categoría" value={formData.categoria} onChange={handleChange} required style={inputStyle} />
+          <input
+            type="text"
+            name="nombre"
+            placeholder="Nombre del platillo"
+            value={formData.nombre}
+            onChange={handleChange}
+            required
+            style={inputStyle}
+          />
+          <input
+            type="number"
+            step="0.01"
+            name="precio"
+            placeholder="Precio"
+            value={formData.precio}
+            onChange={handleChange}
+            required
+            style={inputStyle}
+          />
+
+          <select
+            name="categoriaId"
+            value={formData.categoriaId}
+            onChange={handleChange}
+            required
+            style={inputStyle}
+          >
+            <option value="">Seleccione una categoría</option>
+            {categorias.map((cat) => (
+              <option key={cat.id} value={cat.id}>{cat.nombre}</option>
+            ))}
+          </select>
+
           <button type="submit" style={{
             backgroundColor: '#006666',
             color: 'white',
