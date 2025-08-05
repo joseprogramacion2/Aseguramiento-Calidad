@@ -91,11 +91,11 @@ function Platillos() {
   };
 
   const eliminarPlatillo = async (id) => {
-    if (!window.confirm('¿Deseas eliminar este platillo?')) return;
+    if (!window.confirm('¿Deseas desactivar este platillo?')) return;
     try {
       await axios.delete(`http://localhost:3001/platillos/${id}`);
       obtenerPlatillos();
-      alert('Platillo eliminado');
+      alert('Platillo Desactivado');
     } catch (error) {
       alert('Error al eliminar');
     }
@@ -127,7 +127,7 @@ function Platillos() {
             }}>
               <strong>{p.nombre}</strong> - Q{p.precio} - <em>{p.categoria?.nombre || 'Sin categoría'}</em>
               <button onClick={() => editarPlatillo(p)} style={{ marginLeft: '1rem' }}>Editar</button>
-              <button onClick={() => eliminarPlatillo(p.id)} style={{ marginLeft: '0.5rem', color: 'red' }}>Eliminar</button>
+              <button onClick={() => eliminarPlatillo(p.id)} style={{ marginLeft: '0.5rem', color: 'red' }}>Desactivar</button>
             </li>
           ))}
         </ul>
