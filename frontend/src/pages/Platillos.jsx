@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
+// Firebase
+import { storage } from '../firebase';
+import { ref as storageRef, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 
 function Platillos() {
   const [platillos, setPlatillos] = useState([]);
@@ -9,6 +13,12 @@ function Platillos() {
   const [modoEdicion, setModoEdicion] = useState(false);
   const [idEditando, setIdEditando] = useState(null);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
+
+  // subida de imagen
+  const [subiendoId, setSubiendoId] = useState(null);
+  const [progreso, setProgreso] = useState(0);
+  const fileInputRef = useRef(null);
+  const platilloIdParaImagenRef = useRef(null);
 
   const usuarioLogueado = JSON.parse(localStorage.getItem('usuario'));
   const responsableId = usuarioLogueado?.id;
@@ -105,8 +115,81 @@ function Platillos() {
     }
   };
 
+  // ---- Subida de imagen ----
+  const clickSubirPara = (platilloId) => {
+    platilloIdParaImagenRef.current = platilloId;
+    fileInputRef.current?.click();
+  };
+
+  const onArchivoSeleccionado = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // limpiar input para permitir mismo archivo de nuevo
+    if (!file) return;
+
+    const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
+    if (!tiposPermitidos.includes(file.type)) {
+      alert(`Formato no permitido (${file.type}). Usa JPG, PNG, WEBP, GIF o SVG.`);
+      return;
+    }
+
+    const platilloId = platilloIdParaImagenRef.current;
+    if (!platilloId) {
+      alert('No se seleccionó platillo para la imagen.');
+      return;
+    }
+
+    try {
+      setSubiendoId(platilloId);
+      setProgreso(0);
+
+      const nombreSeguro = file.name.replace(/\s+/g, '_');
+      const nombreArchivo = `platillos/${platilloId}-${Date.now()}-${nombreSeguro}`;
+      const refObj = storageRef(storage, nombreArchivo);
+
+      const task = uploadBytesResumable(refObj, file);
+      task.on(
+        'state_changed',
+        (snap) => setProgreso((snap.bytesTransferred / snap.totalBytes) * 100),
+        (err) => {
+          console.error('Error Storage:', err);
+          alert(err?.message || 'Error subiendo imagen.');
+          setSubiendoId(null);
+        },
+        async () => {
+          try {
+            const url = await getDownloadURL(task.snapshot.ref);
+            await axios.put(`http://localhost:3001/platillos/${platilloId}/imagen`, {
+              url,
+              responsableId: responsableId || 1
+            });
+            await obtenerPlatillos();
+            alert('Imagen subida y guardada.');
+          } catch (e2) {
+            console.error('Error guardando en backend:', e2);
+            alert(e2.response?.data?.error || 'Error al guardar imagen en la base de datos.');
+          } finally {
+            setSubiendoId(null);
+            setProgreso(0);
+          }
+        }
+      );
+    } catch (err) {
+      console.error('Error general en subida:', err);
+      alert('Error inesperado subiendo imagen.');
+      setSubiendoId(null);
+    }
+  };
+
   return (
     <div style={{ fontFamily: 'Segoe UI, sans-serif', minHeight: '100vh', background: '#f8f9fc', padding: '2rem' }}>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={onArchivoSeleccionado}
+      />
+
       <div style={{ backgroundColor: '#1b3c59', color: 'white', padding: '1rem 2rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 3px 6px rgba(0,0,0,0.1)' }}>
         <h2 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>🍽 Platillos por Categoría</h2>
         <button onClick={() => navigate('/admin')} style={{ backgroundColor: '#15803d', color: 'white', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>
@@ -151,18 +234,60 @@ function Platillos() {
           {categoriaSeleccionada && (
             <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
               <h3 style={{ marginBottom: '1rem', color: '#1b3c59' }}>Platillos de la categoría seleccionada</h3>
-              {platillos.filter(p => p.categoria?.id === categoriaSeleccionada).map((platillo) => (
-                <div key={platillo.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '1px solid #ccc', paddingBottom: '0.5rem' }}>
-                  <div>
-                    <strong>{platillo.nombre}</strong> - Q{platillo.precio}
+              {platillos.filter(p => p.categoria?.id === categoriaSeleccionada).map((platillo) => {
+                const tieneImagen = Boolean(platillo.imagenUrl);
+                const labelFoto = tieneImagen ? 'Cambiar foto' : 'Subir foto';
+                const mostrandoProgreso = subiendoId === platillo.id;
+
+                return (
+                  <div key={platillo.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '1px solid #ccc', paddingBottom: '0.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      {/* miniatura antes del nombre */}
+                      {tieneImagen ? (
+                        <img
+                          src={platillo.imagenUrl}
+                          alt={platillo.nombre}
+                          style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8, border: '1px solid #e5e7eb' }}
+                        />
+                      ) : (
+                        <div style={{
+                          width: 48, height: 48, borderRadius: 8, background: '#e5e7eb',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#6b7280'
+                        }}>
+                          Sin foto
+                        </div>
+                      )}
+                      <div>
+                        <strong>{platillo.nombre}</strong> - Q{platillo.precio}
+                        {!platillo.disponible && (
+                          <span style={{ marginLeft: 8, color: '#b91c1c', fontWeight: 'bold' }}>(No disponible)</span>
+                        )}
+                        {mostrandoProgreso && (
+                          <div style={{ marginTop: 6, width: 160, background: '#eee', borderRadius: 6, overflow: 'hidden', height: 8 }}>
+                            <div style={{ width: `${progreso}%`, height: '100%', background: '#0f766e', transition: 'width .2s' }} />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                      <button
+                        onClick={() => clickSubirPara(platillo.id)}
+                        disabled={mostrandoProgreso}
+                        style={{ ...btnTeal, opacity: mostrandoProgreso ? 0.7 : 1 }}
+                        title={labelFoto}
+                      >
+                        {labelFoto}
+                      </button>
+                      <button onClick={() => editarPlatillo(platillo)} style={btnYellow}>Editar</button>
+                      <button onClick={() => cambiarDisponibilidad(platillo.id, platillo.disponible)} style={btnPurple}>
+                        {platillo.disponible ? 'Desactivar' : 'Activar'}
+                      </button>
+                      <button onClick={() => eliminarPlatillo(platillo.id)} style={btnRed}>Eliminar</button>
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button onClick={() => editarPlatillo(platillo)} style={btnYellow}>Editar</button>
-                    <button onClick={() => cambiarDisponibilidad(platillo.id, platillo.disponible)} style={btnPurple}>{platillo.disponible ? 'Desactivar' : 'Activar'}</button>
-                    <button onClick={() => eliminarPlatillo(platillo.id)} style={btnRed}>Eliminar</button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </main>
@@ -215,6 +340,16 @@ const btnPurple = {
   color: 'white',
   border: 'none',
   padding: '0.5rem 1rem',
+  borderRadius: '6px',
+  fontWeight: 'bold',
+  cursor: 'pointer'
+};
+
+const btnTeal = {
+  backgroundColor: '#0f766e',
+  color: 'white',
+  border: 'none',
+  padding: '0.45rem 0.9rem',
   borderRadius: '6px',
   fontWeight: 'bold',
   cursor: 'pointer'

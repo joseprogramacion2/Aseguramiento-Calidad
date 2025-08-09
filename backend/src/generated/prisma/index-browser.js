@@ -138,12 +138,25 @@ exports.Prisma.PlatilloScalarFieldEnum = {
   precio: 'precio',
   creadoEn: 'creadoEn',
   disponible: 'disponible',
+  imagenUrl: 'imagenUrl',
   categoriaId: 'categoriaId'
 };
 
 exports.Prisma.RolScalarFieldEnum = {
   id: 'id',
   nombre: 'nombre'
+};
+
+exports.Prisma.PermisoScalarFieldEnum = {
+  id: 'id',
+  nombre: 'nombre',
+  descripcion: 'descripcion'
+};
+
+exports.Prisma.PermisoPorRolScalarFieldEnum = {
+  id: 'id',
+  permisoId: 'permisoId',
+  rolId: 'rolId'
 };
 
 exports.Prisma.HistorialModificacionScalarFieldEnum = {
@@ -200,6 +213,8 @@ exports.Prisma.ModelName = {
   Usuario: 'Usuario',
   Platillo: 'Platillo',
   Rol: 'Rol',
+  Permiso: 'Permiso',
+  PermisoPorRol: 'PermisoPorRol',
   HistorialModificacion: 'HistorialModificacion',
   Categoria: 'Categoria',
   Orden: 'Orden',

@@ -1,19 +1,26 @@
+// src/pages/ManageCategories.jsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import AdminHeader from '../components/AdminHeader';
+
+const API = 'http://localhost:3001';
 
 const ManageCategories = () => {
   const [nombre, setNombre] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [categorias, setCategorias] = useState([]);
-  const navigate = useNavigate();
+  const [cargando, setCargando] = useState(false);
 
   const obtenerCategorias = async () => {
     try {
-      const res = await fetch('http://localhost:3001/categorias');
-      const data = await res.json();
+      setCargando(true);
+      const { data } = await axios.get(`${API}/categorias`);
       setCategorias(data);
     } catch (error) {
       console.error('Error al obtener categorías:', error);
+      setMensaje('❌ Error al obtener categorías');
+    } finally {
+      setCargando(false);
     }
   };
 
@@ -23,146 +30,150 @@ const ManageCategories = () => {
 
   const handleCreateCategory = async (e) => {
     e.preventDefault();
+    if (!nombre.trim()) return;
 
     try {
-      const response = await fetch('http://localhost:3001/categorias', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ nombre }),
-      });
-
-      if (response.ok) {
-        setMensaje('✅ Categoría creada exitosamente');
-        setNombre('');
-        obtenerCategorias();
-      } else {
-        setMensaje('❌ Error al crear la categoría');
-      }
+      await axios.post(`${API}/categorias`, { nombre: nombre.trim() });
+      setMensaje('✅ Categoría creada exitosamente');
+      setNombre('');
+      obtenerCategorias();
     } catch (error) {
       console.error('Error:', error);
-      setMensaje('❌ Error en la conexión al servidor');
+      setMensaje(error.response?.data?.error || '❌ Error al crear la categoría');
     }
   };
 
   const eliminarCategoria = async (id) => {
-    if (!window.confirm('¿Estás seguro de que deseas eliminar esta categoría?')) return;
+    if (!window.confirm('¿Estás seguro de eliminar esta categoría?')) return;
     try {
-      await fetch(`http://localhost:3001/categorias/${id}`, { method: 'DELETE' });
+      await axios.delete(`${API}/categorias/${id}`);
       setMensaje('✅ Categoría eliminada');
+      // Optimista: quitamos sin reconsultar (y luego revalidamos en background)
+      setCategorias((prev) => prev.filter((c) => c.id !== id));
       obtenerCategorias();
     } catch (error) {
       console.error('Error al eliminar:', error);
-      setMensaje('❌ No se pudo eliminar la categoría');
+      setMensaje(error.response?.data?.error || '❌ No se pudo eliminar la categoría');
     }
   };
 
+  /* ===== Estilos coherentes y “pegados” ===== */
+  const page = {
+    minHeight: '100vh',
+    backgroundColor: '#f3f6f7',
+    fontFamily: 'Segoe UI, sans-serif'
+  };
+
+  const wrap = {
+    padding: '20px 24px 28px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+    gap: 16,
+    alignItems: 'start'
+  };
+
+  const card = {
+    backgroundColor: '#ffffff',
+    padding: 20,
+    borderRadius: 12,
+    boxShadow: '0 4px 12px rgba(0,0,0,0.06)'
+  };
+
+  const inputStyle = {
+    padding: '0.75rem',
+    borderRadius: '8px',
+    border: '1px solid #cbd5e1',
+    fontSize: '1rem',
+    background: '#fff'
+  };
+
+  const buttonPrimary = {
+    padding: '0.75rem',
+    borderRadius: '8px',
+    border: 'none',
+    backgroundColor: '#006666',
+    color: 'white',
+    fontWeight: 'bold',
+    cursor: 'pointer'
+  };
+
+  const buttonDanger = {
+    backgroundColor: '#e11d48',
+    color: '#fff',
+    border: 'none',
+    padding: '0.4rem 0.7rem',
+    borderRadius: 8,
+    fontWeight: 700,
+    cursor: 'pointer'
+  };
+
+  const empty = {
+    padding: '0.75rem',
+    color: '#64748b',
+    background: '#f1f5f9',
+    borderRadius: 8,
+    textAlign: 'center'
+  };
+
   return (
-    <div style={{
-      minHeight: '100vh',
-      backgroundColor: '#f9f9f9',
-      fontFamily: 'Segoe UI, sans-serif',
-      padding: '2rem'
-    }}>
-      <header style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: '#004d4d',
-        color: 'white',
-        padding: '1rem 1.5rem',
-        borderRadius: '10px',
-        marginBottom: '2rem'
-      }}>
-        <strong>📂 Gestión de Categorías</strong>
-        <Link to="/admin" style={{
-          backgroundColor: '#006666',
-          color: 'white',
-          textDecoration: 'none',
-          padding: '0.5rem 1.2rem',
-          borderRadius: '5px',
-          fontWeight: 'bold'
-        }}>
-          ← Volver al Panel
-        </Link>
-      </header>
+    <div style={page}>
+      {/* Topbar pegado, coherente con las otras vistas */}
+      <AdminHeader titulo="📂 Gestión de Categorías" />
 
-      <div style={{
-        backgroundColor: '#ffffff',
-        padding: '2rem',
-        borderRadius: '10px',
-        maxWidth: '500px',
-        margin: '0 auto 2rem auto',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-      }}>
-        <h2 style={{ marginBottom: '1rem' }}>Crear nueva categoría</h2>
+      <div style={wrap}>
+        {/* Crear categoría */}
+        <section style={card}>
+          <h2 style={{ marginTop: 0, marginBottom: 12, color: '#1e293b' }}>Crear nueva categoría</h2>
 
-        <form onSubmit={handleCreateCategory} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <input
-            type="text"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            placeholder="Nombre de la categoría"
-            required
-            style={inputStyle}
-          />
-          <button type="submit" style={buttonStyle}>Crear Categoría</button>
-        </form>
+          <form onSubmit={handleCreateCategory} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <input
+              type="text"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              placeholder="Nombre de la categoría"
+              required
+              style={inputStyle}
+            />
+            <button type="submit" style={buttonPrimary}>Crear Categoría</button>
+          </form>
 
-        {mensaje && <p style={{ marginTop: '1rem', fontWeight: 'bold' }}>{mensaje}</p>}
-      </div>
+          {mensaje && (
+            <p style={{ marginTop: 12, fontWeight: 'bold' }}>{mensaje}</p>
+          )}
+        </section>
 
-      <div style={{
-        maxWidth: '600px',
-        margin: '0 auto',
-        backgroundColor: '#fff',
-        padding: '1.5rem',
-        borderRadius: '10px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-      }}>
-        <h3 style={{ marginBottom: '1rem' }}>Categorías Existentes</h3>
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {categorias.map((cat) => (
-            <li key={cat.id} style={{
-              padding: '0.6rem 0',
-              borderBottom: '1px solid #ddd',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}>
-              <span>{cat.nombre}</span>
-   {/*           <button onClick={() => eliminarCategoria(cat.id)} style={{
-                backgroundColor: '#e60000',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                padding: '0.3rem 0.6rem',
-                cursor: 'pointer'
-              }}>Eliminar</button> */}
-            </li>
-          ))}
-        </ul>
+        {/* Lista de categorías */}
+        <section style={card}>
+          <h3 style={{ marginTop: 0, marginBottom: 12, color: '#1e293b' }}>Categorías existentes</h3>
+
+          {cargando ? (
+            <div style={empty}>Cargando…</div>
+          ) : categorias.length === 0 ? (
+            <div style={empty}>No hay categorías registradas.</div>
+          ) : (
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {categorias.map((cat) => (
+                <li
+                  key={cat.id}
+                  style={{
+                    padding: '0.6rem 0',
+                    borderBottom: '1px solid #e2e8f0',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: 10
+                  }}
+                >
+                  <span>{cat.nombre}</span>
+                  
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
       </div>
     </div>
   );
-};
-
-const inputStyle = {
-  padding: '0.75rem',
-  borderRadius: '5px',
-  border: '1px solid #ccc',
-  fontSize: '1rem'
-};
-
-const buttonStyle = {
-  padding: '0.75rem',
-  borderRadius: '5px',
-  border: 'none',
-  backgroundColor: '#006666',
-  color: 'white',
-  fontWeight: 'bold',
-  cursor: 'pointer'
 };
 
 export default ManageCategories;

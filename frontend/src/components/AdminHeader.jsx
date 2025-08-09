@@ -1,101 +1,105 @@
+// src/components/AdminHeader.jsx
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import React from 'react';
 
-const AdminHeader = ({ titulo }) => {
+export default function AdminHeader({ titulo = 'Panel' }) {
   const navigate = useNavigate();
   const location = useLocation();
 
   const usuario = JSON.parse(localStorage.getItem('usuario'));
-  const rol = usuario?.rol?.nombre || 'Administrador General';
+  const rol = usuario?.rol?.nombre || 'Administrador';
+
+  const enPanelAdmin = location.pathname === '/admin';
 
   const cerrarSesion = () => {
     localStorage.removeItem('usuario');
     navigate('/');
   };
 
-  const enPanelAdmin = location.pathname === '/admin';
-
   return (
-    <header style={headerContainer}>
-      <div style={leftSection}>
-        <span style={icono}>📋</span>
-        <h1 style={tituloEstilo}>{titulo}</h1>
+    <header style={wrap}>
+      {/* Izquierda: título */}
+      <div style={left}>
+        <span role="img" aria-label="pin">📍</span>
+        <span>{titulo}</span>
       </div>
 
-      <div style={rightSection}>
-        <span style={usuarioEstilo}>👤 {rol}</span>
+      {/* Derecha: rol + volver/cerrar */}
+      <div style={right}>
+        <span style={roleBadge}>
+          <span role="img" aria-label="user">👤</span>
+          {rol}
+        </span>
 
-        {rol === 'Administrador' && enPanelAdmin && (
-          <button onClick={cerrarSesion} style={buttonRed}>Cerrar sesión</button>
-        )}
-
-        {rol === 'Administrador' && !enPanelAdmin && (
-          <Link to="/admin" style={buttonReturn}>← Volver al Panel</Link>
-        )}
-
-        {rol !== 'Administrador' && (
-          <button onClick={cerrarSesion} style={buttonRed}>Cerrar sesión</button>
+        {/* Si no estamos en /admin, mostrar "Volver al Panel" */}
+        {!enPanelAdmin ? (
+          <Link to="/admin" style={backBtn}>← Volver al Panel</Link>
+        ) : (
+          <button onClick={cerrarSesion} style={backBtnRed}>Cerrar sesión</button>
         )}
       </div>
     </header>
   );
-};
+}
 
-// 🎨 Estilos visuales
-const headerContainer = {
-  backgroundColor: '#1e3d59',
+/* === Estilos idénticos a PageTopBar === */
+const wrap = {
+  position: 'sticky',
+  top: 0,
+  zIndex: 1000,
+  width: '100vw',           // full‑bleed
+  boxSizing: 'border-box',
+  background: '#13354B',    // mismo azul
   color: 'white',
-  padding: '1rem 2rem',
-  borderRadius: '12px',
+  padding: '14px 20px',
   display: 'flex',
+  alignItems: 'center',
   justifyContent: 'space-between',
-  alignItems: 'center',
-  boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-  fontFamily: 'Poppins, sans-serif'
+  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+  borderRadius: 0,
+  fontWeight: 700,
+  fontSize: '20px',
 };
 
-const leftSection = {
+const left = {
   display: 'flex',
   alignItems: 'center',
-  gap: '0.8rem'
+  gap: '10px',
 };
 
-const icono = {
-  fontSize: '1.5rem'
-};
-
-const tituloEstilo = {
-  fontSize: '1.2rem',
-  margin: 0
-};
-
-const rightSection = {
+const right = {
   display: 'flex',
   alignItems: 'center',
-  gap: '1rem'
+  gap: '12px',
 };
 
-const usuarioEstilo = {
-  fontWeight: '500',
-  fontSize: '0.95rem'
+const roleBadge = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '6px',
+  background: 'rgba(255,255,255,0.12)',
+  padding: '8px 12px',
+  borderRadius: '999px',
+  fontWeight: 600,
+  fontSize: '14px',
 };
 
-const buttonRed = {
-  backgroundColor: '#e63946',
-  color: 'white',
-  border: 'none',
-  padding: '0.5rem 1rem',
-  borderRadius: '8px',
-  fontWeight: 'bold',
-  cursor: 'pointer'
-};
-
-const buttonReturn = {
-  backgroundColor: '#007f5f',
+const backBtn = {
+  background: '#0F7A65',    // mismo verde del botón
   color: 'white',
   textDecoration: 'none',
-  padding: '0.5rem 1rem',
-  borderRadius: '8px',
-  fontWeight: 'bold'
+  padding: '10px 16px',
+  borderRadius: '999px',
+  fontWeight: 700,
+  border: 'none',
+  cursor: 'pointer',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'transform .06s ease',
 };
 
-export default AdminHeader;
+const backBtnRed = {
+  ...backBtn,
+  background: '#e63946',
+};

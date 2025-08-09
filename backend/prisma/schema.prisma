@@ -37,6 +37,8 @@ model Platillo {
   creadoEn   DateTime @default(now())
   disponible Boolean  @default(true)
 
+  imagenUrl  String?   // <-- NUEVO
+
   categoriaId Int
   categoria   Categoria @relation(fields: [categoriaId], references: [id])
 
@@ -48,7 +50,26 @@ model Rol {
   id       Int       @id @default(autoincrement())
   nombre   String    @unique
   usuarios Usuario[]
+    permisos  PermisoPorRol[]
 }
+model Permiso {
+  id          Int                @id @default(autoincrement())
+  nombre      String             @unique
+  descripcion String?
+  roles       PermisoPorRol[]
+}
+
+// 5. Luego PermisoPorRol
+model PermisoPorRol {
+  id         Int      @id @default(autoincrement())
+  permisoId  Int
+  rolId      Int
+  permiso    Permiso  @relation(fields: [permisoId], references: [id])
+  rol        Rol      @relation(fields: [rolId], references: [id])
+
+  @@unique([permisoId, rolId])
+}
+
 
 // 4) Historial de modificaciones
 model HistorialModificacion {

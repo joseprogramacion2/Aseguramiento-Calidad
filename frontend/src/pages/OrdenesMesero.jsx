@@ -1,7 +1,8 @@
-// OrdenesMesero.jsx
+// src/pages/OrdenesMesero.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import PageTopBar from '../components/PageTopBar';
 
 function OrdenesMesero() {
   const [ordenes, setOrdenes] = useState([]);
@@ -31,8 +32,6 @@ function OrdenesMesero() {
       console.error('Error al obtener órdenes:', error);
     }
   };
-
-  const volver = () => navigate('/mesero');
 
   const cancelarOrden = async (id) => {
     if (!window.confirm('¿Deseas cancelar esta orden?')) return;
@@ -110,62 +109,81 @@ function OrdenesMesero() {
   };
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif' }}>
-      <header style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-        <h2>📄 Órdenes enviadas</h2>
-        <button onClick={volver} style={volverBtn}>← Volver</button>
-      </header>
+    <div
+      style={{
+        height: '100vh',
+        width: '100vw',
+        display: 'flex',
+        flexDirection: 'column',
+        overflowX: 'hidden',            // 👈 sin scroll lateral
+        fontFamily: 'Segoe UI, sans-serif',
+        boxSizing: 'border-box',
+      }}
+    >
+      {/* Barra superior full-width/sticky */}
+      <PageTopBar
+        title="Órdenes del Mesero"
+        backTo="/panel"                 // 👈 ajusta si tu panel usa otra ruta
+      />
 
-      <table style={{ width:'100%', borderCollapse:'collapse', marginTop:'2rem' }}>
-        <thead>
-          <tr style={{ background:'#006666', color:'#fff' }}>
-            <th style={th}>Código</th>
-            <th style={th}>Mesa</th>
-            <th style={th}>Estado</th>
-            <th style={th}>Mesero</th>
-            <th style={th}>Detalle</th>
-            <th style={th}>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {ordenes.map((orden, i) => {
-            const itemsAgr = agruparItemsParaMostrar(orden.items);
-            return (
-              <tr key={orden.id} style={{ background: i%2===0 ? '#f9f9f9' : '#fff' }}>
-                <td style={td}>{orden.codigo || `#${orden.id}`}</td>
-                <td style={td}>{orden.mesa}</td>
-                <td style={td}><span style={estadoChipStyle(orden.estado)}>{orden.estado}</span></td>
-                <td style={td}>{orden.mesero?.nombre || usuario?.nombre}</td>
-                <td style={{ ...td, verticalAlign:'top' }}>
-                  <ul style={{ margin:0, paddingLeft:'1.2rem' }}>
-                    {itemsAgr.map((it, idx) => (
-                      <li key={idx} style={{ marginBottom:'.2rem' }}>
-                        <strong>{it.nombre}</strong>
-                        {it._agrupado && it.cantidad>1
-                          ? <> x{it.cantidad} - Q{Number(it.precio).toFixed(2)} c/u</>
-                          : <> - Q{Number(it.precio).toFixed(2)}</>}
-                        {it.nota && <em> ({it.nota})</em>}
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-                <td style={td}>
-                  <button
-                    onClick={() => { setOrdenTemporal(JSON.parse(JSON.stringify(orden))); setMostrarModal(true); }}
-                    style={accionBtn}
-                  >Editar</button>
-                  <button
-                    onClick={() => cancelarOrden(orden.id)}
-                    style={{ ...accionBtn, background:'#e60000' }}
-                    disabled={orden.estado==='Entregado'}
-                    title={orden.estado==='Entregado' ? 'No se puede cancelar una orden entregada' : undefined}
-                  >Cancelar</button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {/* Contenido */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '2rem', boxSizing: 'border-box' }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+          <h2>📄 Órdenes enviadas</h2>
+
+        </div>
+
+        <table style={{ width:'100%', borderCollapse:'collapse', marginTop:'2rem' }}>
+          <thead>
+            <tr style={{ background:'#006666', color:'#fff' }}>
+              <th style={th}>Código</th>
+              <th style={th}>Mesa</th>
+              <th style={th}>Estado</th>
+              <th style={th}>Mesero</th>
+              <th style={th}>Detalle</th>
+              <th style={th}>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ordenes.map((orden, i) => {
+              const itemsAgr = agruparItemsParaMostrar(orden.items);
+              return (
+                <tr key={orden.id} style={{ background: i%2===0 ? '#f9f9f9' : '#fff' }}>
+                  <td style={td}>{orden.codigo || `#${orden.id}`}</td>
+                  <td style={td}>{orden.mesa}</td>
+                  <td style={td}><span style={estadoChipStyle(orden.estado)}>{orden.estado}</span></td>
+                  <td style={td}>{orden.mesero?.nombre || usuario?.nombre}</td>
+                  <td style={{ ...td, verticalAlign:'top' }}>
+                    <ul style={{ margin:0, paddingLeft:'1.2rem' }}>
+                      {itemsAgr.map((it, idx) => (
+                        <li key={idx} style={{ marginBottom:'.2rem' }}>
+                          <strong>{it.nombre}</strong>
+                          {it._agrupado && it.cantidad>1
+                            ? <> x{it.cantidad} - Q{Number(it.precio).toFixed(2)} c/u</>
+                            : <> - Q{Number(it.precio).toFixed(2)}</>}
+                          {it.nota && <em> ({it.nota})</em>}
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td style={td}>
+                    <button
+                      onClick={() => { setOrdenTemporal(JSON.parse(JSON.stringify(orden))); setMostrarModal(true); }}
+                      style={accionBtn}
+                    >Editar</button>
+                    <button
+                      onClick={() => cancelarOrden(orden.id)}
+                      style={{ ...accionBtn, background:'#e60000' }}
+                      disabled={orden.estado==='Entregado'}
+                      title={orden.estado==='Entregado' ? 'No se puede cancelar una orden entregada' : undefined}
+                    >Cancelar</button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
 
       {/* Modal editar */}
       {mostrarModal && ordenTemporal && (
@@ -202,12 +220,15 @@ function OrdenesMesero() {
 
 const th = { padding:'0.8rem', textAlign:'left', borderBottom:'2px solid #ccc' };
 const td = { padding:'0.8rem', borderBottom:'1px solid #ddd' };
+
 const volverBtn = { background:'#004d4d', color:'#fff', padding:'0.6rem 1.2rem', border:'none', borderRadius:6, cursor:'pointer' };
 const accionBtn = { marginRight:'.5rem', padding:'.4rem .8rem', border:'none', borderRadius:4, background:'#004d4d', color:'#fff', cursor:'pointer' };
+
 const guardarBtn = { padding:'0.6rem 1.2rem', background:'#006666', color:'#fff', border:'none', borderRadius:6, cursor:'pointer' };
 const agregarBtn = { padding:'0.6rem 1.2rem', background:'#0b7', color:'#fff', border:'none', borderRadius:6, cursor:'pointer' };
 const cerrarBtn = { padding:'0.6rem 1.2rem', background:'#ccc', color:'#333', border:'none', borderRadius:6, cursor:'pointer' };
-const modalStyle = { position:'fixed', top:0, left:0, width:'100%', height:'100%', background:'rgba(0,0,0,.5)', display:'flex', justifyContent:'center', alignItems:'center', zIndex:999 };
-const modalContent = { background:'#fff', padding:'2rem', borderRadius:10, width:420, maxWidth:'90%' };
+
+const modalStyle = { position:'fixed', top:0, left:0, width:'100vw', height:'100vh', background:'rgba(0,0,0,.5)', display:'flex', justifyContent:'center', alignItems:'center', zIndex:999 };
+const modalContent = { background:'#fff', padding:'2rem', borderRadius:10, width:420, maxWidth:'90vw', boxSizing:'border-box' };
 
 export default OrdenesMesero;

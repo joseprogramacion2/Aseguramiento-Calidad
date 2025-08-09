@@ -1,10 +1,47 @@
+// src/pages/Login.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+/* === Helpers de normalización ===
+   - normalizePermKeys: convierte cualquier forma de permiso a STRING MAYÚSCULA con _.
+   - normalizeUserForStorage: asegura que usuario.permisos exista como array de strings normalizados.
+   - normalizeRoleName: compara roles sin problemas de mayúsculas/espacios. */
+function normalizePermKeys(list) {
+  if (!Array.isArray(list)) return [];
+  const toKey = (p) => {
+    if (typeof p === 'string') return p;
+    return p?.clave || p?.nombre || p?.key || '';
+  };
+  return list
+    .map(toKey)
+    .filter(Boolean)
+    .map((s) => String(s).trim().toUpperCase().replace(/\s+/g, '_'));
+}
+
+function normalizeUserForStorage(u) {
+  if (!u || typeof u !== 'object') return null;
+
+  // Fuente de permisos: primero usuario.permisos; si no, rol.permisos.
+  const srcPerms = Array.isArray(u?.permisos) && u.permisos.length
+    ? u.permisos
+    : (Array.isArray(u?.rol?.permisos) ? u.rol.permisos : []);
+
+  const perms = normalizePermKeys(srcPerms);
+
+  // Devolvemos una copia con permisos ya normalizados (strings).
+  return { ...u, permisos: perms };
+}
+
+function normalizeRoleName(name) {
+  return String(name || '').trim().toUpperCase();
+}
+
+/* ======================= Componente ======================= */
 function Login() {
   const [credenciales, setCredenciales] = useState({ usuario: '', contrasena: '' });
   const [error, setError] = useState('');
+  const [cargando, setCargando] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -14,19 +51,39 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
+    setCargando(true);
 
     try {
       const res = await axios.post('http://localhost:3001/login', credenciales);
-      localStorage.setItem('usuario', JSON.stringify(res.data.usuario));
-      const usuario = res.data.usuario;
 
-      if (usuario.rol.nombre === 'Administrador') {
-        navigate('/admin');
+      // Validaciones defensivas
+      const usuarioSrv = res?.data?.usuario;
+      if (!usuarioSrv) {
+        throw new Error('Respuesta inválida del servidor (sin usuario).');
+      }
+
+      // Normalizar antes de guardar (clave para que PanelPorRol reconozca permisos)
+      const usuarioOK = normalizeUserForStorage(usuarioSrv);
+      if (!usuarioOK) {
+        throw new Error('No fue posible normalizar los datos de usuario.');
+      }
+
+      localStorage.setItem('usuario', JSON.stringify(usuarioOK));
+
+      // Redirección por rol (case-insensitive)
+      const roleName = normalizeRoleName(usuarioOK?.rol?.nombre);
+      if (roleName === 'ADMINISTRADOR' || roleName === 'ADMIN') {
+        navigate('/admin', { replace: true });
       } else {
-        navigate('/panel');
+        // Tu flujo usa /panel para no-admin; PanelPorRol redirige admin a /admin
+        navigate('/panel', { replace: true });
       }
     } catch (err) {
-      setError(err.response?.data?.error || 'Error al iniciar sesión');
+      console.error(err);
+      const msg = err?.response?.data?.error || err?.message || 'Error al iniciar sesión';
+      setError(msg);
+    } finally {
+      setCargando(false);
     }
   };
 
@@ -71,6 +128,7 @@ function Login() {
             onChange={handleChange}
             required
             style={inputStyle}
+            autoComplete="username"
           />
           <input
             type="password"
@@ -80,13 +138,24 @@ function Login() {
             onChange={handleChange}
             required
             style={inputStyle}
+            autoComplete="current-password"
           />
-          <button type="submit" style={buttonStyle}>
-            Ingresar
+
+          <button type="submit" style={buttonStyle} disabled={cargando}>
+            {cargando ? 'Ingresando…' : 'Ingresar'}
           </button>
 
-          {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+          {error && (
+            <p style={{ color: 'red', textAlign: 'center', marginTop: '.25rem' }}>
+              {error}
+            </p>
+          )}
         </form>
+
+        {/* Espacio para enlaces auxiliares, si luego los necesitas
+        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+          <a href="#" style={{ color: '#006666' }}>¿Olvidaste tu contraseña?</a>
+        </div> */}
       </div>
     </div>
   );
