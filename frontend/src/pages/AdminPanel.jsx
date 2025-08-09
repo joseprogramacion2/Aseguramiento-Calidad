@@ -10,7 +10,7 @@ function AdminPanel() {
     if (usuario) {
       setNombre(usuario.nombre);
     } else {
-      navigate('/'); // Redirige al login si no hay sesión
+      navigate('/');
     }
   }, [navigate]);
 
@@ -22,64 +22,90 @@ function AdminPanel() {
   return (
     <div style={{
       minHeight: '100vh',
-      backgroundColor: '#f9f9f9',
       fontFamily: 'Segoe UI, sans-serif',
-      padding: '2rem'
+      backgroundColor: '#f5f6fa'
     }}>
-      {/* Barra superior */}
+      {/* Top bar */}
       <header style={{
+        backgroundColor: '#1e3d59',
+        color: 'white',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#004d4d',
-        color: 'white',
-        padding: '1rem 1.5rem',
-        borderRadius: '10px',
-        marginBottom: '2rem'
+        padding: '1rem 2rem',
+        boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
       }}>
-        <div><strong>👤 {nombre}</strong></div>
-        <button onClick={cerrarSesion} style={{
-          backgroundColor: '#e60000',
-          color: 'white',
-          border: 'none',
-          padding: '0.5rem 1.2rem',
-          borderRadius: '5px',
-          cursor: 'pointer'
-        }}>
-          Cerrar sesión
-        </button>
+        <h1 style={{ margin: 0, fontSize: '1.3rem' }}>📋 Panel de Administración</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <span>👤 {nombre || "Administrador"}</span>
+          <button onClick={cerrarSesion} style={{
+            backgroundColor: '#e63946',
+            color: 'white',
+            border: 'none',
+            padding: '0.5rem 1rem',
+            borderRadius: '5px',
+            fontWeight: 'bold',
+            cursor: 'pointer'
+          }}>Cerrar sesión</button>
+        </div>
       </header>
 
-      {/* Título principal */}
-      <h2 style={{ color: '#333', marginBottom: '1.5rem' }}>Panel de Administración</h2>
-
-      {/* Navegación */}
-      <nav style={{
-        display: 'flex',
-        gap: '1.5rem',
+      {/* Contenido */}
+      <div style={{
+        maxWidth: '1000px',
+        margin: '2rem auto',
+        padding: '2rem',
         backgroundColor: '#ffffff',
-        padding: '1.5rem',
-        borderRadius: '10px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+        borderRadius: '12px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)'
       }}>
-        <Link to="/admin/usuarios" style={linkStyle}>👥 Usuarios</Link>
-        <Link to="/admin/platillos" style={linkStyle}>🍽 Platillos</Link>
-        <Link to="/admin/historial" style={linkStyle}>📜 Historial</Link>
-        <Link to="/admin/menu" style={linkStyle}>📋 Menú</Link> 
-        <Link to="/admin/categorias" style={linkStyle}>📂 Categorías</Link>
-      </nav>
+        <h2 style={{ textAlign: 'center', marginBottom: '2rem', color: '#333' }}>Accesos rápidos</h2>
+        
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+          gap: '2rem',
+          justifyItems: 'center'
+        }}>
+          {botones.map(({ ruta, texto, icono }) => (
+            <Link to={ruta} key={ruta} style={cuadroLink}>
+              <div style={{ fontSize: '2rem' }}>{icono}</div>
+              <span style={{ marginTop: '0.5rem', fontWeight: 500 }}>{texto}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
-const linkStyle = {
+const botones = [
+  { ruta: "/admin/usuarios", texto: "Usuarios", icono: "👥" },
+  { ruta: "/admin/platillos", texto: "Platillos", icono: "🍽️" },
+  { ruta: "/admin/historial", texto: "Historial", icono: "📜" },
+  { ruta: "/admin/menu", texto: "Menú", icono: "📋" },
+  { ruta: "/admin/categorias", texto: "Categorías", icono: "📂" },
+];
+
+const cuadroLink = {
+  backgroundColor: '#f1f3f6',
   textDecoration: 'none',
-  padding: '0.8rem 1.2rem',
-  backgroundColor: '#006666',
-  color: 'white',
+  color: '#1e3d59',
+  width: '150px',
+  height: '120px',
   borderRadius: '8px',
-  fontWeight: 'bold',
-  transition: 'background-color 0.3s',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+  transition: 'transform 0.2s, box-shadow 0.2s',
+  cursor: 'pointer'
+};
+
+cuadroLink[':hover'] = {
+  transform: 'scale(1.05)',
+  boxShadow: '0 4px 10px rgba(0,0,0,0.15)'
 };
 
 export default AdminPanel;

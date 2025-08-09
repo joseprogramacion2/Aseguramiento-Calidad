@@ -132,14 +132,14 @@ const ManageCategories = () => {
               alignItems: 'center'
             }}>
               <span>{cat.nombre}</span>
-              <button onClick={() => eliminarCategoria(cat.id)} style={{
+   {/*           <button onClick={() => eliminarCategoria(cat.id)} style={{
                 backgroundColor: '#e60000',
                 color: 'white',
                 border: 'none',
                 borderRadius: '5px',
                 padding: '0.3rem 0.6rem',
                 cursor: 'pointer'
-              }}>Eliminar</button>
+              }}>Eliminar</button> */}
             </li>
           ))}
         </ul>

@@ -59,7 +59,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Eliminar un platillo
+// Eliminar un platillo (solo si decides mantenerlo, pero ya no se usa)
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -146,6 +146,27 @@ router.put('/:id', async (req, res) => {
   } catch (error) {
     console.error('Error al actualizar platillo:', error);
     res.status(500).json({ error: 'Error al actualizar el platillo.' });
+  }
+});
+
+// ✅ NUEVO: Cambiar disponibilidad (activar/desactivar) de un platillo
+router.patch('/:id/disponibilidad', async (req, res) => {
+  const { id } = req.params;
+  const { disponible } = req.body;
+
+  try {
+    const actualizado = await prisma.platillo.update({
+      where: { id: parseInt(id) },
+      data: { disponible: Boolean(disponible) }
+    });
+
+    res.json({
+      mensaje: `Platillo ${disponible ? 'activado' : 'desactivado'} correctamente`,
+      platillo: actualizado
+    });
+  } catch (error) {
+    console.error('Error al cambiar disponibilidad:', error);
+    res.status(500).json({ error: 'Error al actualizar disponibilidad del platillo.' });
   }
 });
 

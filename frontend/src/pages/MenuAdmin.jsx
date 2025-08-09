@@ -15,13 +15,14 @@ function MenuAdmin() {
   const obtenerPlatillos = async () => {
     try {
       const res = await axios.get('http://localhost:3001/platillos');
-      setPlatillos(res.data);
+      // ✅ Solo mostrar platillos disponibles
+      setPlatillos(res.data.filter(p => p.disponible));
     } catch (error) {
       console.error('Error al obtener el menú:', error);
     }
   };
 
-  // Agrupar por nombre de categoría (evita renderizar objetos)
+  // Agrupar platillos por nombre de categoría
   const platillosPorCategoria = platillos.reduce((grupos, platillo) => {
     const categoriaNombre = typeof platillo.categoria?.nombre === 'string'
       ? platillo.categoria.nombre

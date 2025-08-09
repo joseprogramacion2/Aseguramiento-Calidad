@@ -8,31 +8,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// 1. Primero Usuario
+// 1) Usuario
 model Usuario {
-  id           Int                     @id @default(autoincrement())
-  nombre       String
-  usuario      String                  @unique
-  correo       String                  @unique
-  contrasena   String
-  estado       Boolean                 @default(true)
-  creadoEn     DateTime                @default(now())
-  actualizadoEn DateTime               @updatedAt
+  id            Int      @id @default(autoincrement())
+  nombre        String
+  usuario       String   @unique
+  correo        String   @unique
+  contrasena    String
+  estado        Boolean  @default(true)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
 
-  rolId        Int
-  rol          Rol                     @relation(fields: [rolId], references: [id])
+  rolId Int
+  rol   Rol @relation(fields: [rolId], references: [id])
 
   historialModificaciones HistorialModificacion[] @relation("ModificacionesDelUsuario")
   historialResponsable    HistorialModificacion[] @relation("ModificacionesHechasPor")
+
+  // Órdenes donde este usuario actúa como mesero
+  ordenesMesero Orden[] @relation("OrdenesDelMesero")
 }
 
-// 2. Luego Platillo
+// 2) Platillo
 model Platillo {
-  id         Int       @id @default(autoincrement())
-  nombre     String    @unique
+  id         Int      @id @default(autoincrement())
+  nombre     String   @unique
   precio     Float
-  creadoEn   DateTime  @default(now())
-  disponible Boolean   @default(true)
+  creadoEn   DateTime @default(now())
+  disponible Boolean  @default(true)
 
   categoriaId Int
   categoria   Categoria @relation(fields: [categoriaId], references: [id])
@@ -40,38 +43,60 @@ model Platillo {
   historialModificaciones HistorialModificacion[]
 }
 
-
-// 3. Luego Rol
+// 3) Rol
 model Rol {
   id       Int       @id @default(autoincrement())
   nombre   String    @unique
-
   usuarios Usuario[]
 }
 
-// 4. Al final HistorialModificacion
+// 4) Historial de modificaciones
 model HistorialModificacion {
-  id             Int       @id @default(autoincrement())
-  campo          String
-  valorAnterior  String?
-  valorNuevo     String?
-  fecha          DateTime  @default(now())
-  accion         String
+  id            Int      @id @default(autoincrement())
+  campo         String
+  valorAnterior String?
+  valorNuevo    String?
+  fecha         DateTime @default(now())
+  accion        String
 
-  responsableId  Int
-  responsable    Usuario   @relation("ModificacionesHechasPor", fields: [responsableId], references: [id])
+  responsableId Int
+  responsable   Usuario @relation("ModificacionesHechasPor", fields: [responsableId], references: [id])
 
-  usuarioId      Int? 
-  usuario        Usuario?  @relation("ModificacionesDelUsuario", fields: [usuarioId], references: [id])
+  usuarioId Int?
+  usuario   Usuario? @relation("ModificacionesDelUsuario", fields: [usuarioId], references: [id])
 
-  platilloId     Int?
-  platillo       Platillo? @relation(fields: [platilloId], references: [id])
+  platilloId Int?
+  platillo   Platillo? @relation(fields: [platilloId], references: [id])
 }
+
+// 5) Categoría
 model Categoria {
   id        Int        @id @default(autoincrement())
   nombre    String     @unique
   creadoEn  DateTime   @default(now())
-
-  platillos Platillo[] // Relación uno a muchos: una categoría puede tener muchos platillos
+  platillos Platillo[]
 }
 
+// 6) Orden
+model Orden {
+  id Int @id @default(autoincrement())
+
+  // Código alfanumérico de 5 caracteres generado por la BD (ej: A1F3B)
+  codigo String @unique @default(dbgenerated("upper(substr(md5(random()::text),1,5))")) @db.VarChar(5)
+
+  mesa     Int
+  fecha    DateTime    @default(now())
+  meseroId Int
+  mesero   Usuario     @relation("OrdenesDelMesero", fields: [meseroId], references: [id])
+  items    OrdenItem[]
+}
+
+// 7) OrdenItem (detalle)
+model OrdenItem {
+  id      Int     @id @default(autoincrement())
+  nombre  String
+  precio  Float
+  nota    String?
+  ordenId Int
+  orden   Orden   @relation(fields: [ordenId], references: [id])
+}

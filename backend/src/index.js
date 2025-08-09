@@ -7,7 +7,8 @@ const usuarioRoutes = require('./routes/usuarios.routes');
 const rolesRoutes = require('./routes/rol.routes');
 const historialRoutes = require('./routes/historial.routes');
 const platillosRoutes = require('./routes/platillos.routes');
-const categoriaRoutes = require('./routes/categoria.routes'); // 👈 importar
+const categoriaRoutes = require('./routes/categoria.routes');
+const ordenesRoutes = require('./routes/ordenes.routes'); // ✅ AÑADIDO
 
 const PORT = 3001;
 
@@ -20,7 +21,8 @@ app.use('/usuarios', usuarioRoutes);
 app.use('/roles', rolesRoutes);
 app.use('/historial', historialRoutes);
 app.use('/platillos', platillosRoutes);
-app.use('/categorias', categoriaRoutes); // 👈 montar ruta
+app.use('/categorias', categoriaRoutes);
+app.use('/ordenes', ordenesRoutes); // ✅ AÑADIDO
 
 app.get("/", (req, res) => {
   res.send("Backend corriendo 🚀");

@@ -1,4 +1,4 @@
-//app.js
+// app.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -10,6 +10,8 @@ import Historial from './pages/Historial';
 import PanelBasico from './pages/PanelBasico';
 import MenuAdmin from './pages/MenuAdmin';
 import ManageCategories from './pages/ManageCategories';
+import VistaMesero from './pages/VistaMesero';
+import OrdenesMesero from './pages/OrdenesMesero'; // ✅ Importación nueva
 
 function App() {
   return (
@@ -23,9 +25,12 @@ function App() {
         <Route path="/admin/menu" element={<MenuAdmin />} />
         <Route path="/admin/categorias" element={<ManageCategories />} />
         <Route path="/panel" element={<PanelBasico />} />
+        <Route path="/mesero" element={<VistaMesero />} />
+        <Route path="/mesero/ordenes" element={<OrdenesMesero />} /> {/* ✅ Ruta nueva */}
       </Routes>
     </Router>
   );
 }
 
 export default App;
+

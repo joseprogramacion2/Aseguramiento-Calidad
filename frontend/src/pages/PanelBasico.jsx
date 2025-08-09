@@ -10,10 +10,15 @@ function PanelBasico() {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('usuario'));
     if (user) {
-      setRol(user.rol?.nombre || '');
+      const userRol = user.rol?.nombre || '';
+      setRol(userRol);
       setNombre(user.nombre || '');
+
+      // ✅ Solo el mesero redirige por ahora
+      if (userRol === 'Mesero') navigate('/mesero');
+      // Cocinero y Repartidor se quedan en esta vista básica
     }
-  }, []);
+  }, [navigate]);
 
   const cerrarSesion = () => {
     localStorage.removeItem('usuario');
@@ -43,7 +48,6 @@ function PanelBasico() {
 
         {rol === 'Cocinero' && <p>🍳 Vista de cocinero próximamente</p>}
         {rol === 'Repartidor' && <p>🚚 Vista de repartidor próximamente</p>}
-        {rol === 'Mesero' && <p>🍽 Vista de mesero próximamente</p>}
         {rol === 'Administrador' && <p>🛠 Vista de administrador</p>}
         {!rol && <p>⚠ No se encontró rol</p>}
 
