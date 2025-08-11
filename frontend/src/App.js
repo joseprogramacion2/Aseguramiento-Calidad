@@ -1,4 +1,4 @@
-// app.js
+// src/app.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -10,17 +10,20 @@ import Historial from './pages/Historial';
 import PanelPorRol from './pages/PanelPorRol';
 import MenuAdmin from './pages/MenuAdmin';
 import ManageCategories from './pages/ManageCategories';
-import VistaMesero from './pages/VistaMesero';
 import GestionRoles from './pages/GestionRoles';
-import OrdenesMesero from './pages/OrdenesMesero'; // ✅ Importación nueva
+import VistaMesero from './pages/VistaMesero';
+import OrdenesMesero from './pages/OrdenesMesero';
+import Cocinero from './pages/Cocinero'; // 👈 NUEVO
 
 function App() {
   return (
     <Router>
       <Routes>
+        {/* Auth */}
         <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />  {/* 👈 alias */}
+        <Route path="/login" element={<Login />} />
 
+        {/* Panel Admin */}
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/admin/usuarios" element={<Usuarios />} />
         <Route path="/admin/platillos" element={<Platillos />} />
@@ -29,17 +32,18 @@ function App() {
         <Route path="/admin/categorias" element={<ManageCategories />} />
         <Route path="/admin/roles" element={<GestionRoles />} />
 
+        {/* Panel no-admin (según permisos) */}
         <Route path="/panel" element={<PanelPorRol />} />
 
+        {/* Mesero */}
         <Route path="/mesero" element={<VistaMesero />} />
-        <Route path="/mesero/ordenes" element={<OrdenesMesero />} /> {/* ✅ Ruta nueva */}
+        <Route path="/mesero/ordenes" element={<OrdenesMesero />} />
 
-
-        
+        {/* Cocinero */}
+        <Route path="/cocina" element={<Cocinero />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-

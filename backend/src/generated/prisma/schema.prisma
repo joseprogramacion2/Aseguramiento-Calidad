@@ -27,6 +27,12 @@ model Usuario {
 
   // Órdenes donde este usuario actúa como mesero
   ordenesMesero Orden[] @relation("OrdenesDelMesero")
+
+  // Ítems asignados como chef
+  itemsAsignados OrdenItem[] @relation("AsignadoAlChef")
+
+  // Estado de actividad en cocina (1:1 opcional)
+  cocinaEstado CocinaChef?
 }
 
 // 2) Platillo
@@ -37,7 +43,7 @@ model Platillo {
   creadoEn   DateTime @default(now())
   disponible Boolean  @default(true)
 
-  imagenUrl String? // <-- NUEVO
+  imagenUrl String?
 
   categoriaId Int
   categoria   Categoria @relation(fields: [categoriaId], references: [id])
@@ -60,7 +66,6 @@ model Permiso {
   roles       PermisoPorRol[]
 }
 
-// 5. Luego PermisoPorRol
 model PermisoPorRol {
   id        Int     @id @default(autoincrement())
   permisoId Int
@@ -110,14 +115,51 @@ model Orden {
   meseroId Int
   mesero   Usuario     @relation("OrdenesDelMesero", fields: [meseroId], references: [id])
   items    OrdenItem[]
+
+  estado String @default("En espera")
 }
 
 // 7) OrdenItem (detalle)
+enum OrdenItemEstado {
+  PENDIENTE
+  ASIGNADO
+  PREPARANDO
+  LISTO
+}
+
+enum OrdenItemTipo {
+  PLATILLO
+  BEBIDA
+}
+
+//8)
 model OrdenItem {
-  id      Int     @id @default(autoincrement())
-  nombre  String
-  precio  Float
-  nota    String?
-  ordenId Int
-  orden   Orden   @relation(fields: [ordenId], references: [id])
+  id     Int     @id @default(autoincrement())
+  nombre String
+  precio Float
+  nota   String?
+  tipo   String
+  estado String
+
+  creadoEn DateTime @default(now())
+  ordenId  Int
+  orden    Orden    @relation(fields: [ordenId], references: [id])
+
+  chefId Int?
+  chef   Usuario? @relation("AsignadoAlChef", fields: [chefId], references: [id])
+
+  asignadoEn   DateTime?
+  finalizadoEn DateTime?
+  prioridad    Int?
+
+  @@index([chefId, estado])
+}
+
+// 9) Actividad de chefs (quién está activo en cocina)
+model CocinaChef {
+  id       Int      @id @default(autoincrement())
+  chefId   Int      @unique
+  chef     Usuario  @relation(fields: [chefId], references: [id])
+  activo   Boolean  @default(true)
+  lastSeen DateTime @default(now())
 }

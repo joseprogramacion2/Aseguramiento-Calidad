@@ -4,16 +4,19 @@ const prisma = new PrismaClient();
 
 const PERMISOS = [
   // Administración
-  { clave: 'CONFIGURAR_USUARIOS', nombre: 'CONFIGURAR_USUARIOS', descripcion: 'Gestionar usuarios' },
-  { clave: 'CONFIGURAR_PLATILLOS', nombre: 'CONFIGURAR_PLATILLOS', descripcion: 'Gestionar platillos' },
-  { clave: 'GESTIONAR_CATEGORIAS', nombre: 'GESTIONAR_CATEGORIAS', descripcion: 'Gestionar categorías' },
-  { clave: 'GESTIONAR_ROLES', nombre: 'GESTIONAR_ROLES', descripcion: 'Gestionar roles y permisos' },
-  { clave: 'VER_MENU', nombre: 'VER_MENU', descripcion: 'Ver menú' },
-  { clave: 'VER_HISTORIAL', nombre: 'VER_HISTORIAL', descripcion: 'Ver historial' },
+  { nombre: 'CONFIGURAR_USUARIOS', descripcion: 'Gestionar usuarios' },
+  { nombre: 'CONFIGURAR_PLATILLOS', descripcion: 'Gestionar platillos' },
+  { nombre: 'GESTIONAR_CATEGORIAS', descripcion: 'Gestionar categorías' },
+  { nombre: 'GESTIONAR_ROLES', descripcion: 'Gestionar roles y permisos' },
+  { nombre: 'VER_MENU', descripcion: 'Ver menú' },
+  { nombre: 'VER_HISTORIAL', descripcion: 'Ver historial' },
 
   // Mesero / Órdenes
-  { clave: 'GENERAR_ORDEN', nombre: 'GENERAR_ORDEN', descripcion: 'Crear órdenes' },
-  { clave: 'VER_ORDENES', nombre: 'VER_ORDENES', descripcion: 'Ver historial de órdenes' },
+  { nombre: 'GENERAR_ORDEN', descripcion: 'Crear órdenes' },
+  { nombre: 'VER_ORDENES', descripcion: 'Ver historial de órdenes' },
+
+  // 👨‍🍳 Cocina
+  { nombre: 'COCINA_VIEW', descripcion: 'Acceso a vista de cocina' },
 ];
 
 async function main() {
@@ -39,6 +42,12 @@ async function main() {
     create: { nombre: 'Mesero' },
   });
 
+  const cocinero = await prisma.rol.upsert({
+    where: { nombre: 'Cocinero' },
+    update: {},
+    create: { nombre: 'Cocinero' },
+  });
+
   // --- Vincular permisos a roles ---
   const todosPermisos = await prisma.permiso.findMany();
   const mapPerm = Object.fromEntries(todosPermisos.map(p => [p.nombre, p.id]));
@@ -52,7 +61,7 @@ async function main() {
     });
   }
 
-  // Mesero -> solo los de órdenes e historial
+  // Mesero -> solo los de órdenes
   const permisosMesero = ['GENERAR_ORDEN', 'VER_ORDENES'];
   for (const nombre of permisosMesero) {
     const pid = mapPerm[nombre];
@@ -61,6 +70,18 @@ async function main() {
       where: { permisoId_rolId: { permisoId: pid, rolId: mesero.id } },
       update: {},
       create: { permisoId: pid, rolId: mesero.id },
+    });
+  }
+
+  // Cocinero -> acceso a vista de cocina
+  const permisosCocinero = ['COCINA_VIEW'];
+  for (const nombre of permisosCocinero) {
+    const pid = mapPerm[nombre];
+    if (!pid) continue;
+    await prisma.permisoPorRol.upsert({
+      where: { permisoId_rolId: { permisoId: pid, rolId: cocinero.id } },
+      update: {},
+      create: { permisoId: pid, rolId: cocinero.id },
     });
   }
 
@@ -79,6 +100,33 @@ async function main() {
     },
   });
 
+  // Mesero demo
+  await prisma.usuario.upsert({
+    where: { usuario: 'mesero1' },
+    update: { estado: true, rolId: mesero.id },
+    create: {
+      nombre: 'Mesero Demo',
+      usuario: 'mesero1',
+      correo: 'mesero1@demo.com',
+      contrasena: 'mesero123',
+      rolId: mesero.id,
+      estado: true,
+    },
+  });
+
+  // Cocinero demo
+  await prisma.usuario.upsert({
+    where: { usuario: 'cocinero1' },
+    update: { estado: true, rolId: cocinero.id },
+    create: {
+      nombre: 'Cocinero Demo',
+      usuario: 'cocinero1',
+      correo: 'cocinero1@demo.com',
+      contrasena: 'cocina123',
+      rolId: cocinero.id,
+      estado: true,
+    },
+  });
 
   console.log('✅ Seed completado.');
 }

@@ -182,7 +182,8 @@ exports.Prisma.OrdenScalarFieldEnum = {
   codigo: 'codigo',
   mesa: 'mesa',
   fecha: 'fecha',
-  meseroId: 'meseroId'
+  meseroId: 'meseroId',
+  estado: 'estado'
 };
 
 exports.Prisma.OrdenItemScalarFieldEnum = {
@@ -190,7 +191,21 @@ exports.Prisma.OrdenItemScalarFieldEnum = {
   nombre: 'nombre',
   precio: 'precio',
   nota: 'nota',
-  ordenId: 'ordenId'
+  tipo: 'tipo',
+  estado: 'estado',
+  creadoEn: 'creadoEn',
+  ordenId: 'ordenId',
+  chefId: 'chefId',
+  asignadoEn: 'asignadoEn',
+  finalizadoEn: 'finalizadoEn',
+  prioridad: 'prioridad'
+};
+
+exports.Prisma.CocinaChefScalarFieldEnum = {
+  id: 'id',
+  chefId: 'chefId',
+  activo: 'activo',
+  lastSeen: 'lastSeen'
 };
 
 exports.Prisma.SortOrder = {
@@ -218,7 +233,8 @@ exports.Prisma.ModelName = {
   HistorialModificacion: 'HistorialModificacion',
   Categoria: 'Categoria',
   Orden: 'Orden',
-  OrdenItem: 'OrdenItem'
+  OrdenItem: 'OrdenItem',
+  CocinaChef: 'CocinaChef'
 };
 
 /**

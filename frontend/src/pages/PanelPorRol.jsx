@@ -1,4 +1,4 @@
-// src/pages/PanelPorRol.jsx
+// frontend/src/pages/PanelPorRol.jsx
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -6,44 +6,30 @@ function logout() {
   try {
     localStorage.removeItem('usuario');
     sessionStorage.clear();
-    window.location.replace('/login'); // redirección limpia
+    window.location.replace('/login');
   } catch {
     window.location.replace('/login');
   }
 }
 
-// === Helpers inline (Opción B) ===
-function getPermisosFromUser(u) {
-  if (Array.isArray(u?.permisos) && u.permisos.length) {
-    return u.permisos
-      .map(p => (typeof p === 'string' ? p : (p.clave || p.nombre || p.key)))
-      .filter(Boolean);
-  }
-  if (Array.isArray(u?.rol?.permisos) && u.rol.permisos.length) {
-    return u.rol.permisos
-      .map(p => (typeof p === 'string' ? p : (p.clave || p.nombre || p.key)))
-      .filter(Boolean);
-  }
-  return [];
+// Helpers
+function normRoleName(name) {
+  return String(name || '').trim().toUpperCase();
 }
-function esAdmin(u) {
-  const n = (u?.rol?.nombre || '').trim().toUpperCase();
-  return n === 'ADMINISTRADOR' || n === 'ADMIN';
+function normPermList(list) {
+  if (!Array.isArray(list)) return [];
+  return list
+    .map(p => (typeof p === 'string' ? p : (p?.clave || p?.nombre || p?.key || '')))
+    .filter(Boolean)
+    .map(s => String(s).trim().toUpperCase().replace(/\s+/g, '_'));
+}
+function getPermsFromUser(u) {
+  const p1 = normPermList(u?.permisos || []);
+  if (p1.length) return p1;
+  const p2 = normPermList(u?.rol?.permisos || []);
+  return p2;
 }
 
-// === estilos ===
-const cajaLink = {
-  textDecoration: 'none',
-  padding: '0.8rem 1.2rem',
-  backgroundColor: '#006666',
-  color: 'white',
-  borderRadius: '8px',
-  fontWeight: 'bold',
-  transition: 'transform 0.2s, box-shadow 0.2s',
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: '.5rem',
-};
 const tile = {
   backgroundColor: '#f1f3f6',
   textDecoration: 'none',
@@ -64,17 +50,22 @@ const cont = {
   fontFamily: 'Segoe UI, sans-serif',
 };
 
-// Importante: claves de permiso alineadas al seed.js
-const CATALOGO_ROL = [
-  { ruta: "/admin/usuarios",   texto: "Usuarios",              icono: "👥",  permiso: "CONFIGURAR_USUARIOS" },
-  { ruta: "/admin/platillos",  texto: "Platillos",             icono: "🍽️", permiso: "CONFIGURAR_PLATILLOS" },
-  { ruta: "/admin/historial",  texto: "Historial",             icono: "📜",  permiso: "VER_HISTORIAL" },
-  { ruta: "/admin/menu",       texto: "Menú",                  icono: "📋",  permiso: "VER_MENU" },
-  { ruta: "/admin/categorias", texto: "Categorías",            icono: "📂",  permiso: "GESTIONAR_CATEGORIAS" },
-  { ruta: "/admin/roles",      texto: "Roles",                 icono: "🛠",  permiso: "GESTIONAR_ROLES" },
+// Catálogo (coinciden con los permisos del seed)
+const CATALOGO = [
+  // Admin
+  { ruta: "/admin/usuarios",   texto: "Usuarios",          icono: "👥",  permiso: "CONFIGURAR_USUARIOS" },
+  { ruta: "/admin/platillos",  texto: "Platillos",         icono: "🍽️", permiso: "CONFIGURAR_PLATILLOS" },
+  { ruta: "/admin/historial",  texto: "Historial",         icono: "📜",  permiso: "VER_HISTORIAL" },
+  { ruta: "/admin/menu",       texto: "Menú",              icono: "📋",  permiso: "VER_MENU" },
+  { ruta: "/admin/categorias", texto: "Categorías",        icono: "📂",  permiso: "GESTIONAR_CATEGORIAS" },
+  { ruta: "/admin/roles",      texto: "Roles",             icono: "🛠",  permiso: "GESTIONAR_ROLES" },
+
   // Mesero
-  { ruta: "/mesero",           texto: "Generar Orden",   icono: "🛎️", permiso: "GENERAR_ORDEN" },
-  { ruta: "/mesero/ordenes",   texto: "Historial Órdenes", icono: "📋", permiso: "VER_ORDENES" }, // <- del seed
+  { ruta: "/mesero",           texto: "Generar Orden",     icono: "🛎️", permiso: "GENERAR_ORDEN" },
+  { ruta: "/mesero/ordenes",   texto: "Historial Órdenes", icono: "📋", permiso: "VER_ORDENES" },
+
+  // Cocinero (si usas este permiso)
+  { ruta: "/cocina",           texto: "Cocina",            icono: "👨‍🍳", permiso: "COCINA_VIEW" },
 ];
 
 export default function PanelPorRol() {
@@ -84,55 +75,94 @@ export default function PanelPorRol() {
 
   useEffect(() => {
     const u = JSON.parse(localStorage.getItem('usuario'));
-    if (!u) return navigate('/login', { replace: true });
+    if (!u) {
+      navigate('/login', { replace: true });
+      return;
+    }
 
-    // Si es admin, no debe ver este panel
-    if (esAdmin(u)) return navigate('/admin', { replace: true });
+    const role = normRoleName(u?.rol?.nombre);
+    let perms = getPermsFromUser(u);
+
+    // Fallback: si es MESERO y viene sin permisos, darle los mínimos
+    if (role === 'MESERO' && perms.length === 0) {
+      perms = ['GENERAR_ORDEN', 'VER_ORDENES'];
+    }
 
     setUsuario(u);
-    setPermisos(getPermisosFromUser(u)); // normaliza strings/objetos/clave/nombre
+    setPermisos(perms);
   }, [navigate]);
 
-  const nombre = usuario?.nombre || '';
-  const rolNombre = usuario?.rol?.nombre || 'Usuario';
+  // Hooks SIEMPRE antes de cualquier return
+  const roleName = usuario?.rol?.nombre || 'Usuario';
+  const isAdmin = useMemo(() => {
+    const rn = normRoleName(roleName);
+    return rn === 'ADMINISTRADOR' || rn === 'ADMIN';
+  }, [roleName]);
 
-  const accesos = useMemo(
-    () => CATALOGO_ROL.filter(item => !item.permiso || permisos.includes(item.permiso)),
-    [permisos]
-  );
+  const accesos = useMemo(() => {
+    if (isAdmin) return CATALOGO; // admin ve todo
+    const setPerms = new Set(permisos);
+    return CATALOGO.filter(item => !item.permiso || setPerms.has(item.permiso));
+  }, [isAdmin, permisos]);
 
-  if (!usuario) return null;
+  // Render
+  if (!usuario) {
+    // pequeño esqueleto para evitar return antes de hooks
+    return (
+      <div style={cont}>
+        <header style={{
+          backgroundColor: '#1e3d59',
+          color: 'white',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '1rem 2rem',
+          boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+        }}>
+          <h1 style={{ margin: 0, fontSize: '1.1rem' }}>Cargando…</h1>
+        </header>
+        <main style={{
+          maxWidth: 1000,
+          margin: '2rem auto',
+          padding: '2rem',
+          backgroundColor: '#ffffff',
+          borderRadius: 12,
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)'
+        }}>
+          <p>Preparando tu panel…</p>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div style={cont}>
       {/* Header simple */}
       <header style={{
-  backgroundColor: '#1e3d59',
-  color: 'white',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '1rem 2rem',
-  boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
-}}>
-  <h1 style={{ margin: 0, fontSize: '1.1rem' }}>👤 {nombre}</h1>
-
-  {/* 👉 lado derecho: rol + botón cerrar sesión */}
-  <div style={{ display:'flex', alignItems:'center', gap:'1rem' }}>
-    <span>{rolNombre}</span>
-    <button onClick={logout} style={{
-      background:'#e63946',
-      color:'#fff',
-      border:'none',
-      padding:'.5rem 1rem',
-      borderRadius:6,
-      fontWeight:'bold',
-      cursor:'pointer'
-    }}>
-      Cerrar sesión
-    </button>
-  </div>
-</header>
+        backgroundColor: '#1e3d59',
+        color: 'white',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '1rem 2rem',
+        boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+      }}>
+        <h1 style={{ margin: 0, fontSize: '1.1rem' }}>👤 Panel de {usuario?.nombre || 'Usuario'}</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <span>{roleName}</span>
+          <button onClick={logout} style={{
+            background: '#e63946',
+            color: '#fff',
+            border: 'none',
+            padding: '.5rem 1rem',
+            borderRadius: 6,
+            fontWeight: 'bold',
+            cursor: 'pointer'
+          }}>
+            Cerrar sesión
+          </button>
+        </div>
+      </header>
 
       <main style={{
         maxWidth: 1000,
@@ -172,8 +202,6 @@ export default function PanelPorRol() {
             ))}
           </div>
         )}
-
-
       </main>
     </div>
   );

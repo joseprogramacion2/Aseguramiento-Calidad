@@ -58,6 +58,42 @@ export type Orden = $Result.DefaultSelection<Prisma.$OrdenPayload>
  * 
  */
 export type OrdenItem = $Result.DefaultSelection<Prisma.$OrdenItemPayload>
+/**
+ * Model CocinaChef
+ * 
+ */
+export type CocinaChef = $Result.DefaultSelection<Prisma.$CocinaChefPayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const OrdenItemEstado: {
+  PENDIENTE: 'PENDIENTE',
+  ASIGNADO: 'ASIGNADO',
+  PREPARANDO: 'PREPARANDO',
+  LISTO: 'LISTO'
+};
+
+export type OrdenItemEstado = (typeof OrdenItemEstado)[keyof typeof OrdenItemEstado]
+
+
+export const OrdenItemTipo: {
+  PLATILLO: 'PLATILLO',
+  BEBIDA: 'BEBIDA'
+};
+
+export type OrdenItemTipo = (typeof OrdenItemTipo)[keyof typeof OrdenItemTipo]
+
+}
+
+export type OrdenItemEstado = $Enums.OrdenItemEstado
+
+export const OrdenItemEstado: typeof $Enums.OrdenItemEstado
+
+export type OrdenItemTipo = $Enums.OrdenItemTipo
+
+export const OrdenItemTipo: typeof $Enums.OrdenItemTipo
 
 /**
  * ##  Prisma Client ʲˢ
@@ -273,6 +309,16 @@ export class PrismaClient<
     * ```
     */
   get ordenItem(): Prisma.OrdenItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.cocinaChef`: Exposes CRUD operations for the **CocinaChef** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CocinaChefs
+    * const cocinaChefs = await prisma.cocinaChef.findMany()
+    * ```
+    */
+  get cocinaChef(): Prisma.CocinaChefDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -721,7 +767,8 @@ export namespace Prisma {
     HistorialModificacion: 'HistorialModificacion',
     Categoria: 'Categoria',
     Orden: 'Orden',
-    OrdenItem: 'OrdenItem'
+    OrdenItem: 'OrdenItem',
+    CocinaChef: 'CocinaChef'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -740,7 +787,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "usuario" | "platillo" | "rol" | "permiso" | "permisoPorRol" | "historialModificacion" | "categoria" | "orden" | "ordenItem"
+      modelProps: "usuario" | "platillo" | "rol" | "permiso" | "permisoPorRol" | "historialModificacion" | "categoria" | "orden" | "ordenItem" | "cocinaChef"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1410,6 +1457,80 @@ export namespace Prisma {
           }
         }
       }
+      CocinaChef: {
+        payload: Prisma.$CocinaChefPayload<ExtArgs>
+        fields: Prisma.CocinaChefFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CocinaChefFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CocinaChefPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CocinaChefFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CocinaChefPayload>
+          }
+          findFirst: {
+            args: Prisma.CocinaChefFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CocinaChefPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CocinaChefFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CocinaChefPayload>
+          }
+          findMany: {
+            args: Prisma.CocinaChefFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CocinaChefPayload>[]
+          }
+          create: {
+            args: Prisma.CocinaChefCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CocinaChefPayload>
+          }
+          createMany: {
+            args: Prisma.CocinaChefCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CocinaChefCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CocinaChefPayload>[]
+          }
+          delete: {
+            args: Prisma.CocinaChefDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CocinaChefPayload>
+          }
+          update: {
+            args: Prisma.CocinaChefUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CocinaChefPayload>
+          }
+          deleteMany: {
+            args: Prisma.CocinaChefDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CocinaChefUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CocinaChefUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CocinaChefPayload>[]
+          }
+          upsert: {
+            args: Prisma.CocinaChefUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CocinaChefPayload>
+          }
+          aggregate: {
+            args: Prisma.CocinaChefAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCocinaChef>
+          }
+          groupBy: {
+            args: Prisma.CocinaChefGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CocinaChefGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CocinaChefCountArgs<ExtArgs>
+            result: $Utils.Optional<CocinaChefCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1511,6 +1632,7 @@ export namespace Prisma {
     categoria?: CategoriaOmit
     orden?: OrdenOmit
     ordenItem?: OrdenItemOmit
+    cocinaChef?: CocinaChefOmit
   }
 
   /* Types for Logging */
@@ -1613,12 +1735,14 @@ export namespace Prisma {
     historialModificaciones: number
     historialResponsable: number
     ordenesMesero: number
+    itemsAsignados: number
   }
 
   export type UsuarioCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     historialModificaciones?: boolean | UsuarioCountOutputTypeCountHistorialModificacionesArgs
     historialResponsable?: boolean | UsuarioCountOutputTypeCountHistorialResponsableArgs
     ordenesMesero?: boolean | UsuarioCountOutputTypeCountOrdenesMeseroArgs
+    itemsAsignados?: boolean | UsuarioCountOutputTypeCountItemsAsignadosArgs
   }
 
   // Custom InputTypes
@@ -1651,6 +1775,13 @@ export namespace Prisma {
    */
   export type UsuarioCountOutputTypeCountOrdenesMeseroArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OrdenWhereInput
+  }
+
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeCountItemsAsignadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrdenItemWhereInput
   }
 
 
@@ -2060,6 +2191,8 @@ export namespace Prisma {
     historialModificaciones?: boolean | Usuario$historialModificacionesArgs<ExtArgs>
     historialResponsable?: boolean | Usuario$historialResponsableArgs<ExtArgs>
     ordenesMesero?: boolean | Usuario$ordenesMeseroArgs<ExtArgs>
+    itemsAsignados?: boolean | Usuario$itemsAsignadosArgs<ExtArgs>
+    cocinaEstado?: boolean | Usuario$cocinaEstadoArgs<ExtArgs>
     _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["usuario"]>
 
@@ -2107,6 +2240,8 @@ export namespace Prisma {
     historialModificaciones?: boolean | Usuario$historialModificacionesArgs<ExtArgs>
     historialResponsable?: boolean | Usuario$historialResponsableArgs<ExtArgs>
     ordenesMesero?: boolean | Usuario$ordenesMeseroArgs<ExtArgs>
+    itemsAsignados?: boolean | Usuario$itemsAsignadosArgs<ExtArgs>
+    cocinaEstado?: boolean | Usuario$cocinaEstadoArgs<ExtArgs>
     _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UsuarioIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2123,6 +2258,8 @@ export namespace Prisma {
       historialModificaciones: Prisma.$HistorialModificacionPayload<ExtArgs>[]
       historialResponsable: Prisma.$HistorialModificacionPayload<ExtArgs>[]
       ordenesMesero: Prisma.$OrdenPayload<ExtArgs>[]
+      itemsAsignados: Prisma.$OrdenItemPayload<ExtArgs>[]
+      cocinaEstado: Prisma.$CocinaChefPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2532,6 +2669,8 @@ export namespace Prisma {
     historialModificaciones<T extends Usuario$historialModificacionesArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$historialModificacionesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HistorialModificacionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     historialResponsable<T extends Usuario$historialResponsableArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$historialResponsableArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HistorialModificacionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ordenesMesero<T extends Usuario$ordenesMeseroArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$ordenesMeseroArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrdenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    itemsAsignados<T extends Usuario$itemsAsignadosArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$itemsAsignadosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrdenItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cocinaEstado<T extends Usuario$cocinaEstadoArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$cocinaEstadoArgs<ExtArgs>>): Prisma__CocinaChefClient<$Result.GetResult<Prisma.$CocinaChefPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3035,6 +3174,49 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OrdenScalarFieldEnum | OrdenScalarFieldEnum[]
+  }
+
+  /**
+   * Usuario.itemsAsignados
+   */
+  export type Usuario$itemsAsignadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrdenItem
+     */
+    select?: OrdenItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrdenItem
+     */
+    omit?: OrdenItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrdenItemInclude<ExtArgs> | null
+    where?: OrdenItemWhereInput
+    orderBy?: OrdenItemOrderByWithRelationInput | OrdenItemOrderByWithRelationInput[]
+    cursor?: OrdenItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrdenItemScalarFieldEnum | OrdenItemScalarFieldEnum[]
+  }
+
+  /**
+   * Usuario.cocinaEstado
+   */
+  export type Usuario$cocinaEstadoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CocinaChef
+     */
+    select?: CocinaChefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CocinaChef
+     */
+    omit?: CocinaChefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CocinaChefInclude<ExtArgs> | null
+    where?: CocinaChefWhereInput
   }
 
   /**
@@ -9783,6 +9965,7 @@ export namespace Prisma {
     mesa: number | null
     fecha: Date | null
     meseroId: number | null
+    estado: string | null
   }
 
   export type OrdenMaxAggregateOutputType = {
@@ -9791,6 +9974,7 @@ export namespace Prisma {
     mesa: number | null
     fecha: Date | null
     meseroId: number | null
+    estado: string | null
   }
 
   export type OrdenCountAggregateOutputType = {
@@ -9799,6 +9983,7 @@ export namespace Prisma {
     mesa: number
     fecha: number
     meseroId: number
+    estado: number
     _all: number
   }
 
@@ -9821,6 +10006,7 @@ export namespace Prisma {
     mesa?: true
     fecha?: true
     meseroId?: true
+    estado?: true
   }
 
   export type OrdenMaxAggregateInputType = {
@@ -9829,6 +10015,7 @@ export namespace Prisma {
     mesa?: true
     fecha?: true
     meseroId?: true
+    estado?: true
   }
 
   export type OrdenCountAggregateInputType = {
@@ -9837,6 +10024,7 @@ export namespace Prisma {
     mesa?: true
     fecha?: true
     meseroId?: true
+    estado?: true
     _all?: true
   }
 
@@ -9932,6 +10120,7 @@ export namespace Prisma {
     mesa: number
     fecha: Date
     meseroId: number
+    estado: string
     _count: OrdenCountAggregateOutputType | null
     _avg: OrdenAvgAggregateOutputType | null
     _sum: OrdenSumAggregateOutputType | null
@@ -9959,6 +10148,7 @@ export namespace Prisma {
     mesa?: boolean
     fecha?: boolean
     meseroId?: boolean
+    estado?: boolean
     mesero?: boolean | UsuarioDefaultArgs<ExtArgs>
     items?: boolean | Orden$itemsArgs<ExtArgs>
     _count?: boolean | OrdenCountOutputTypeDefaultArgs<ExtArgs>
@@ -9970,6 +10160,7 @@ export namespace Prisma {
     mesa?: boolean
     fecha?: boolean
     meseroId?: boolean
+    estado?: boolean
     mesero?: boolean | UsuarioDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["orden"]>
 
@@ -9979,6 +10170,7 @@ export namespace Prisma {
     mesa?: boolean
     fecha?: boolean
     meseroId?: boolean
+    estado?: boolean
     mesero?: boolean | UsuarioDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["orden"]>
 
@@ -9988,9 +10180,10 @@ export namespace Prisma {
     mesa?: boolean
     fecha?: boolean
     meseroId?: boolean
+    estado?: boolean
   }
 
-  export type OrdenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "codigo" | "mesa" | "fecha" | "meseroId", ExtArgs["result"]["orden"]>
+  export type OrdenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "codigo" | "mesa" | "fecha" | "meseroId" | "estado", ExtArgs["result"]["orden"]>
   export type OrdenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     mesero?: boolean | UsuarioDefaultArgs<ExtArgs>
     items?: boolean | Orden$itemsArgs<ExtArgs>
@@ -10015,6 +10208,7 @@ export namespace Prisma {
       mesa: number
       fecha: Date
       meseroId: number
+      estado: string
     }, ExtArgs["result"]["orden"]>
     composites: {}
   }
@@ -10445,6 +10639,7 @@ export namespace Prisma {
     readonly mesa: FieldRef<"Orden", 'Int'>
     readonly fecha: FieldRef<"Orden", 'DateTime'>
     readonly meseroId: FieldRef<"Orden", 'Int'>
+    readonly estado: FieldRef<"Orden", 'String'>
   }
     
 
@@ -10899,12 +11094,16 @@ export namespace Prisma {
     id: number | null
     precio: number | null
     ordenId: number | null
+    chefId: number | null
+    prioridad: number | null
   }
 
   export type OrdenItemSumAggregateOutputType = {
     id: number | null
     precio: number | null
     ordenId: number | null
+    chefId: number | null
+    prioridad: number | null
   }
 
   export type OrdenItemMinAggregateOutputType = {
@@ -10912,7 +11111,14 @@ export namespace Prisma {
     nombre: string | null
     precio: number | null
     nota: string | null
+    tipo: string | null
+    estado: string | null
+    creadoEn: Date | null
     ordenId: number | null
+    chefId: number | null
+    asignadoEn: Date | null
+    finalizadoEn: Date | null
+    prioridad: number | null
   }
 
   export type OrdenItemMaxAggregateOutputType = {
@@ -10920,7 +11126,14 @@ export namespace Prisma {
     nombre: string | null
     precio: number | null
     nota: string | null
+    tipo: string | null
+    estado: string | null
+    creadoEn: Date | null
     ordenId: number | null
+    chefId: number | null
+    asignadoEn: Date | null
+    finalizadoEn: Date | null
+    prioridad: number | null
   }
 
   export type OrdenItemCountAggregateOutputType = {
@@ -10928,7 +11141,14 @@ export namespace Prisma {
     nombre: number
     precio: number
     nota: number
+    tipo: number
+    estado: number
+    creadoEn: number
     ordenId: number
+    chefId: number
+    asignadoEn: number
+    finalizadoEn: number
+    prioridad: number
     _all: number
   }
 
@@ -10937,12 +11157,16 @@ export namespace Prisma {
     id?: true
     precio?: true
     ordenId?: true
+    chefId?: true
+    prioridad?: true
   }
 
   export type OrdenItemSumAggregateInputType = {
     id?: true
     precio?: true
     ordenId?: true
+    chefId?: true
+    prioridad?: true
   }
 
   export type OrdenItemMinAggregateInputType = {
@@ -10950,7 +11174,14 @@ export namespace Prisma {
     nombre?: true
     precio?: true
     nota?: true
+    tipo?: true
+    estado?: true
+    creadoEn?: true
     ordenId?: true
+    chefId?: true
+    asignadoEn?: true
+    finalizadoEn?: true
+    prioridad?: true
   }
 
   export type OrdenItemMaxAggregateInputType = {
@@ -10958,7 +11189,14 @@ export namespace Prisma {
     nombre?: true
     precio?: true
     nota?: true
+    tipo?: true
+    estado?: true
+    creadoEn?: true
     ordenId?: true
+    chefId?: true
+    asignadoEn?: true
+    finalizadoEn?: true
+    prioridad?: true
   }
 
   export type OrdenItemCountAggregateInputType = {
@@ -10966,7 +11204,14 @@ export namespace Prisma {
     nombre?: true
     precio?: true
     nota?: true
+    tipo?: true
+    estado?: true
+    creadoEn?: true
     ordenId?: true
+    chefId?: true
+    asignadoEn?: true
+    finalizadoEn?: true
+    prioridad?: true
     _all?: true
   }
 
@@ -11061,7 +11306,14 @@ export namespace Prisma {
     nombre: string
     precio: number
     nota: string | null
+    tipo: string
+    estado: string
+    creadoEn: Date
     ordenId: number
+    chefId: number | null
+    asignadoEn: Date | null
+    finalizadoEn: Date | null
+    prioridad: number | null
     _count: OrdenItemCountAggregateOutputType | null
     _avg: OrdenItemAvgAggregateOutputType | null
     _sum: OrdenItemSumAggregateOutputType | null
@@ -11088,8 +11340,16 @@ export namespace Prisma {
     nombre?: boolean
     precio?: boolean
     nota?: boolean
+    tipo?: boolean
+    estado?: boolean
+    creadoEn?: boolean
     ordenId?: boolean
+    chefId?: boolean
+    asignadoEn?: boolean
+    finalizadoEn?: boolean
+    prioridad?: boolean
     orden?: boolean | OrdenDefaultArgs<ExtArgs>
+    chef?: boolean | OrdenItem$chefArgs<ExtArgs>
   }, ExtArgs["result"]["ordenItem"]>
 
   export type OrdenItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -11097,8 +11357,16 @@ export namespace Prisma {
     nombre?: boolean
     precio?: boolean
     nota?: boolean
+    tipo?: boolean
+    estado?: boolean
+    creadoEn?: boolean
     ordenId?: boolean
+    chefId?: boolean
+    asignadoEn?: boolean
+    finalizadoEn?: boolean
+    prioridad?: boolean
     orden?: boolean | OrdenDefaultArgs<ExtArgs>
+    chef?: boolean | OrdenItem$chefArgs<ExtArgs>
   }, ExtArgs["result"]["ordenItem"]>
 
   export type OrdenItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -11106,8 +11374,16 @@ export namespace Prisma {
     nombre?: boolean
     precio?: boolean
     nota?: boolean
+    tipo?: boolean
+    estado?: boolean
+    creadoEn?: boolean
     ordenId?: boolean
+    chefId?: boolean
+    asignadoEn?: boolean
+    finalizadoEn?: boolean
+    prioridad?: boolean
     orden?: boolean | OrdenDefaultArgs<ExtArgs>
+    chef?: boolean | OrdenItem$chefArgs<ExtArgs>
   }, ExtArgs["result"]["ordenItem"]>
 
   export type OrdenItemSelectScalar = {
@@ -11115,31 +11391,49 @@ export namespace Prisma {
     nombre?: boolean
     precio?: boolean
     nota?: boolean
+    tipo?: boolean
+    estado?: boolean
+    creadoEn?: boolean
     ordenId?: boolean
+    chefId?: boolean
+    asignadoEn?: boolean
+    finalizadoEn?: boolean
+    prioridad?: boolean
   }
 
-  export type OrdenItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nombre" | "precio" | "nota" | "ordenId", ExtArgs["result"]["ordenItem"]>
+  export type OrdenItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nombre" | "precio" | "nota" | "tipo" | "estado" | "creadoEn" | "ordenId" | "chefId" | "asignadoEn" | "finalizadoEn" | "prioridad", ExtArgs["result"]["ordenItem"]>
   export type OrdenItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orden?: boolean | OrdenDefaultArgs<ExtArgs>
+    chef?: boolean | OrdenItem$chefArgs<ExtArgs>
   }
   export type OrdenItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orden?: boolean | OrdenDefaultArgs<ExtArgs>
+    chef?: boolean | OrdenItem$chefArgs<ExtArgs>
   }
   export type OrdenItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orden?: boolean | OrdenDefaultArgs<ExtArgs>
+    chef?: boolean | OrdenItem$chefArgs<ExtArgs>
   }
 
   export type $OrdenItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "OrdenItem"
     objects: {
       orden: Prisma.$OrdenPayload<ExtArgs>
+      chef: Prisma.$UsuarioPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       nombre: string
       precio: number
       nota: string | null
+      tipo: string
+      estado: string
+      creadoEn: Date
       ordenId: number
+      chefId: number | null
+      asignadoEn: Date | null
+      finalizadoEn: Date | null
+      prioridad: number | null
     }, ExtArgs["result"]["ordenItem"]>
     composites: {}
   }
@@ -11535,6 +11829,7 @@ export namespace Prisma {
   export interface Prisma__OrdenItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     orden<T extends OrdenDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrdenDefaultArgs<ExtArgs>>): Prisma__OrdenClient<$Result.GetResult<Prisma.$OrdenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    chef<T extends OrdenItem$chefArgs<ExtArgs> = {}>(args?: Subset<T, OrdenItem$chefArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11568,7 +11863,14 @@ export namespace Prisma {
     readonly nombre: FieldRef<"OrdenItem", 'String'>
     readonly precio: FieldRef<"OrdenItem", 'Float'>
     readonly nota: FieldRef<"OrdenItem", 'String'>
+    readonly tipo: FieldRef<"OrdenItem", 'String'>
+    readonly estado: FieldRef<"OrdenItem", 'String'>
+    readonly creadoEn: FieldRef<"OrdenItem", 'DateTime'>
     readonly ordenId: FieldRef<"OrdenItem", 'Int'>
+    readonly chefId: FieldRef<"OrdenItem", 'Int'>
+    readonly asignadoEn: FieldRef<"OrdenItem", 'DateTime'>
+    readonly finalizadoEn: FieldRef<"OrdenItem", 'DateTime'>
+    readonly prioridad: FieldRef<"OrdenItem", 'Int'>
   }
     
 
@@ -11965,6 +12267,25 @@ export namespace Prisma {
   }
 
   /**
+   * OrdenItem.chef
+   */
+  export type OrdenItem$chefArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Usuario
+     */
+    select?: UsuarioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Usuario
+     */
+    omit?: UsuarioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsuarioInclude<ExtArgs> | null
+    where?: UsuarioWhereInput
+  }
+
+  /**
    * OrdenItem without action
    */
   export type OrdenItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11980,6 +12301,1089 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: OrdenItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CocinaChef
+   */
+
+  export type AggregateCocinaChef = {
+    _count: CocinaChefCountAggregateOutputType | null
+    _avg: CocinaChefAvgAggregateOutputType | null
+    _sum: CocinaChefSumAggregateOutputType | null
+    _min: CocinaChefMinAggregateOutputType | null
+    _max: CocinaChefMaxAggregateOutputType | null
+  }
+
+  export type CocinaChefAvgAggregateOutputType = {
+    id: number | null
+    chefId: number | null
+  }
+
+  export type CocinaChefSumAggregateOutputType = {
+    id: number | null
+    chefId: number | null
+  }
+
+  export type CocinaChefMinAggregateOutputType = {
+    id: number | null
+    chefId: number | null
+    activo: boolean | null
+    lastSeen: Date | null
+  }
+
+  export type CocinaChefMaxAggregateOutputType = {
+    id: number | null
+    chefId: number | null
+    activo: boolean | null
+    lastSeen: Date | null
+  }
+
+  export type CocinaChefCountAggregateOutputType = {
+    id: number
+    chefId: number
+    activo: number
+    lastSeen: number
+    _all: number
+  }
+
+
+  export type CocinaChefAvgAggregateInputType = {
+    id?: true
+    chefId?: true
+  }
+
+  export type CocinaChefSumAggregateInputType = {
+    id?: true
+    chefId?: true
+  }
+
+  export type CocinaChefMinAggregateInputType = {
+    id?: true
+    chefId?: true
+    activo?: true
+    lastSeen?: true
+  }
+
+  export type CocinaChefMaxAggregateInputType = {
+    id?: true
+    chefId?: true
+    activo?: true
+    lastSeen?: true
+  }
+
+  export type CocinaChefCountAggregateInputType = {
+    id?: true
+    chefId?: true
+    activo?: true
+    lastSeen?: true
+    _all?: true
+  }
+
+  export type CocinaChefAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CocinaChef to aggregate.
+     */
+    where?: CocinaChefWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CocinaChefs to fetch.
+     */
+    orderBy?: CocinaChefOrderByWithRelationInput | CocinaChefOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CocinaChefWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CocinaChefs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CocinaChefs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CocinaChefs
+    **/
+    _count?: true | CocinaChefCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CocinaChefAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CocinaChefSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CocinaChefMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CocinaChefMaxAggregateInputType
+  }
+
+  export type GetCocinaChefAggregateType<T extends CocinaChefAggregateArgs> = {
+        [P in keyof T & keyof AggregateCocinaChef]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCocinaChef[P]>
+      : GetScalarType<T[P], AggregateCocinaChef[P]>
+  }
+
+
+
+
+  export type CocinaChefGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CocinaChefWhereInput
+    orderBy?: CocinaChefOrderByWithAggregationInput | CocinaChefOrderByWithAggregationInput[]
+    by: CocinaChefScalarFieldEnum[] | CocinaChefScalarFieldEnum
+    having?: CocinaChefScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CocinaChefCountAggregateInputType | true
+    _avg?: CocinaChefAvgAggregateInputType
+    _sum?: CocinaChefSumAggregateInputType
+    _min?: CocinaChefMinAggregateInputType
+    _max?: CocinaChefMaxAggregateInputType
+  }
+
+  export type CocinaChefGroupByOutputType = {
+    id: number
+    chefId: number
+    activo: boolean
+    lastSeen: Date
+    _count: CocinaChefCountAggregateOutputType | null
+    _avg: CocinaChefAvgAggregateOutputType | null
+    _sum: CocinaChefSumAggregateOutputType | null
+    _min: CocinaChefMinAggregateOutputType | null
+    _max: CocinaChefMaxAggregateOutputType | null
+  }
+
+  type GetCocinaChefGroupByPayload<T extends CocinaChefGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CocinaChefGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CocinaChefGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CocinaChefGroupByOutputType[P]>
+            : GetScalarType<T[P], CocinaChefGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CocinaChefSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    chefId?: boolean
+    activo?: boolean
+    lastSeen?: boolean
+    chef?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cocinaChef"]>
+
+  export type CocinaChefSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    chefId?: boolean
+    activo?: boolean
+    lastSeen?: boolean
+    chef?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cocinaChef"]>
+
+  export type CocinaChefSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    chefId?: boolean
+    activo?: boolean
+    lastSeen?: boolean
+    chef?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cocinaChef"]>
+
+  export type CocinaChefSelectScalar = {
+    id?: boolean
+    chefId?: boolean
+    activo?: boolean
+    lastSeen?: boolean
+  }
+
+  export type CocinaChefOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "chefId" | "activo" | "lastSeen", ExtArgs["result"]["cocinaChef"]>
+  export type CocinaChefInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    chef?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type CocinaChefIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    chef?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type CocinaChefIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    chef?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+
+  export type $CocinaChefPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CocinaChef"
+    objects: {
+      chef: Prisma.$UsuarioPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      chefId: number
+      activo: boolean
+      lastSeen: Date
+    }, ExtArgs["result"]["cocinaChef"]>
+    composites: {}
+  }
+
+  type CocinaChefGetPayload<S extends boolean | null | undefined | CocinaChefDefaultArgs> = $Result.GetResult<Prisma.$CocinaChefPayload, S>
+
+  type CocinaChefCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CocinaChefFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CocinaChefCountAggregateInputType | true
+    }
+
+  export interface CocinaChefDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CocinaChef'], meta: { name: 'CocinaChef' } }
+    /**
+     * Find zero or one CocinaChef that matches the filter.
+     * @param {CocinaChefFindUniqueArgs} args - Arguments to find a CocinaChef
+     * @example
+     * // Get one CocinaChef
+     * const cocinaChef = await prisma.cocinaChef.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CocinaChefFindUniqueArgs>(args: SelectSubset<T, CocinaChefFindUniqueArgs<ExtArgs>>): Prisma__CocinaChefClient<$Result.GetResult<Prisma.$CocinaChefPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CocinaChef that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CocinaChefFindUniqueOrThrowArgs} args - Arguments to find a CocinaChef
+     * @example
+     * // Get one CocinaChef
+     * const cocinaChef = await prisma.cocinaChef.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CocinaChefFindUniqueOrThrowArgs>(args: SelectSubset<T, CocinaChefFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CocinaChefClient<$Result.GetResult<Prisma.$CocinaChefPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CocinaChef that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CocinaChefFindFirstArgs} args - Arguments to find a CocinaChef
+     * @example
+     * // Get one CocinaChef
+     * const cocinaChef = await prisma.cocinaChef.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CocinaChefFindFirstArgs>(args?: SelectSubset<T, CocinaChefFindFirstArgs<ExtArgs>>): Prisma__CocinaChefClient<$Result.GetResult<Prisma.$CocinaChefPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CocinaChef that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CocinaChefFindFirstOrThrowArgs} args - Arguments to find a CocinaChef
+     * @example
+     * // Get one CocinaChef
+     * const cocinaChef = await prisma.cocinaChef.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CocinaChefFindFirstOrThrowArgs>(args?: SelectSubset<T, CocinaChefFindFirstOrThrowArgs<ExtArgs>>): Prisma__CocinaChefClient<$Result.GetResult<Prisma.$CocinaChefPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CocinaChefs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CocinaChefFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CocinaChefs
+     * const cocinaChefs = await prisma.cocinaChef.findMany()
+     * 
+     * // Get first 10 CocinaChefs
+     * const cocinaChefs = await prisma.cocinaChef.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const cocinaChefWithIdOnly = await prisma.cocinaChef.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CocinaChefFindManyArgs>(args?: SelectSubset<T, CocinaChefFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CocinaChefPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CocinaChef.
+     * @param {CocinaChefCreateArgs} args - Arguments to create a CocinaChef.
+     * @example
+     * // Create one CocinaChef
+     * const CocinaChef = await prisma.cocinaChef.create({
+     *   data: {
+     *     // ... data to create a CocinaChef
+     *   }
+     * })
+     * 
+     */
+    create<T extends CocinaChefCreateArgs>(args: SelectSubset<T, CocinaChefCreateArgs<ExtArgs>>): Prisma__CocinaChefClient<$Result.GetResult<Prisma.$CocinaChefPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CocinaChefs.
+     * @param {CocinaChefCreateManyArgs} args - Arguments to create many CocinaChefs.
+     * @example
+     * // Create many CocinaChefs
+     * const cocinaChef = await prisma.cocinaChef.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CocinaChefCreateManyArgs>(args?: SelectSubset<T, CocinaChefCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CocinaChefs and returns the data saved in the database.
+     * @param {CocinaChefCreateManyAndReturnArgs} args - Arguments to create many CocinaChefs.
+     * @example
+     * // Create many CocinaChefs
+     * const cocinaChef = await prisma.cocinaChef.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CocinaChefs and only return the `id`
+     * const cocinaChefWithIdOnly = await prisma.cocinaChef.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CocinaChefCreateManyAndReturnArgs>(args?: SelectSubset<T, CocinaChefCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CocinaChefPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CocinaChef.
+     * @param {CocinaChefDeleteArgs} args - Arguments to delete one CocinaChef.
+     * @example
+     * // Delete one CocinaChef
+     * const CocinaChef = await prisma.cocinaChef.delete({
+     *   where: {
+     *     // ... filter to delete one CocinaChef
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CocinaChefDeleteArgs>(args: SelectSubset<T, CocinaChefDeleteArgs<ExtArgs>>): Prisma__CocinaChefClient<$Result.GetResult<Prisma.$CocinaChefPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CocinaChef.
+     * @param {CocinaChefUpdateArgs} args - Arguments to update one CocinaChef.
+     * @example
+     * // Update one CocinaChef
+     * const cocinaChef = await prisma.cocinaChef.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CocinaChefUpdateArgs>(args: SelectSubset<T, CocinaChefUpdateArgs<ExtArgs>>): Prisma__CocinaChefClient<$Result.GetResult<Prisma.$CocinaChefPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CocinaChefs.
+     * @param {CocinaChefDeleteManyArgs} args - Arguments to filter CocinaChefs to delete.
+     * @example
+     * // Delete a few CocinaChefs
+     * const { count } = await prisma.cocinaChef.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CocinaChefDeleteManyArgs>(args?: SelectSubset<T, CocinaChefDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CocinaChefs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CocinaChefUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CocinaChefs
+     * const cocinaChef = await prisma.cocinaChef.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CocinaChefUpdateManyArgs>(args: SelectSubset<T, CocinaChefUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CocinaChefs and returns the data updated in the database.
+     * @param {CocinaChefUpdateManyAndReturnArgs} args - Arguments to update many CocinaChefs.
+     * @example
+     * // Update many CocinaChefs
+     * const cocinaChef = await prisma.cocinaChef.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CocinaChefs and only return the `id`
+     * const cocinaChefWithIdOnly = await prisma.cocinaChef.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CocinaChefUpdateManyAndReturnArgs>(args: SelectSubset<T, CocinaChefUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CocinaChefPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CocinaChef.
+     * @param {CocinaChefUpsertArgs} args - Arguments to update or create a CocinaChef.
+     * @example
+     * // Update or create a CocinaChef
+     * const cocinaChef = await prisma.cocinaChef.upsert({
+     *   create: {
+     *     // ... data to create a CocinaChef
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CocinaChef we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CocinaChefUpsertArgs>(args: SelectSubset<T, CocinaChefUpsertArgs<ExtArgs>>): Prisma__CocinaChefClient<$Result.GetResult<Prisma.$CocinaChefPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CocinaChefs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CocinaChefCountArgs} args - Arguments to filter CocinaChefs to count.
+     * @example
+     * // Count the number of CocinaChefs
+     * const count = await prisma.cocinaChef.count({
+     *   where: {
+     *     // ... the filter for the CocinaChefs we want to count
+     *   }
+     * })
+    **/
+    count<T extends CocinaChefCountArgs>(
+      args?: Subset<T, CocinaChefCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CocinaChefCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CocinaChef.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CocinaChefAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CocinaChefAggregateArgs>(args: Subset<T, CocinaChefAggregateArgs>): Prisma.PrismaPromise<GetCocinaChefAggregateType<T>>
+
+    /**
+     * Group by CocinaChef.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CocinaChefGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CocinaChefGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CocinaChefGroupByArgs['orderBy'] }
+        : { orderBy?: CocinaChefGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CocinaChefGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCocinaChefGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CocinaChef model
+   */
+  readonly fields: CocinaChefFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CocinaChef.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CocinaChefClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    chef<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CocinaChef model
+   */
+  interface CocinaChefFieldRefs {
+    readonly id: FieldRef<"CocinaChef", 'Int'>
+    readonly chefId: FieldRef<"CocinaChef", 'Int'>
+    readonly activo: FieldRef<"CocinaChef", 'Boolean'>
+    readonly lastSeen: FieldRef<"CocinaChef", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CocinaChef findUnique
+   */
+  export type CocinaChefFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CocinaChef
+     */
+    select?: CocinaChefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CocinaChef
+     */
+    omit?: CocinaChefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CocinaChefInclude<ExtArgs> | null
+    /**
+     * Filter, which CocinaChef to fetch.
+     */
+    where: CocinaChefWhereUniqueInput
+  }
+
+  /**
+   * CocinaChef findUniqueOrThrow
+   */
+  export type CocinaChefFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CocinaChef
+     */
+    select?: CocinaChefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CocinaChef
+     */
+    omit?: CocinaChefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CocinaChefInclude<ExtArgs> | null
+    /**
+     * Filter, which CocinaChef to fetch.
+     */
+    where: CocinaChefWhereUniqueInput
+  }
+
+  /**
+   * CocinaChef findFirst
+   */
+  export type CocinaChefFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CocinaChef
+     */
+    select?: CocinaChefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CocinaChef
+     */
+    omit?: CocinaChefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CocinaChefInclude<ExtArgs> | null
+    /**
+     * Filter, which CocinaChef to fetch.
+     */
+    where?: CocinaChefWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CocinaChefs to fetch.
+     */
+    orderBy?: CocinaChefOrderByWithRelationInput | CocinaChefOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CocinaChefs.
+     */
+    cursor?: CocinaChefWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CocinaChefs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CocinaChefs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CocinaChefs.
+     */
+    distinct?: CocinaChefScalarFieldEnum | CocinaChefScalarFieldEnum[]
+  }
+
+  /**
+   * CocinaChef findFirstOrThrow
+   */
+  export type CocinaChefFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CocinaChef
+     */
+    select?: CocinaChefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CocinaChef
+     */
+    omit?: CocinaChefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CocinaChefInclude<ExtArgs> | null
+    /**
+     * Filter, which CocinaChef to fetch.
+     */
+    where?: CocinaChefWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CocinaChefs to fetch.
+     */
+    orderBy?: CocinaChefOrderByWithRelationInput | CocinaChefOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CocinaChefs.
+     */
+    cursor?: CocinaChefWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CocinaChefs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CocinaChefs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CocinaChefs.
+     */
+    distinct?: CocinaChefScalarFieldEnum | CocinaChefScalarFieldEnum[]
+  }
+
+  /**
+   * CocinaChef findMany
+   */
+  export type CocinaChefFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CocinaChef
+     */
+    select?: CocinaChefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CocinaChef
+     */
+    omit?: CocinaChefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CocinaChefInclude<ExtArgs> | null
+    /**
+     * Filter, which CocinaChefs to fetch.
+     */
+    where?: CocinaChefWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CocinaChefs to fetch.
+     */
+    orderBy?: CocinaChefOrderByWithRelationInput | CocinaChefOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CocinaChefs.
+     */
+    cursor?: CocinaChefWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CocinaChefs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CocinaChefs.
+     */
+    skip?: number
+    distinct?: CocinaChefScalarFieldEnum | CocinaChefScalarFieldEnum[]
+  }
+
+  /**
+   * CocinaChef create
+   */
+  export type CocinaChefCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CocinaChef
+     */
+    select?: CocinaChefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CocinaChef
+     */
+    omit?: CocinaChefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CocinaChefInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CocinaChef.
+     */
+    data: XOR<CocinaChefCreateInput, CocinaChefUncheckedCreateInput>
+  }
+
+  /**
+   * CocinaChef createMany
+   */
+  export type CocinaChefCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CocinaChefs.
+     */
+    data: CocinaChefCreateManyInput | CocinaChefCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CocinaChef createManyAndReturn
+   */
+  export type CocinaChefCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CocinaChef
+     */
+    select?: CocinaChefSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CocinaChef
+     */
+    omit?: CocinaChefOmit<ExtArgs> | null
+    /**
+     * The data used to create many CocinaChefs.
+     */
+    data: CocinaChefCreateManyInput | CocinaChefCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CocinaChefIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CocinaChef update
+   */
+  export type CocinaChefUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CocinaChef
+     */
+    select?: CocinaChefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CocinaChef
+     */
+    omit?: CocinaChefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CocinaChefInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CocinaChef.
+     */
+    data: XOR<CocinaChefUpdateInput, CocinaChefUncheckedUpdateInput>
+    /**
+     * Choose, which CocinaChef to update.
+     */
+    where: CocinaChefWhereUniqueInput
+  }
+
+  /**
+   * CocinaChef updateMany
+   */
+  export type CocinaChefUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CocinaChefs.
+     */
+    data: XOR<CocinaChefUpdateManyMutationInput, CocinaChefUncheckedUpdateManyInput>
+    /**
+     * Filter which CocinaChefs to update
+     */
+    where?: CocinaChefWhereInput
+    /**
+     * Limit how many CocinaChefs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CocinaChef updateManyAndReturn
+   */
+  export type CocinaChefUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CocinaChef
+     */
+    select?: CocinaChefSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CocinaChef
+     */
+    omit?: CocinaChefOmit<ExtArgs> | null
+    /**
+     * The data used to update CocinaChefs.
+     */
+    data: XOR<CocinaChefUpdateManyMutationInput, CocinaChefUncheckedUpdateManyInput>
+    /**
+     * Filter which CocinaChefs to update
+     */
+    where?: CocinaChefWhereInput
+    /**
+     * Limit how many CocinaChefs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CocinaChefIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CocinaChef upsert
+   */
+  export type CocinaChefUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CocinaChef
+     */
+    select?: CocinaChefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CocinaChef
+     */
+    omit?: CocinaChefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CocinaChefInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CocinaChef to update in case it exists.
+     */
+    where: CocinaChefWhereUniqueInput
+    /**
+     * In case the CocinaChef found by the `where` argument doesn't exist, create a new CocinaChef with this data.
+     */
+    create: XOR<CocinaChefCreateInput, CocinaChefUncheckedCreateInput>
+    /**
+     * In case the CocinaChef was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CocinaChefUpdateInput, CocinaChefUncheckedUpdateInput>
+  }
+
+  /**
+   * CocinaChef delete
+   */
+  export type CocinaChefDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CocinaChef
+     */
+    select?: CocinaChefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CocinaChef
+     */
+    omit?: CocinaChefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CocinaChefInclude<ExtArgs> | null
+    /**
+     * Filter which CocinaChef to delete.
+     */
+    where: CocinaChefWhereUniqueInput
+  }
+
+  /**
+   * CocinaChef deleteMany
+   */
+  export type CocinaChefDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CocinaChefs to delete
+     */
+    where?: CocinaChefWhereInput
+    /**
+     * Limit how many CocinaChefs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CocinaChef without action
+   */
+  export type CocinaChefDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CocinaChef
+     */
+    select?: CocinaChefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CocinaChef
+     */
+    omit?: CocinaChefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CocinaChefInclude<ExtArgs> | null
   }
 
 
@@ -12080,7 +13484,8 @@ export namespace Prisma {
     codigo: 'codigo',
     mesa: 'mesa',
     fecha: 'fecha',
-    meseroId: 'meseroId'
+    meseroId: 'meseroId',
+    estado: 'estado'
   };
 
   export type OrdenScalarFieldEnum = (typeof OrdenScalarFieldEnum)[keyof typeof OrdenScalarFieldEnum]
@@ -12091,10 +13496,27 @@ export namespace Prisma {
     nombre: 'nombre',
     precio: 'precio',
     nota: 'nota',
-    ordenId: 'ordenId'
+    tipo: 'tipo',
+    estado: 'estado',
+    creadoEn: 'creadoEn',
+    ordenId: 'ordenId',
+    chefId: 'chefId',
+    asignadoEn: 'asignadoEn',
+    finalizadoEn: 'finalizadoEn',
+    prioridad: 'prioridad'
   };
 
   export type OrdenItemScalarFieldEnum = (typeof OrdenItemScalarFieldEnum)[keyof typeof OrdenItemScalarFieldEnum]
+
+
+  export const CocinaChefScalarFieldEnum: {
+    id: 'id',
+    chefId: 'chefId',
+    activo: 'activo',
+    lastSeen: 'lastSeen'
+  };
+
+  export type CocinaChefScalarFieldEnum = (typeof CocinaChefScalarFieldEnum)[keyof typeof CocinaChefScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -12209,6 +13631,8 @@ export namespace Prisma {
     historialModificaciones?: HistorialModificacionListRelationFilter
     historialResponsable?: HistorialModificacionListRelationFilter
     ordenesMesero?: OrdenListRelationFilter
+    itemsAsignados?: OrdenItemListRelationFilter
+    cocinaEstado?: XOR<CocinaChefNullableScalarRelationFilter, CocinaChefWhereInput> | null
   }
 
   export type UsuarioOrderByWithRelationInput = {
@@ -12225,6 +13649,8 @@ export namespace Prisma {
     historialModificaciones?: HistorialModificacionOrderByRelationAggregateInput
     historialResponsable?: HistorialModificacionOrderByRelationAggregateInput
     ordenesMesero?: OrdenOrderByRelationAggregateInput
+    itemsAsignados?: OrdenItemOrderByRelationAggregateInput
+    cocinaEstado?: CocinaChefOrderByWithRelationInput
   }
 
   export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
@@ -12244,6 +13670,8 @@ export namespace Prisma {
     historialModificaciones?: HistorialModificacionListRelationFilter
     historialResponsable?: HistorialModificacionListRelationFilter
     ordenesMesero?: OrdenListRelationFilter
+    itemsAsignados?: OrdenItemListRelationFilter
+    cocinaEstado?: XOR<CocinaChefNullableScalarRelationFilter, CocinaChefWhereInput> | null
   }, "id" | "usuario" | "correo">
 
   export type UsuarioOrderByWithAggregationInput = {
@@ -12630,6 +14058,7 @@ export namespace Prisma {
     mesa?: IntFilter<"Orden"> | number
     fecha?: DateTimeFilter<"Orden"> | Date | string
     meseroId?: IntFilter<"Orden"> | number
+    estado?: StringFilter<"Orden"> | string
     mesero?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
     items?: OrdenItemListRelationFilter
   }
@@ -12640,6 +14069,7 @@ export namespace Prisma {
     mesa?: SortOrder
     fecha?: SortOrder
     meseroId?: SortOrder
+    estado?: SortOrder
     mesero?: UsuarioOrderByWithRelationInput
     items?: OrdenItemOrderByRelationAggregateInput
   }
@@ -12653,6 +14083,7 @@ export namespace Prisma {
     mesa?: IntFilter<"Orden"> | number
     fecha?: DateTimeFilter<"Orden"> | Date | string
     meseroId?: IntFilter<"Orden"> | number
+    estado?: StringFilter<"Orden"> | string
     mesero?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
     items?: OrdenItemListRelationFilter
   }, "id" | "codigo">
@@ -12663,6 +14094,7 @@ export namespace Prisma {
     mesa?: SortOrder
     fecha?: SortOrder
     meseroId?: SortOrder
+    estado?: SortOrder
     _count?: OrdenCountOrderByAggregateInput
     _avg?: OrdenAvgOrderByAggregateInput
     _max?: OrdenMaxOrderByAggregateInput
@@ -12679,6 +14111,7 @@ export namespace Prisma {
     mesa?: IntWithAggregatesFilter<"Orden"> | number
     fecha?: DateTimeWithAggregatesFilter<"Orden"> | Date | string
     meseroId?: IntWithAggregatesFilter<"Orden"> | number
+    estado?: StringWithAggregatesFilter<"Orden"> | string
   }
 
   export type OrdenItemWhereInput = {
@@ -12689,8 +14122,16 @@ export namespace Prisma {
     nombre?: StringFilter<"OrdenItem"> | string
     precio?: FloatFilter<"OrdenItem"> | number
     nota?: StringNullableFilter<"OrdenItem"> | string | null
+    tipo?: StringFilter<"OrdenItem"> | string
+    estado?: StringFilter<"OrdenItem"> | string
+    creadoEn?: DateTimeFilter<"OrdenItem"> | Date | string
     ordenId?: IntFilter<"OrdenItem"> | number
+    chefId?: IntNullableFilter<"OrdenItem"> | number | null
+    asignadoEn?: DateTimeNullableFilter<"OrdenItem"> | Date | string | null
+    finalizadoEn?: DateTimeNullableFilter<"OrdenItem"> | Date | string | null
+    prioridad?: IntNullableFilter<"OrdenItem"> | number | null
     orden?: XOR<OrdenScalarRelationFilter, OrdenWhereInput>
+    chef?: XOR<UsuarioNullableScalarRelationFilter, UsuarioWhereInput> | null
   }
 
   export type OrdenItemOrderByWithRelationInput = {
@@ -12698,8 +14139,16 @@ export namespace Prisma {
     nombre?: SortOrder
     precio?: SortOrder
     nota?: SortOrderInput | SortOrder
+    tipo?: SortOrder
+    estado?: SortOrder
+    creadoEn?: SortOrder
     ordenId?: SortOrder
+    chefId?: SortOrderInput | SortOrder
+    asignadoEn?: SortOrderInput | SortOrder
+    finalizadoEn?: SortOrderInput | SortOrder
+    prioridad?: SortOrderInput | SortOrder
     orden?: OrdenOrderByWithRelationInput
+    chef?: UsuarioOrderByWithRelationInput
   }
 
   export type OrdenItemWhereUniqueInput = Prisma.AtLeast<{
@@ -12710,8 +14159,16 @@ export namespace Prisma {
     nombre?: StringFilter<"OrdenItem"> | string
     precio?: FloatFilter<"OrdenItem"> | number
     nota?: StringNullableFilter<"OrdenItem"> | string | null
+    tipo?: StringFilter<"OrdenItem"> | string
+    estado?: StringFilter<"OrdenItem"> | string
+    creadoEn?: DateTimeFilter<"OrdenItem"> | Date | string
     ordenId?: IntFilter<"OrdenItem"> | number
+    chefId?: IntNullableFilter<"OrdenItem"> | number | null
+    asignadoEn?: DateTimeNullableFilter<"OrdenItem"> | Date | string | null
+    finalizadoEn?: DateTimeNullableFilter<"OrdenItem"> | Date | string | null
+    prioridad?: IntNullableFilter<"OrdenItem"> | number | null
     orden?: XOR<OrdenScalarRelationFilter, OrdenWhereInput>
+    chef?: XOR<UsuarioNullableScalarRelationFilter, UsuarioWhereInput> | null
   }, "id">
 
   export type OrdenItemOrderByWithAggregationInput = {
@@ -12719,7 +14176,14 @@ export namespace Prisma {
     nombre?: SortOrder
     precio?: SortOrder
     nota?: SortOrderInput | SortOrder
+    tipo?: SortOrder
+    estado?: SortOrder
+    creadoEn?: SortOrder
     ordenId?: SortOrder
+    chefId?: SortOrderInput | SortOrder
+    asignadoEn?: SortOrderInput | SortOrder
+    finalizadoEn?: SortOrderInput | SortOrder
+    prioridad?: SortOrderInput | SortOrder
     _count?: OrdenItemCountOrderByAggregateInput
     _avg?: OrdenItemAvgOrderByAggregateInput
     _max?: OrdenItemMaxOrderByAggregateInput
@@ -12735,7 +14199,66 @@ export namespace Prisma {
     nombre?: StringWithAggregatesFilter<"OrdenItem"> | string
     precio?: FloatWithAggregatesFilter<"OrdenItem"> | number
     nota?: StringNullableWithAggregatesFilter<"OrdenItem"> | string | null
+    tipo?: StringWithAggregatesFilter<"OrdenItem"> | string
+    estado?: StringWithAggregatesFilter<"OrdenItem"> | string
+    creadoEn?: DateTimeWithAggregatesFilter<"OrdenItem"> | Date | string
     ordenId?: IntWithAggregatesFilter<"OrdenItem"> | number
+    chefId?: IntNullableWithAggregatesFilter<"OrdenItem"> | number | null
+    asignadoEn?: DateTimeNullableWithAggregatesFilter<"OrdenItem"> | Date | string | null
+    finalizadoEn?: DateTimeNullableWithAggregatesFilter<"OrdenItem"> | Date | string | null
+    prioridad?: IntNullableWithAggregatesFilter<"OrdenItem"> | number | null
+  }
+
+  export type CocinaChefWhereInput = {
+    AND?: CocinaChefWhereInput | CocinaChefWhereInput[]
+    OR?: CocinaChefWhereInput[]
+    NOT?: CocinaChefWhereInput | CocinaChefWhereInput[]
+    id?: IntFilter<"CocinaChef"> | number
+    chefId?: IntFilter<"CocinaChef"> | number
+    activo?: BoolFilter<"CocinaChef"> | boolean
+    lastSeen?: DateTimeFilter<"CocinaChef"> | Date | string
+    chef?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }
+
+  export type CocinaChefOrderByWithRelationInput = {
+    id?: SortOrder
+    chefId?: SortOrder
+    activo?: SortOrder
+    lastSeen?: SortOrder
+    chef?: UsuarioOrderByWithRelationInput
+  }
+
+  export type CocinaChefWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    chefId?: number
+    AND?: CocinaChefWhereInput | CocinaChefWhereInput[]
+    OR?: CocinaChefWhereInput[]
+    NOT?: CocinaChefWhereInput | CocinaChefWhereInput[]
+    activo?: BoolFilter<"CocinaChef"> | boolean
+    lastSeen?: DateTimeFilter<"CocinaChef"> | Date | string
+    chef?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }, "id" | "chefId">
+
+  export type CocinaChefOrderByWithAggregationInput = {
+    id?: SortOrder
+    chefId?: SortOrder
+    activo?: SortOrder
+    lastSeen?: SortOrder
+    _count?: CocinaChefCountOrderByAggregateInput
+    _avg?: CocinaChefAvgOrderByAggregateInput
+    _max?: CocinaChefMaxOrderByAggregateInput
+    _min?: CocinaChefMinOrderByAggregateInput
+    _sum?: CocinaChefSumOrderByAggregateInput
+  }
+
+  export type CocinaChefScalarWhereWithAggregatesInput = {
+    AND?: CocinaChefScalarWhereWithAggregatesInput | CocinaChefScalarWhereWithAggregatesInput[]
+    OR?: CocinaChefScalarWhereWithAggregatesInput[]
+    NOT?: CocinaChefScalarWhereWithAggregatesInput | CocinaChefScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"CocinaChef"> | number
+    chefId?: IntWithAggregatesFilter<"CocinaChef"> | number
+    activo?: BoolWithAggregatesFilter<"CocinaChef"> | boolean
+    lastSeen?: DateTimeWithAggregatesFilter<"CocinaChef"> | Date | string
   }
 
   export type UsuarioCreateInput = {
@@ -12750,6 +14273,8 @@ export namespace Prisma {
     historialModificaciones?: HistorialModificacionCreateNestedManyWithoutUsuarioInput
     historialResponsable?: HistorialModificacionCreateNestedManyWithoutResponsableInput
     ordenesMesero?: OrdenCreateNestedManyWithoutMeseroInput
+    itemsAsignados?: OrdenItemCreateNestedManyWithoutChefInput
+    cocinaEstado?: CocinaChefCreateNestedOneWithoutChefInput
   }
 
   export type UsuarioUncheckedCreateInput = {
@@ -12765,6 +14290,8 @@ export namespace Prisma {
     historialModificaciones?: HistorialModificacionUncheckedCreateNestedManyWithoutUsuarioInput
     historialResponsable?: HistorialModificacionUncheckedCreateNestedManyWithoutResponsableInput
     ordenesMesero?: OrdenUncheckedCreateNestedManyWithoutMeseroInput
+    itemsAsignados?: OrdenItemUncheckedCreateNestedManyWithoutChefInput
+    cocinaEstado?: CocinaChefUncheckedCreateNestedOneWithoutChefInput
   }
 
   export type UsuarioUpdateInput = {
@@ -12779,6 +14306,8 @@ export namespace Prisma {
     historialModificaciones?: HistorialModificacionUpdateManyWithoutUsuarioNestedInput
     historialResponsable?: HistorialModificacionUpdateManyWithoutResponsableNestedInput
     ordenesMesero?: OrdenUpdateManyWithoutMeseroNestedInput
+    itemsAsignados?: OrdenItemUpdateManyWithoutChefNestedInput
+    cocinaEstado?: CocinaChefUpdateOneWithoutChefNestedInput
   }
 
   export type UsuarioUncheckedUpdateInput = {
@@ -12794,6 +14323,8 @@ export namespace Prisma {
     historialModificaciones?: HistorialModificacionUncheckedUpdateManyWithoutUsuarioNestedInput
     historialResponsable?: HistorialModificacionUncheckedUpdateManyWithoutResponsableNestedInput
     ordenesMesero?: OrdenUncheckedUpdateManyWithoutMeseroNestedInput
+    itemsAsignados?: OrdenItemUncheckedUpdateManyWithoutChefNestedInput
+    cocinaEstado?: CocinaChefUncheckedUpdateOneWithoutChefNestedInput
   }
 
   export type UsuarioCreateManyInput = {
@@ -13146,6 +14677,7 @@ export namespace Prisma {
     codigo?: string
     mesa: number
     fecha?: Date | string
+    estado?: string
     mesero: UsuarioCreateNestedOneWithoutOrdenesMeseroInput
     items?: OrdenItemCreateNestedManyWithoutOrdenInput
   }
@@ -13156,6 +14688,7 @@ export namespace Prisma {
     mesa: number
     fecha?: Date | string
     meseroId: number
+    estado?: string
     items?: OrdenItemUncheckedCreateNestedManyWithoutOrdenInput
   }
 
@@ -13163,6 +14696,7 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    estado?: StringFieldUpdateOperationsInput | string
     mesero?: UsuarioUpdateOneRequiredWithoutOrdenesMeseroNestedInput
     items?: OrdenItemUpdateManyWithoutOrdenNestedInput
   }
@@ -13173,6 +14707,7 @@ export namespace Prisma {
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
     meseroId?: IntFieldUpdateOperationsInput | number
+    estado?: StringFieldUpdateOperationsInput | string
     items?: OrdenItemUncheckedUpdateManyWithoutOrdenNestedInput
   }
 
@@ -13182,12 +14717,14 @@ export namespace Prisma {
     mesa: number
     fecha?: Date | string
     meseroId: number
+    estado?: string
   }
 
   export type OrdenUpdateManyMutationInput = {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    estado?: StringFieldUpdateOperationsInput | string
   }
 
   export type OrdenUncheckedUpdateManyInput = {
@@ -13196,13 +14733,21 @@ export namespace Prisma {
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
     meseroId?: IntFieldUpdateOperationsInput | number
+    estado?: StringFieldUpdateOperationsInput | string
   }
 
   export type OrdenItemCreateInput = {
     nombre: string
     precio: number
     nota?: string | null
+    tipo: string
+    estado: string
+    creadoEn?: Date | string
+    asignadoEn?: Date | string | null
+    finalizadoEn?: Date | string | null
+    prioridad?: number | null
     orden: OrdenCreateNestedOneWithoutItemsInput
+    chef?: UsuarioCreateNestedOneWithoutItemsAsignadosInput
   }
 
   export type OrdenItemUncheckedCreateInput = {
@@ -13210,14 +14755,28 @@ export namespace Prisma {
     nombre: string
     precio: number
     nota?: string | null
+    tipo: string
+    estado: string
+    creadoEn?: Date | string
     ordenId: number
+    chefId?: number | null
+    asignadoEn?: Date | string | null
+    finalizadoEn?: Date | string | null
+    prioridad?: number | null
   }
 
   export type OrdenItemUpdateInput = {
     nombre?: StringFieldUpdateOperationsInput | string
     precio?: FloatFieldUpdateOperationsInput | number
     nota?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo?: StringFieldUpdateOperationsInput | string
+    estado?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prioridad?: NullableIntFieldUpdateOperationsInput | number | null
     orden?: OrdenUpdateOneRequiredWithoutItemsNestedInput
+    chef?: UsuarioUpdateOneWithoutItemsAsignadosNestedInput
   }
 
   export type OrdenItemUncheckedUpdateInput = {
@@ -13225,7 +14784,14 @@ export namespace Prisma {
     nombre?: StringFieldUpdateOperationsInput | string
     precio?: FloatFieldUpdateOperationsInput | number
     nota?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo?: StringFieldUpdateOperationsInput | string
+    estado?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
     ordenId?: IntFieldUpdateOperationsInput | number
+    chefId?: NullableIntFieldUpdateOperationsInput | number | null
+    asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prioridad?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type OrdenItemCreateManyInput = {
@@ -13233,13 +14799,26 @@ export namespace Prisma {
     nombre: string
     precio: number
     nota?: string | null
+    tipo: string
+    estado: string
+    creadoEn?: Date | string
     ordenId: number
+    chefId?: number | null
+    asignadoEn?: Date | string | null
+    finalizadoEn?: Date | string | null
+    prioridad?: number | null
   }
 
   export type OrdenItemUpdateManyMutationInput = {
     nombre?: StringFieldUpdateOperationsInput | string
     precio?: FloatFieldUpdateOperationsInput | number
     nota?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo?: StringFieldUpdateOperationsInput | string
+    estado?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prioridad?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type OrdenItemUncheckedUpdateManyInput = {
@@ -13247,7 +14826,59 @@ export namespace Prisma {
     nombre?: StringFieldUpdateOperationsInput | string
     precio?: FloatFieldUpdateOperationsInput | number
     nota?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo?: StringFieldUpdateOperationsInput | string
+    estado?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
     ordenId?: IntFieldUpdateOperationsInput | number
+    chefId?: NullableIntFieldUpdateOperationsInput | number | null
+    asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prioridad?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type CocinaChefCreateInput = {
+    activo?: boolean
+    lastSeen?: Date | string
+    chef: UsuarioCreateNestedOneWithoutCocinaEstadoInput
+  }
+
+  export type CocinaChefUncheckedCreateInput = {
+    id?: number
+    chefId: number
+    activo?: boolean
+    lastSeen?: Date | string
+  }
+
+  export type CocinaChefUpdateInput = {
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    lastSeen?: DateTimeFieldUpdateOperationsInput | Date | string
+    chef?: UsuarioUpdateOneRequiredWithoutCocinaEstadoNestedInput
+  }
+
+  export type CocinaChefUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    chefId?: IntFieldUpdateOperationsInput | number
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    lastSeen?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CocinaChefCreateManyInput = {
+    id?: number
+    chefId: number
+    activo?: boolean
+    lastSeen?: Date | string
+  }
+
+  export type CocinaChefUpdateManyMutationInput = {
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    lastSeen?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CocinaChefUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    chefId?: IntFieldUpdateOperationsInput | number
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    lastSeen?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -13309,11 +14940,26 @@ export namespace Prisma {
     none?: OrdenWhereInput
   }
 
+  export type OrdenItemListRelationFilter = {
+    every?: OrdenItemWhereInput
+    some?: OrdenItemWhereInput
+    none?: OrdenItemWhereInput
+  }
+
+  export type CocinaChefNullableScalarRelationFilter = {
+    is?: CocinaChefWhereInput | null
+    isNot?: CocinaChefWhereInput | null
+  }
+
   export type HistorialModificacionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type OrdenOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OrdenItemOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -13768,22 +15414,13 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type OrdenItemListRelationFilter = {
-    every?: OrdenItemWhereInput
-    some?: OrdenItemWhereInput
-    none?: OrdenItemWhereInput
-  }
-
-  export type OrdenItemOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type OrdenCountOrderByAggregateInput = {
     id?: SortOrder
     codigo?: SortOrder
     mesa?: SortOrder
     fecha?: SortOrder
     meseroId?: SortOrder
+    estado?: SortOrder
   }
 
   export type OrdenAvgOrderByAggregateInput = {
@@ -13798,6 +15435,7 @@ export namespace Prisma {
     mesa?: SortOrder
     fecha?: SortOrder
     meseroId?: SortOrder
+    estado?: SortOrder
   }
 
   export type OrdenMinOrderByAggregateInput = {
@@ -13806,12 +15444,24 @@ export namespace Prisma {
     mesa?: SortOrder
     fecha?: SortOrder
     meseroId?: SortOrder
+    estado?: SortOrder
   }
 
   export type OrdenSumOrderByAggregateInput = {
     id?: SortOrder
     mesa?: SortOrder
     meseroId?: SortOrder
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type OrdenScalarRelationFilter = {
@@ -13824,13 +15474,22 @@ export namespace Prisma {
     nombre?: SortOrder
     precio?: SortOrder
     nota?: SortOrder
+    tipo?: SortOrder
+    estado?: SortOrder
+    creadoEn?: SortOrder
     ordenId?: SortOrder
+    chefId?: SortOrder
+    asignadoEn?: SortOrder
+    finalizadoEn?: SortOrder
+    prioridad?: SortOrder
   }
 
   export type OrdenItemAvgOrderByAggregateInput = {
     id?: SortOrder
     precio?: SortOrder
     ordenId?: SortOrder
+    chefId?: SortOrder
+    prioridad?: SortOrder
   }
 
   export type OrdenItemMaxOrderByAggregateInput = {
@@ -13838,7 +15497,14 @@ export namespace Prisma {
     nombre?: SortOrder
     precio?: SortOrder
     nota?: SortOrder
+    tipo?: SortOrder
+    estado?: SortOrder
+    creadoEn?: SortOrder
     ordenId?: SortOrder
+    chefId?: SortOrder
+    asignadoEn?: SortOrder
+    finalizadoEn?: SortOrder
+    prioridad?: SortOrder
   }
 
   export type OrdenItemMinOrderByAggregateInput = {
@@ -13846,13 +15512,67 @@ export namespace Prisma {
     nombre?: SortOrder
     precio?: SortOrder
     nota?: SortOrder
+    tipo?: SortOrder
+    estado?: SortOrder
+    creadoEn?: SortOrder
     ordenId?: SortOrder
+    chefId?: SortOrder
+    asignadoEn?: SortOrder
+    finalizadoEn?: SortOrder
+    prioridad?: SortOrder
   }
 
   export type OrdenItemSumOrderByAggregateInput = {
     id?: SortOrder
     precio?: SortOrder
     ordenId?: SortOrder
+    chefId?: SortOrder
+    prioridad?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type CocinaChefCountOrderByAggregateInput = {
+    id?: SortOrder
+    chefId?: SortOrder
+    activo?: SortOrder
+    lastSeen?: SortOrder
+  }
+
+  export type CocinaChefAvgOrderByAggregateInput = {
+    id?: SortOrder
+    chefId?: SortOrder
+  }
+
+  export type CocinaChefMaxOrderByAggregateInput = {
+    id?: SortOrder
+    chefId?: SortOrder
+    activo?: SortOrder
+    lastSeen?: SortOrder
+  }
+
+  export type CocinaChefMinOrderByAggregateInput = {
+    id?: SortOrder
+    chefId?: SortOrder
+    activo?: SortOrder
+    lastSeen?: SortOrder
+  }
+
+  export type CocinaChefSumOrderByAggregateInput = {
+    id?: SortOrder
+    chefId?: SortOrder
   }
 
   export type RolCreateNestedOneWithoutUsuariosInput = {
@@ -13882,6 +15602,19 @@ export namespace Prisma {
     connect?: OrdenWhereUniqueInput | OrdenWhereUniqueInput[]
   }
 
+  export type OrdenItemCreateNestedManyWithoutChefInput = {
+    create?: XOR<OrdenItemCreateWithoutChefInput, OrdenItemUncheckedCreateWithoutChefInput> | OrdenItemCreateWithoutChefInput[] | OrdenItemUncheckedCreateWithoutChefInput[]
+    connectOrCreate?: OrdenItemCreateOrConnectWithoutChefInput | OrdenItemCreateOrConnectWithoutChefInput[]
+    createMany?: OrdenItemCreateManyChefInputEnvelope
+    connect?: OrdenItemWhereUniqueInput | OrdenItemWhereUniqueInput[]
+  }
+
+  export type CocinaChefCreateNestedOneWithoutChefInput = {
+    create?: XOR<CocinaChefCreateWithoutChefInput, CocinaChefUncheckedCreateWithoutChefInput>
+    connectOrCreate?: CocinaChefCreateOrConnectWithoutChefInput
+    connect?: CocinaChefWhereUniqueInput
+  }
+
   export type HistorialModificacionUncheckedCreateNestedManyWithoutUsuarioInput = {
     create?: XOR<HistorialModificacionCreateWithoutUsuarioInput, HistorialModificacionUncheckedCreateWithoutUsuarioInput> | HistorialModificacionCreateWithoutUsuarioInput[] | HistorialModificacionUncheckedCreateWithoutUsuarioInput[]
     connectOrCreate?: HistorialModificacionCreateOrConnectWithoutUsuarioInput | HistorialModificacionCreateOrConnectWithoutUsuarioInput[]
@@ -13901,6 +15634,19 @@ export namespace Prisma {
     connectOrCreate?: OrdenCreateOrConnectWithoutMeseroInput | OrdenCreateOrConnectWithoutMeseroInput[]
     createMany?: OrdenCreateManyMeseroInputEnvelope
     connect?: OrdenWhereUniqueInput | OrdenWhereUniqueInput[]
+  }
+
+  export type OrdenItemUncheckedCreateNestedManyWithoutChefInput = {
+    create?: XOR<OrdenItemCreateWithoutChefInput, OrdenItemUncheckedCreateWithoutChefInput> | OrdenItemCreateWithoutChefInput[] | OrdenItemUncheckedCreateWithoutChefInput[]
+    connectOrCreate?: OrdenItemCreateOrConnectWithoutChefInput | OrdenItemCreateOrConnectWithoutChefInput[]
+    createMany?: OrdenItemCreateManyChefInputEnvelope
+    connect?: OrdenItemWhereUniqueInput | OrdenItemWhereUniqueInput[]
+  }
+
+  export type CocinaChefUncheckedCreateNestedOneWithoutChefInput = {
+    create?: XOR<CocinaChefCreateWithoutChefInput, CocinaChefUncheckedCreateWithoutChefInput>
+    connectOrCreate?: CocinaChefCreateOrConnectWithoutChefInput
+    connect?: CocinaChefWhereUniqueInput
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -13965,6 +15711,30 @@ export namespace Prisma {
     deleteMany?: OrdenScalarWhereInput | OrdenScalarWhereInput[]
   }
 
+  export type OrdenItemUpdateManyWithoutChefNestedInput = {
+    create?: XOR<OrdenItemCreateWithoutChefInput, OrdenItemUncheckedCreateWithoutChefInput> | OrdenItemCreateWithoutChefInput[] | OrdenItemUncheckedCreateWithoutChefInput[]
+    connectOrCreate?: OrdenItemCreateOrConnectWithoutChefInput | OrdenItemCreateOrConnectWithoutChefInput[]
+    upsert?: OrdenItemUpsertWithWhereUniqueWithoutChefInput | OrdenItemUpsertWithWhereUniqueWithoutChefInput[]
+    createMany?: OrdenItemCreateManyChefInputEnvelope
+    set?: OrdenItemWhereUniqueInput | OrdenItemWhereUniqueInput[]
+    disconnect?: OrdenItemWhereUniqueInput | OrdenItemWhereUniqueInput[]
+    delete?: OrdenItemWhereUniqueInput | OrdenItemWhereUniqueInput[]
+    connect?: OrdenItemWhereUniqueInput | OrdenItemWhereUniqueInput[]
+    update?: OrdenItemUpdateWithWhereUniqueWithoutChefInput | OrdenItemUpdateWithWhereUniqueWithoutChefInput[]
+    updateMany?: OrdenItemUpdateManyWithWhereWithoutChefInput | OrdenItemUpdateManyWithWhereWithoutChefInput[]
+    deleteMany?: OrdenItemScalarWhereInput | OrdenItemScalarWhereInput[]
+  }
+
+  export type CocinaChefUpdateOneWithoutChefNestedInput = {
+    create?: XOR<CocinaChefCreateWithoutChefInput, CocinaChefUncheckedCreateWithoutChefInput>
+    connectOrCreate?: CocinaChefCreateOrConnectWithoutChefInput
+    upsert?: CocinaChefUpsertWithoutChefInput
+    disconnect?: CocinaChefWhereInput | boolean
+    delete?: CocinaChefWhereInput | boolean
+    connect?: CocinaChefWhereUniqueInput
+    update?: XOR<XOR<CocinaChefUpdateToOneWithWhereWithoutChefInput, CocinaChefUpdateWithoutChefInput>, CocinaChefUncheckedUpdateWithoutChefInput>
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -14013,6 +15783,30 @@ export namespace Prisma {
     update?: OrdenUpdateWithWhereUniqueWithoutMeseroInput | OrdenUpdateWithWhereUniqueWithoutMeseroInput[]
     updateMany?: OrdenUpdateManyWithWhereWithoutMeseroInput | OrdenUpdateManyWithWhereWithoutMeseroInput[]
     deleteMany?: OrdenScalarWhereInput | OrdenScalarWhereInput[]
+  }
+
+  export type OrdenItemUncheckedUpdateManyWithoutChefNestedInput = {
+    create?: XOR<OrdenItemCreateWithoutChefInput, OrdenItemUncheckedCreateWithoutChefInput> | OrdenItemCreateWithoutChefInput[] | OrdenItemUncheckedCreateWithoutChefInput[]
+    connectOrCreate?: OrdenItemCreateOrConnectWithoutChefInput | OrdenItemCreateOrConnectWithoutChefInput[]
+    upsert?: OrdenItemUpsertWithWhereUniqueWithoutChefInput | OrdenItemUpsertWithWhereUniqueWithoutChefInput[]
+    createMany?: OrdenItemCreateManyChefInputEnvelope
+    set?: OrdenItemWhereUniqueInput | OrdenItemWhereUniqueInput[]
+    disconnect?: OrdenItemWhereUniqueInput | OrdenItemWhereUniqueInput[]
+    delete?: OrdenItemWhereUniqueInput | OrdenItemWhereUniqueInput[]
+    connect?: OrdenItemWhereUniqueInput | OrdenItemWhereUniqueInput[]
+    update?: OrdenItemUpdateWithWhereUniqueWithoutChefInput | OrdenItemUpdateWithWhereUniqueWithoutChefInput[]
+    updateMany?: OrdenItemUpdateManyWithWhereWithoutChefInput | OrdenItemUpdateManyWithWhereWithoutChefInput[]
+    deleteMany?: OrdenItemScalarWhereInput | OrdenItemScalarWhereInput[]
+  }
+
+  export type CocinaChefUncheckedUpdateOneWithoutChefNestedInput = {
+    create?: XOR<CocinaChefCreateWithoutChefInput, CocinaChefUncheckedCreateWithoutChefInput>
+    connectOrCreate?: CocinaChefCreateOrConnectWithoutChefInput
+    upsert?: CocinaChefUpsertWithoutChefInput
+    disconnect?: CocinaChefWhereInput | boolean
+    delete?: CocinaChefWhereInput | boolean
+    connect?: CocinaChefWhereUniqueInput
+    update?: XOR<XOR<CocinaChefUpdateToOneWithWhereWithoutChefInput, CocinaChefUpdateWithoutChefInput>, CocinaChefUncheckedUpdateWithoutChefInput>
   }
 
   export type CategoriaCreateNestedOneWithoutPlatillosInput = {
@@ -14395,12 +16189,46 @@ export namespace Prisma {
     connect?: OrdenWhereUniqueInput
   }
 
+  export type UsuarioCreateNestedOneWithoutItemsAsignadosInput = {
+    create?: XOR<UsuarioCreateWithoutItemsAsignadosInput, UsuarioUncheckedCreateWithoutItemsAsignadosInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutItemsAsignadosInput
+    connect?: UsuarioWhereUniqueInput
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type OrdenUpdateOneRequiredWithoutItemsNestedInput = {
     create?: XOR<OrdenCreateWithoutItemsInput, OrdenUncheckedCreateWithoutItemsInput>
     connectOrCreate?: OrdenCreateOrConnectWithoutItemsInput
     upsert?: OrdenUpsertWithoutItemsInput
     connect?: OrdenWhereUniqueInput
     update?: XOR<XOR<OrdenUpdateToOneWithWhereWithoutItemsInput, OrdenUpdateWithoutItemsInput>, OrdenUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type UsuarioUpdateOneWithoutItemsAsignadosNestedInput = {
+    create?: XOR<UsuarioCreateWithoutItemsAsignadosInput, UsuarioUncheckedCreateWithoutItemsAsignadosInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutItemsAsignadosInput
+    upsert?: UsuarioUpsertWithoutItemsAsignadosInput
+    disconnect?: UsuarioWhereInput | boolean
+    delete?: UsuarioWhereInput | boolean
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutItemsAsignadosInput, UsuarioUpdateWithoutItemsAsignadosInput>, UsuarioUncheckedUpdateWithoutItemsAsignadosInput>
+  }
+
+  export type UsuarioCreateNestedOneWithoutCocinaEstadoInput = {
+    create?: XOR<UsuarioCreateWithoutCocinaEstadoInput, UsuarioUncheckedCreateWithoutCocinaEstadoInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutCocinaEstadoInput
+    connect?: UsuarioWhereUniqueInput
+  }
+
+  export type UsuarioUpdateOneRequiredWithoutCocinaEstadoNestedInput = {
+    create?: XOR<UsuarioCreateWithoutCocinaEstadoInput, UsuarioUncheckedCreateWithoutCocinaEstadoInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutCocinaEstadoInput
+    upsert?: UsuarioUpsertWithoutCocinaEstadoInput
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutCocinaEstadoInput, UsuarioUpdateWithoutCocinaEstadoInput>, UsuarioUncheckedUpdateWithoutCocinaEstadoInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -14595,6 +16423,31 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type RolCreateWithoutUsuariosInput = {
     nombre: string
     permisos?: PermisoPorRolCreateNestedManyWithoutRolInput
@@ -14677,6 +16530,7 @@ export namespace Prisma {
     codigo?: string
     mesa: number
     fecha?: Date | string
+    estado?: string
     items?: OrdenItemCreateNestedManyWithoutOrdenInput
   }
 
@@ -14685,6 +16539,7 @@ export namespace Prisma {
     codigo?: string
     mesa: number
     fecha?: Date | string
+    estado?: string
     items?: OrdenItemUncheckedCreateNestedManyWithoutOrdenInput
   }
 
@@ -14696,6 +16551,59 @@ export namespace Prisma {
   export type OrdenCreateManyMeseroInputEnvelope = {
     data: OrdenCreateManyMeseroInput | OrdenCreateManyMeseroInput[]
     skipDuplicates?: boolean
+  }
+
+  export type OrdenItemCreateWithoutChefInput = {
+    nombre: string
+    precio: number
+    nota?: string | null
+    tipo: string
+    estado: string
+    creadoEn?: Date | string
+    asignadoEn?: Date | string | null
+    finalizadoEn?: Date | string | null
+    prioridad?: number | null
+    orden: OrdenCreateNestedOneWithoutItemsInput
+  }
+
+  export type OrdenItemUncheckedCreateWithoutChefInput = {
+    id?: number
+    nombre: string
+    precio: number
+    nota?: string | null
+    tipo: string
+    estado: string
+    creadoEn?: Date | string
+    ordenId: number
+    asignadoEn?: Date | string | null
+    finalizadoEn?: Date | string | null
+    prioridad?: number | null
+  }
+
+  export type OrdenItemCreateOrConnectWithoutChefInput = {
+    where: OrdenItemWhereUniqueInput
+    create: XOR<OrdenItemCreateWithoutChefInput, OrdenItemUncheckedCreateWithoutChefInput>
+  }
+
+  export type OrdenItemCreateManyChefInputEnvelope = {
+    data: OrdenItemCreateManyChefInput | OrdenItemCreateManyChefInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CocinaChefCreateWithoutChefInput = {
+    activo?: boolean
+    lastSeen?: Date | string
+  }
+
+  export type CocinaChefUncheckedCreateWithoutChefInput = {
+    id?: number
+    activo?: boolean
+    lastSeen?: Date | string
+  }
+
+  export type CocinaChefCreateOrConnectWithoutChefInput = {
+    where: CocinaChefWhereUniqueInput
+    create: XOR<CocinaChefCreateWithoutChefInput, CocinaChefUncheckedCreateWithoutChefInput>
   }
 
   export type RolUpsertWithoutUsuariosInput = {
@@ -14792,6 +16700,63 @@ export namespace Prisma {
     mesa?: IntFilter<"Orden"> | number
     fecha?: DateTimeFilter<"Orden"> | Date | string
     meseroId?: IntFilter<"Orden"> | number
+    estado?: StringFilter<"Orden"> | string
+  }
+
+  export type OrdenItemUpsertWithWhereUniqueWithoutChefInput = {
+    where: OrdenItemWhereUniqueInput
+    update: XOR<OrdenItemUpdateWithoutChefInput, OrdenItemUncheckedUpdateWithoutChefInput>
+    create: XOR<OrdenItemCreateWithoutChefInput, OrdenItemUncheckedCreateWithoutChefInput>
+  }
+
+  export type OrdenItemUpdateWithWhereUniqueWithoutChefInput = {
+    where: OrdenItemWhereUniqueInput
+    data: XOR<OrdenItemUpdateWithoutChefInput, OrdenItemUncheckedUpdateWithoutChefInput>
+  }
+
+  export type OrdenItemUpdateManyWithWhereWithoutChefInput = {
+    where: OrdenItemScalarWhereInput
+    data: XOR<OrdenItemUpdateManyMutationInput, OrdenItemUncheckedUpdateManyWithoutChefInput>
+  }
+
+  export type OrdenItemScalarWhereInput = {
+    AND?: OrdenItemScalarWhereInput | OrdenItemScalarWhereInput[]
+    OR?: OrdenItemScalarWhereInput[]
+    NOT?: OrdenItemScalarWhereInput | OrdenItemScalarWhereInput[]
+    id?: IntFilter<"OrdenItem"> | number
+    nombre?: StringFilter<"OrdenItem"> | string
+    precio?: FloatFilter<"OrdenItem"> | number
+    nota?: StringNullableFilter<"OrdenItem"> | string | null
+    tipo?: StringFilter<"OrdenItem"> | string
+    estado?: StringFilter<"OrdenItem"> | string
+    creadoEn?: DateTimeFilter<"OrdenItem"> | Date | string
+    ordenId?: IntFilter<"OrdenItem"> | number
+    chefId?: IntNullableFilter<"OrdenItem"> | number | null
+    asignadoEn?: DateTimeNullableFilter<"OrdenItem"> | Date | string | null
+    finalizadoEn?: DateTimeNullableFilter<"OrdenItem"> | Date | string | null
+    prioridad?: IntNullableFilter<"OrdenItem"> | number | null
+  }
+
+  export type CocinaChefUpsertWithoutChefInput = {
+    update: XOR<CocinaChefUpdateWithoutChefInput, CocinaChefUncheckedUpdateWithoutChefInput>
+    create: XOR<CocinaChefCreateWithoutChefInput, CocinaChefUncheckedCreateWithoutChefInput>
+    where?: CocinaChefWhereInput
+  }
+
+  export type CocinaChefUpdateToOneWithWhereWithoutChefInput = {
+    where?: CocinaChefWhereInput
+    data: XOR<CocinaChefUpdateWithoutChefInput, CocinaChefUncheckedUpdateWithoutChefInput>
+  }
+
+  export type CocinaChefUpdateWithoutChefInput = {
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    lastSeen?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CocinaChefUncheckedUpdateWithoutChefInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    lastSeen?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CategoriaCreateWithoutPlatillosInput = {
@@ -14890,6 +16855,8 @@ export namespace Prisma {
     historialModificaciones?: HistorialModificacionCreateNestedManyWithoutUsuarioInput
     historialResponsable?: HistorialModificacionCreateNestedManyWithoutResponsableInput
     ordenesMesero?: OrdenCreateNestedManyWithoutMeseroInput
+    itemsAsignados?: OrdenItemCreateNestedManyWithoutChefInput
+    cocinaEstado?: CocinaChefCreateNestedOneWithoutChefInput
   }
 
   export type UsuarioUncheckedCreateWithoutRolInput = {
@@ -14904,6 +16871,8 @@ export namespace Prisma {
     historialModificaciones?: HistorialModificacionUncheckedCreateNestedManyWithoutUsuarioInput
     historialResponsable?: HistorialModificacionUncheckedCreateNestedManyWithoutResponsableInput
     ordenesMesero?: OrdenUncheckedCreateNestedManyWithoutMeseroInput
+    itemsAsignados?: OrdenItemUncheckedCreateNestedManyWithoutChefInput
+    cocinaEstado?: CocinaChefUncheckedCreateNestedOneWithoutChefInput
   }
 
   export type UsuarioCreateOrConnectWithoutRolInput = {
@@ -15113,6 +17082,8 @@ export namespace Prisma {
     rol: RolCreateNestedOneWithoutUsuariosInput
     historialModificaciones?: HistorialModificacionCreateNestedManyWithoutUsuarioInput
     ordenesMesero?: OrdenCreateNestedManyWithoutMeseroInput
+    itemsAsignados?: OrdenItemCreateNestedManyWithoutChefInput
+    cocinaEstado?: CocinaChefCreateNestedOneWithoutChefInput
   }
 
   export type UsuarioUncheckedCreateWithoutHistorialResponsableInput = {
@@ -15127,6 +17098,8 @@ export namespace Prisma {
     rolId: number
     historialModificaciones?: HistorialModificacionUncheckedCreateNestedManyWithoutUsuarioInput
     ordenesMesero?: OrdenUncheckedCreateNestedManyWithoutMeseroInput
+    itemsAsignados?: OrdenItemUncheckedCreateNestedManyWithoutChefInput
+    cocinaEstado?: CocinaChefUncheckedCreateNestedOneWithoutChefInput
   }
 
   export type UsuarioCreateOrConnectWithoutHistorialResponsableInput = {
@@ -15145,6 +17118,8 @@ export namespace Prisma {
     rol: RolCreateNestedOneWithoutUsuariosInput
     historialResponsable?: HistorialModificacionCreateNestedManyWithoutResponsableInput
     ordenesMesero?: OrdenCreateNestedManyWithoutMeseroInput
+    itemsAsignados?: OrdenItemCreateNestedManyWithoutChefInput
+    cocinaEstado?: CocinaChefCreateNestedOneWithoutChefInput
   }
 
   export type UsuarioUncheckedCreateWithoutHistorialModificacionesInput = {
@@ -15159,6 +17134,8 @@ export namespace Prisma {
     rolId: number
     historialResponsable?: HistorialModificacionUncheckedCreateNestedManyWithoutResponsableInput
     ordenesMesero?: OrdenUncheckedCreateNestedManyWithoutMeseroInput
+    itemsAsignados?: OrdenItemUncheckedCreateNestedManyWithoutChefInput
+    cocinaEstado?: CocinaChefUncheckedCreateNestedOneWithoutChefInput
   }
 
   export type UsuarioCreateOrConnectWithoutHistorialModificacionesInput = {
@@ -15212,6 +17189,8 @@ export namespace Prisma {
     rol?: RolUpdateOneRequiredWithoutUsuariosNestedInput
     historialModificaciones?: HistorialModificacionUpdateManyWithoutUsuarioNestedInput
     ordenesMesero?: OrdenUpdateManyWithoutMeseroNestedInput
+    itemsAsignados?: OrdenItemUpdateManyWithoutChefNestedInput
+    cocinaEstado?: CocinaChefUpdateOneWithoutChefNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutHistorialResponsableInput = {
@@ -15226,6 +17205,8 @@ export namespace Prisma {
     rolId?: IntFieldUpdateOperationsInput | number
     historialModificaciones?: HistorialModificacionUncheckedUpdateManyWithoutUsuarioNestedInput
     ordenesMesero?: OrdenUncheckedUpdateManyWithoutMeseroNestedInput
+    itemsAsignados?: OrdenItemUncheckedUpdateManyWithoutChefNestedInput
+    cocinaEstado?: CocinaChefUncheckedUpdateOneWithoutChefNestedInput
   }
 
   export type UsuarioUpsertWithoutHistorialModificacionesInput = {
@@ -15250,6 +17231,8 @@ export namespace Prisma {
     rol?: RolUpdateOneRequiredWithoutUsuariosNestedInput
     historialResponsable?: HistorialModificacionUpdateManyWithoutResponsableNestedInput
     ordenesMesero?: OrdenUpdateManyWithoutMeseroNestedInput
+    itemsAsignados?: OrdenItemUpdateManyWithoutChefNestedInput
+    cocinaEstado?: CocinaChefUpdateOneWithoutChefNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutHistorialModificacionesInput = {
@@ -15264,6 +17247,8 @@ export namespace Prisma {
     rolId?: IntFieldUpdateOperationsInput | number
     historialResponsable?: HistorialModificacionUncheckedUpdateManyWithoutResponsableNestedInput
     ordenesMesero?: OrdenUncheckedUpdateManyWithoutMeseroNestedInput
+    itemsAsignados?: OrdenItemUncheckedUpdateManyWithoutChefNestedInput
+    cocinaEstado?: CocinaChefUncheckedUpdateOneWithoutChefNestedInput
   }
 
   export type PlatilloUpsertWithoutHistorialModificacionesInput = {
@@ -15365,6 +17350,8 @@ export namespace Prisma {
     rol: RolCreateNestedOneWithoutUsuariosInput
     historialModificaciones?: HistorialModificacionCreateNestedManyWithoutUsuarioInput
     historialResponsable?: HistorialModificacionCreateNestedManyWithoutResponsableInput
+    itemsAsignados?: OrdenItemCreateNestedManyWithoutChefInput
+    cocinaEstado?: CocinaChefCreateNestedOneWithoutChefInput
   }
 
   export type UsuarioUncheckedCreateWithoutOrdenesMeseroInput = {
@@ -15379,6 +17366,8 @@ export namespace Prisma {
     rolId: number
     historialModificaciones?: HistorialModificacionUncheckedCreateNestedManyWithoutUsuarioInput
     historialResponsable?: HistorialModificacionUncheckedCreateNestedManyWithoutResponsableInput
+    itemsAsignados?: OrdenItemUncheckedCreateNestedManyWithoutChefInput
+    cocinaEstado?: CocinaChefUncheckedCreateNestedOneWithoutChefInput
   }
 
   export type UsuarioCreateOrConnectWithoutOrdenesMeseroInput = {
@@ -15390,6 +17379,13 @@ export namespace Prisma {
     nombre: string
     precio: number
     nota?: string | null
+    tipo: string
+    estado: string
+    creadoEn?: Date | string
+    asignadoEn?: Date | string | null
+    finalizadoEn?: Date | string | null
+    prioridad?: number | null
+    chef?: UsuarioCreateNestedOneWithoutItemsAsignadosInput
   }
 
   export type OrdenItemUncheckedCreateWithoutOrdenInput = {
@@ -15397,6 +17393,13 @@ export namespace Prisma {
     nombre: string
     precio: number
     nota?: string | null
+    tipo: string
+    estado: string
+    creadoEn?: Date | string
+    chefId?: number | null
+    asignadoEn?: Date | string | null
+    finalizadoEn?: Date | string | null
+    prioridad?: number | null
   }
 
   export type OrdenItemCreateOrConnectWithoutOrdenInput = {
@@ -15431,6 +17434,8 @@ export namespace Prisma {
     rol?: RolUpdateOneRequiredWithoutUsuariosNestedInput
     historialModificaciones?: HistorialModificacionUpdateManyWithoutUsuarioNestedInput
     historialResponsable?: HistorialModificacionUpdateManyWithoutResponsableNestedInput
+    itemsAsignados?: OrdenItemUpdateManyWithoutChefNestedInput
+    cocinaEstado?: CocinaChefUpdateOneWithoutChefNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutOrdenesMeseroInput = {
@@ -15445,6 +17450,8 @@ export namespace Prisma {
     rolId?: IntFieldUpdateOperationsInput | number
     historialModificaciones?: HistorialModificacionUncheckedUpdateManyWithoutUsuarioNestedInput
     historialResponsable?: HistorialModificacionUncheckedUpdateManyWithoutResponsableNestedInput
+    itemsAsignados?: OrdenItemUncheckedUpdateManyWithoutChefNestedInput
+    cocinaEstado?: CocinaChefUncheckedUpdateOneWithoutChefNestedInput
   }
 
   export type OrdenItemUpsertWithWhereUniqueWithoutOrdenInput = {
@@ -15463,21 +17470,11 @@ export namespace Prisma {
     data: XOR<OrdenItemUpdateManyMutationInput, OrdenItemUncheckedUpdateManyWithoutOrdenInput>
   }
 
-  export type OrdenItemScalarWhereInput = {
-    AND?: OrdenItemScalarWhereInput | OrdenItemScalarWhereInput[]
-    OR?: OrdenItemScalarWhereInput[]
-    NOT?: OrdenItemScalarWhereInput | OrdenItemScalarWhereInput[]
-    id?: IntFilter<"OrdenItem"> | number
-    nombre?: StringFilter<"OrdenItem"> | string
-    precio?: FloatFilter<"OrdenItem"> | number
-    nota?: StringNullableFilter<"OrdenItem"> | string | null
-    ordenId?: IntFilter<"OrdenItem"> | number
-  }
-
   export type OrdenCreateWithoutItemsInput = {
     codigo?: string
     mesa: number
     fecha?: Date | string
+    estado?: string
     mesero: UsuarioCreateNestedOneWithoutOrdenesMeseroInput
   }
 
@@ -15487,11 +17484,48 @@ export namespace Prisma {
     mesa: number
     fecha?: Date | string
     meseroId: number
+    estado?: string
   }
 
   export type OrdenCreateOrConnectWithoutItemsInput = {
     where: OrdenWhereUniqueInput
     create: XOR<OrdenCreateWithoutItemsInput, OrdenUncheckedCreateWithoutItemsInput>
+  }
+
+  export type UsuarioCreateWithoutItemsAsignadosInput = {
+    nombre: string
+    usuario: string
+    correo: string
+    contrasena: string
+    estado?: boolean
+    creadoEn?: Date | string
+    actualizadoEn?: Date | string
+    rol: RolCreateNestedOneWithoutUsuariosInput
+    historialModificaciones?: HistorialModificacionCreateNestedManyWithoutUsuarioInput
+    historialResponsable?: HistorialModificacionCreateNestedManyWithoutResponsableInput
+    ordenesMesero?: OrdenCreateNestedManyWithoutMeseroInput
+    cocinaEstado?: CocinaChefCreateNestedOneWithoutChefInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutItemsAsignadosInput = {
+    id?: number
+    nombre: string
+    usuario: string
+    correo: string
+    contrasena: string
+    estado?: boolean
+    creadoEn?: Date | string
+    actualizadoEn?: Date | string
+    rolId: number
+    historialModificaciones?: HistorialModificacionUncheckedCreateNestedManyWithoutUsuarioInput
+    historialResponsable?: HistorialModificacionUncheckedCreateNestedManyWithoutResponsableInput
+    ordenesMesero?: OrdenUncheckedCreateNestedManyWithoutMeseroInput
+    cocinaEstado?: CocinaChefUncheckedCreateNestedOneWithoutChefInput
+  }
+
+  export type UsuarioCreateOrConnectWithoutItemsAsignadosInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutItemsAsignadosInput, UsuarioUncheckedCreateWithoutItemsAsignadosInput>
   }
 
   export type OrdenUpsertWithoutItemsInput = {
@@ -15509,6 +17543,7 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    estado?: StringFieldUpdateOperationsInput | string
     mesero?: UsuarioUpdateOneRequiredWithoutOrdenesMeseroNestedInput
   }
 
@@ -15518,6 +17553,127 @@ export namespace Prisma {
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
     meseroId?: IntFieldUpdateOperationsInput | number
+    estado?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UsuarioUpsertWithoutItemsAsignadosInput = {
+    update: XOR<UsuarioUpdateWithoutItemsAsignadosInput, UsuarioUncheckedUpdateWithoutItemsAsignadosInput>
+    create: XOR<UsuarioCreateWithoutItemsAsignadosInput, UsuarioUncheckedCreateWithoutItemsAsignadosInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutItemsAsignadosInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutItemsAsignadosInput, UsuarioUncheckedUpdateWithoutItemsAsignadosInput>
+  }
+
+  export type UsuarioUpdateWithoutItemsAsignadosInput = {
+    nombre?: StringFieldUpdateOperationsInput | string
+    usuario?: StringFieldUpdateOperationsInput | string
+    correo?: StringFieldUpdateOperationsInput | string
+    contrasena?: StringFieldUpdateOperationsInput | string
+    estado?: BoolFieldUpdateOperationsInput | boolean
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    actualizadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    rol?: RolUpdateOneRequiredWithoutUsuariosNestedInput
+    historialModificaciones?: HistorialModificacionUpdateManyWithoutUsuarioNestedInput
+    historialResponsable?: HistorialModificacionUpdateManyWithoutResponsableNestedInput
+    ordenesMesero?: OrdenUpdateManyWithoutMeseroNestedInput
+    cocinaEstado?: CocinaChefUpdateOneWithoutChefNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutItemsAsignadosInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nombre?: StringFieldUpdateOperationsInput | string
+    usuario?: StringFieldUpdateOperationsInput | string
+    correo?: StringFieldUpdateOperationsInput | string
+    contrasena?: StringFieldUpdateOperationsInput | string
+    estado?: BoolFieldUpdateOperationsInput | boolean
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    actualizadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    rolId?: IntFieldUpdateOperationsInput | number
+    historialModificaciones?: HistorialModificacionUncheckedUpdateManyWithoutUsuarioNestedInput
+    historialResponsable?: HistorialModificacionUncheckedUpdateManyWithoutResponsableNestedInput
+    ordenesMesero?: OrdenUncheckedUpdateManyWithoutMeseroNestedInput
+    cocinaEstado?: CocinaChefUncheckedUpdateOneWithoutChefNestedInput
+  }
+
+  export type UsuarioCreateWithoutCocinaEstadoInput = {
+    nombre: string
+    usuario: string
+    correo: string
+    contrasena: string
+    estado?: boolean
+    creadoEn?: Date | string
+    actualizadoEn?: Date | string
+    rol: RolCreateNestedOneWithoutUsuariosInput
+    historialModificaciones?: HistorialModificacionCreateNestedManyWithoutUsuarioInput
+    historialResponsable?: HistorialModificacionCreateNestedManyWithoutResponsableInput
+    ordenesMesero?: OrdenCreateNestedManyWithoutMeseroInput
+    itemsAsignados?: OrdenItemCreateNestedManyWithoutChefInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutCocinaEstadoInput = {
+    id?: number
+    nombre: string
+    usuario: string
+    correo: string
+    contrasena: string
+    estado?: boolean
+    creadoEn?: Date | string
+    actualizadoEn?: Date | string
+    rolId: number
+    historialModificaciones?: HistorialModificacionUncheckedCreateNestedManyWithoutUsuarioInput
+    historialResponsable?: HistorialModificacionUncheckedCreateNestedManyWithoutResponsableInput
+    ordenesMesero?: OrdenUncheckedCreateNestedManyWithoutMeseroInput
+    itemsAsignados?: OrdenItemUncheckedCreateNestedManyWithoutChefInput
+  }
+
+  export type UsuarioCreateOrConnectWithoutCocinaEstadoInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutCocinaEstadoInput, UsuarioUncheckedCreateWithoutCocinaEstadoInput>
+  }
+
+  export type UsuarioUpsertWithoutCocinaEstadoInput = {
+    update: XOR<UsuarioUpdateWithoutCocinaEstadoInput, UsuarioUncheckedUpdateWithoutCocinaEstadoInput>
+    create: XOR<UsuarioCreateWithoutCocinaEstadoInput, UsuarioUncheckedCreateWithoutCocinaEstadoInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutCocinaEstadoInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutCocinaEstadoInput, UsuarioUncheckedUpdateWithoutCocinaEstadoInput>
+  }
+
+  export type UsuarioUpdateWithoutCocinaEstadoInput = {
+    nombre?: StringFieldUpdateOperationsInput | string
+    usuario?: StringFieldUpdateOperationsInput | string
+    correo?: StringFieldUpdateOperationsInput | string
+    contrasena?: StringFieldUpdateOperationsInput | string
+    estado?: BoolFieldUpdateOperationsInput | boolean
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    actualizadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    rol?: RolUpdateOneRequiredWithoutUsuariosNestedInput
+    historialModificaciones?: HistorialModificacionUpdateManyWithoutUsuarioNestedInput
+    historialResponsable?: HistorialModificacionUpdateManyWithoutResponsableNestedInput
+    ordenesMesero?: OrdenUpdateManyWithoutMeseroNestedInput
+    itemsAsignados?: OrdenItemUpdateManyWithoutChefNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutCocinaEstadoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nombre?: StringFieldUpdateOperationsInput | string
+    usuario?: StringFieldUpdateOperationsInput | string
+    correo?: StringFieldUpdateOperationsInput | string
+    contrasena?: StringFieldUpdateOperationsInput | string
+    estado?: BoolFieldUpdateOperationsInput | boolean
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    actualizadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    rolId?: IntFieldUpdateOperationsInput | number
+    historialModificaciones?: HistorialModificacionUncheckedUpdateManyWithoutUsuarioNestedInput
+    historialResponsable?: HistorialModificacionUncheckedUpdateManyWithoutResponsableNestedInput
+    ordenesMesero?: OrdenUncheckedUpdateManyWithoutMeseroNestedInput
+    itemsAsignados?: OrdenItemUncheckedUpdateManyWithoutChefNestedInput
   }
 
   export type HistorialModificacionCreateManyUsuarioInput = {
@@ -15547,6 +17703,21 @@ export namespace Prisma {
     codigo?: string
     mesa: number
     fecha?: Date | string
+    estado?: string
+  }
+
+  export type OrdenItemCreateManyChefInput = {
+    id?: number
+    nombre: string
+    precio: number
+    nota?: string | null
+    tipo: string
+    estado: string
+    creadoEn?: Date | string
+    ordenId: number
+    asignadoEn?: Date | string | null
+    finalizadoEn?: Date | string | null
+    prioridad?: number | null
   }
 
   export type HistorialModificacionUpdateWithoutUsuarioInput = {
@@ -15617,6 +17788,7 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    estado?: StringFieldUpdateOperationsInput | string
     items?: OrdenItemUpdateManyWithoutOrdenNestedInput
   }
 
@@ -15625,6 +17797,7 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    estado?: StringFieldUpdateOperationsInput | string
     items?: OrdenItemUncheckedUpdateManyWithoutOrdenNestedInput
   }
 
@@ -15633,6 +17806,48 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    estado?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type OrdenItemUpdateWithoutChefInput = {
+    nombre?: StringFieldUpdateOperationsInput | string
+    precio?: FloatFieldUpdateOperationsInput | number
+    nota?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo?: StringFieldUpdateOperationsInput | string
+    estado?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prioridad?: NullableIntFieldUpdateOperationsInput | number | null
+    orden?: OrdenUpdateOneRequiredWithoutItemsNestedInput
+  }
+
+  export type OrdenItemUncheckedUpdateWithoutChefInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nombre?: StringFieldUpdateOperationsInput | string
+    precio?: FloatFieldUpdateOperationsInput | number
+    nota?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo?: StringFieldUpdateOperationsInput | string
+    estado?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    ordenId?: IntFieldUpdateOperationsInput | number
+    asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prioridad?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type OrdenItemUncheckedUpdateManyWithoutChefInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nombre?: StringFieldUpdateOperationsInput | string
+    precio?: FloatFieldUpdateOperationsInput | number
+    nota?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo?: StringFieldUpdateOperationsInput | string
+    estado?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    ordenId?: IntFieldUpdateOperationsInput | number
+    asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prioridad?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type HistorialModificacionCreateManyPlatilloInput = {
@@ -15705,6 +17920,8 @@ export namespace Prisma {
     historialModificaciones?: HistorialModificacionUpdateManyWithoutUsuarioNestedInput
     historialResponsable?: HistorialModificacionUpdateManyWithoutResponsableNestedInput
     ordenesMesero?: OrdenUpdateManyWithoutMeseroNestedInput
+    itemsAsignados?: OrdenItemUpdateManyWithoutChefNestedInput
+    cocinaEstado?: CocinaChefUpdateOneWithoutChefNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutRolInput = {
@@ -15719,6 +17936,8 @@ export namespace Prisma {
     historialModificaciones?: HistorialModificacionUncheckedUpdateManyWithoutUsuarioNestedInput
     historialResponsable?: HistorialModificacionUncheckedUpdateManyWithoutResponsableNestedInput
     ordenesMesero?: OrdenUncheckedUpdateManyWithoutMeseroNestedInput
+    itemsAsignados?: OrdenItemUncheckedUpdateManyWithoutChefNestedInput
+    cocinaEstado?: CocinaChefUncheckedUpdateOneWithoutChefNestedInput
   }
 
   export type UsuarioUncheckedUpdateManyWithoutRolInput = {
@@ -15807,12 +18026,26 @@ export namespace Prisma {
     nombre: string
     precio: number
     nota?: string | null
+    tipo: string
+    estado: string
+    creadoEn?: Date | string
+    chefId?: number | null
+    asignadoEn?: Date | string | null
+    finalizadoEn?: Date | string | null
+    prioridad?: number | null
   }
 
   export type OrdenItemUpdateWithoutOrdenInput = {
     nombre?: StringFieldUpdateOperationsInput | string
     precio?: FloatFieldUpdateOperationsInput | number
     nota?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo?: StringFieldUpdateOperationsInput | string
+    estado?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prioridad?: NullableIntFieldUpdateOperationsInput | number | null
+    chef?: UsuarioUpdateOneWithoutItemsAsignadosNestedInput
   }
 
   export type OrdenItemUncheckedUpdateWithoutOrdenInput = {
@@ -15820,6 +18053,13 @@ export namespace Prisma {
     nombre?: StringFieldUpdateOperationsInput | string
     precio?: FloatFieldUpdateOperationsInput | number
     nota?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo?: StringFieldUpdateOperationsInput | string
+    estado?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    chefId?: NullableIntFieldUpdateOperationsInput | number | null
+    asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prioridad?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type OrdenItemUncheckedUpdateManyWithoutOrdenInput = {
@@ -15827,6 +18067,13 @@ export namespace Prisma {
     nombre?: StringFieldUpdateOperationsInput | string
     precio?: FloatFieldUpdateOperationsInput | number
     nota?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo?: StringFieldUpdateOperationsInput | string
+    estado?: StringFieldUpdateOperationsInput | string
+    creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
+    chefId?: NullableIntFieldUpdateOperationsInput | number | null
+    asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    prioridad?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
 

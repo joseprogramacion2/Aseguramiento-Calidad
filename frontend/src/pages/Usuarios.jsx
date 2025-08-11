@@ -23,11 +23,13 @@ function Usuarios() {
   });
 
   const [editando, setEditando] = useState(null);
+  const [viendoEliminados, setViendoEliminados] = useState(false);
+
   const esAdmin = (u) => u?.rol?.nombre?.toLowerCase() === 'administrador';
 
-  const obtenerUsuarios = async () => {
+  const obtenerUsuarios = async (inactivos = false) => {
     try {
-      const { data } = await axios.get(`${API}/usuarios`);
+      const { data } = await axios.get(`${API}/usuarios${inactivos ? '?inactivos=1' : ''}`);
       setUsuarios(data);
     } catch (error) {
       console.error('Error al obtener usuarios:', error);
@@ -46,7 +48,7 @@ function Usuarios() {
 
   useEffect(() => {
     if (!usuarioSesion) return navigate('/login');
-    obtenerUsuarios();
+    obtenerUsuarios(false);
     obtenerRoles();
   }, [navigate, usuarioSesion]);
 
@@ -71,7 +73,7 @@ function Usuarios() {
       const payload = { ...formData, responsableId };
       await axios.post(`${API}/usuarios`, payload);
       resetForm();
-      await obtenerUsuarios();
+      await obtenerUsuarios(false);
       alert('Usuario creado correctamente');
     } catch (error) {
       alert(error.response?.data?.error || 'Error al crear usuario');
@@ -106,14 +108,12 @@ function Usuarios() {
         rolId: formData.rolId,
         responsableId
       };
-      // contraseña opcional
       if (formData.contrasena && formData.contrasena.trim() !== '') {
         payload.contrasena = formData.contrasena.trim();
       }
 
       const { data } = await axios.put(`${API}/usuarios/${editando.id}`, payload);
       const actualizado = { ...data.usuario, rol: data.usuario.rol || { nombre: 'Desconocido' } };
-
       setUsuarios(prev => prev.map(u => (u.id === actualizado.id ? actualizado : u)));
       cancelarEdicion();
       alert('Usuario actualizado');
@@ -134,6 +134,19 @@ function Usuarios() {
     }
   };
 
+  const restaurarUsuario = async (id) => {
+    if (!confirm('¿Restaurar este usuario?')) return;
+    try {
+      await axios.put(`${API}/usuarios/${id}/restaurar`, { responsableId });
+      // si quieres volver a la vista de activos automáticamente:
+      // setViendoEliminados(false);
+      await obtenerUsuarios(true);
+      alert('Usuario restaurado');
+    } catch (error) {
+      alert(error.response?.data?.error || 'Error al restaurar usuario');
+    }
+  };
+
   /* ===== estilos coherentes y “pegados” ===== */
   const page = {
     minHeight: '100vh',
@@ -141,8 +154,24 @@ function Usuarios() {
     fontFamily: 'Poppins, Segoe UI, sans-serif',
   };
 
+  const wrapTop = {
+    padding: '20px 24px 0',
+    display: 'flex',
+    justifyContent: 'flex-end'
+  };
+
+  const toggleBtn = {
+    backgroundColor: '#0f766e',
+    color: '#fff',
+    border: 'none',
+    padding: '0.55rem 0.9rem',
+    borderRadius: 8,
+    fontWeight: 700,
+    cursor: 'pointer'
+  };
+
   const wrap = {
-    padding: '20px 24px 28px', // igual que AdminPanel
+    padding: '12px 24px 28px',
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     gap: '24px',
@@ -195,6 +224,15 @@ function Usuarios() {
     cursor: 'pointer'
   };
 
+  const buttonRestore = {
+    backgroundColor: '#2563eb',
+    color: '#fff',
+    border: 'none',
+    padding: '0.4rem 0.8rem',
+    borderRadius: '6px',
+    cursor: 'pointer'
+  };
+
   const buttonCancel = {
     backgroundColor: '#cccccc',
     color: '#333',
@@ -204,78 +242,106 @@ function Usuarios() {
     cursor: 'pointer'
   };
 
+  const tituloLista = viendoEliminados ? 'Usuarios Eliminados' : 'Usuarios Registrados';
+
   return (
     <div style={page}>
       <AdminHeader titulo="👥 Gestión de Usuarios" />
 
+      {/* Botón para ver eliminados / activos */}
+      <div style={wrapTop}>
+        <button
+          style={toggleBtn}
+          onClick={async () => {
+            const next = !viendoEliminados;
+            setViendoEliminados(next);
+            await obtenerUsuarios(next);
+          }}
+        >
+          {viendoEliminados ? '← Ver activos' : 'Usuarios eliminados'}
+        </button>
+      </div>
+
       <div style={wrap}>
         {/* Lista */}
         <div style={card}>
-          <h2 style={{ marginBottom: 12, color: '#1e3d59' }}>Usuarios Registrados</h2>
+          <h2 style={{ marginBottom: 12, color: '#1e3d59' }}>{tituloLista}</h2>
 
-          {Object.entries(
-            usuarios.reduce((acc, u) => {
-              const rol = u?.rol?.nombre ?? 'Sin rol';
-              (acc[rol] = acc[rol] || []).push(u);
-              return acc;
-            }, {})
-          ).map(([rol, users]) => (
-            <details key={rol} open style={{ marginBottom: 12 }}>
-              <summary style={{ fontWeight: 600, color: '#007f5f', cursor: 'pointer', marginBottom: 6 }}>
-                {rol}
-              </summary>
-              <ul style={{ listStyle: 'none', paddingLeft: 16, margin: 0 }}>
-                {users.map((u) => (
-                  <li key={u.id} style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '8px 0',
-                    borderBottom: '1px solid #eee'
-                  }}>
-                    <span>{u.nombre} — {u.usuario} — {u.correo}</span>
+          {usuarios.length === 0 ? (
+            <p style={{ margin: 0, color: '#64748b' }}>
+              {viendoEliminados ? 'No hay usuarios eliminados.' : 'No hay usuarios registrados.'}
+            </p>
+          ) : (
+            Object.entries(
+              usuarios.reduce((acc, u) => {
+                const rol = u?.rol?.nombre ?? 'Sin rol';
+                (acc[rol] = acc[rol] || []).push(u);
+                return acc;
+              }, {})
+            ).map(([rol, users]) => (
+              <details key={rol} open style={{ marginBottom: 12 }}>
+                <summary style={{ fontWeight: 600, color: '#007f5f', cursor: 'pointer', marginBottom: 6 }}>
+                  {rol}
+                </summary>
+                <ul style={{ listStyle: 'none', paddingLeft: 16, margin: 0 }}>
+                  {users.map((u) => (
+                    <li key={u.id} style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '8px 0',
+                      borderBottom: '1px solid #eee'
+                    }}>
+                      <span>{u.nombre} — {u.usuario} — {u.correo}</span>
 
-                    {!esAdmin(u) && (
-                      <div style={{ display: 'flex', gap: 8 }}>
-                        <button onClick={() => editarUsuario(u)} style={buttonEdit}>Editar</button>
-                        <button onClick={() => eliminarUsuario(u.id)} style={buttonDelete}>Eliminar</button>
-                      </div>
-                    )}
-                  </li>
+                      {viendoEliminados ? (
+                        <button onClick={() => restaurarUsuario(u.id)} style={buttonRestore}>Restaurar</button>
+                      ) : (
+                        !esAdmin(u) && (
+                          <div style={{ display: 'flex', gap: 8 }}>
+                            <button onClick={() => editarUsuario(u)} style={buttonEdit}>Editar</button>
+                            <button onClick={() => eliminarUsuario(u.id)} style={buttonDelete}>Eliminar</button>
+                          </div>
+                        )
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ))
+          )}
+        </div>
+
+        {/* Formulario (solo en vista de activos) */}
+        {!viendoEliminados && (
+          <div style={card}>
+            <h3 style={{ marginBottom: 16, color: '#1e3d59' }}>
+              {editando ? '✏️ Editar Usuario' : '➕ Registrar Nuevo Usuario'}
+            </h3>
+
+            <form onSubmit={editando ? guardarCambios : crearUsuario} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <input type="text" name="nombre" placeholder="Nombre completo" value={formData.nombre} onChange={handleChange} style={inputStyle} required />
+              <input type="text" name="usuario" placeholder="Nombre de usuario" value={formData.usuario} onChange={handleChange} style={inputStyle} required />
+              <input type="email" name="correo" placeholder="Correo electrónico" value={formData.correo} onChange={handleChange} style={inputStyle} required />
+              <input type="password" name="contrasena" placeholder={editando ? 'Contraseña (opcional)' : 'Contraseña'} value={formData.contrasena} onChange={handleChange} style={inputStyle} />
+
+              <select name="rolId" value={formData.rolId} onChange={handleChange} style={inputStyle} required>
+                <option value="">Seleccionar un rol</option>
+                {roles.map((r) => (
+                  <option key={r.id} value={r.id}>{r.nombre}</option>
                 ))}
-              </ul>
-            </details>
-          ))}
-        </div>
+              </select>
 
-        {/* Formulario */}
-        <div style={card}>
-          <h3 style={{ marginBottom: 16, color: '#1e3d59' }}>
-            {editando ? '✏️ Editar Usuario' : '➕ Registrar Nuevo Usuario'}
-          </h3>
+              <button type="submit" style={buttonPrimary}>
+                {editando ? 'Guardar cambios' : 'Crear usuario'}
+              </button>
 
-          <form onSubmit={editando ? guardarCambios : crearUsuario} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <input type="text" name="nombre" placeholder="Nombre completo" value={formData.nombre} onChange={handleChange} style={inputStyle} required />
-            <input type="text" name="usuario" placeholder="Nombre de usuario" value={formData.usuario} onChange={handleChange} style={inputStyle} required />
-            <input type="email" name="correo" placeholder="Correo electrónico" value={formData.correo} onChange={handleChange} style={inputStyle} required />
-            <input type="password" name="contrasena" placeholder={editando ? 'Contraseña (opcional)' : 'Contraseña'} value={formData.contrasena} onChange={handleChange} style={inputStyle} />
-
-            <select name="rolId" value={formData.rolId} onChange={handleChange} style={inputStyle} required>
-              <option value="">Seleccionar un rol</option>
-              {roles.map((r) => (
-                <option key={r.id} value={r.id}>{r.nombre}</option>
-              ))}
-            </select>
-
-            <button type="submit" style={buttonPrimary}>
-              {editando ? 'Guardar cambios' : 'Crear usuario'}
-            </button>
-
-            {editando && (
-              <button type="button" onClick={cancelarEdicion} style={buttonCancel}>Cancelar</button>
-            )}
-          </form>
-        </div>
+              {editando && (
+                <button type="button" onClick={cancelarEdicion} style={buttonCancel}>Cancelar</button>
+              )}
+            </form>
+          </div>
+        )}
       </div>
     </div>
   );

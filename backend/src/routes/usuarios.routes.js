@@ -1,21 +1,27 @@
-//usuarios
+// src/routes/usuarios.routes.js
 const express = require('express');
 const router = express.Router();
 const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
 
-// Obtener usuarios
+// =========================
+// GET /usuarios  (activos o inactivos)
+//   /usuarios           -> solo activos (por defecto)
+//   /usuarios?inactivos=1 -> solo inactivos
+// =========================
 router.get('/', async (req, res) => {
   try {
+    const inactivos = req.query.inactivos === '1';
     const usuarios = await prisma.usuario.findMany({
-      where: { estado: true },
+      where: { estado: inactivos ? false : true },
       select: {
         id: true,
         nombre: true,
         usuario: true,
         correo: true,
         rol: { select: { nombre: true } }
-      }
+      },
+      orderBy: { id: 'asc' }
     });
     res.json(usuarios);
   } catch (error) {
@@ -24,8 +30,9 @@ router.get('/', async (req, res) => {
   }
 });
 
-
-// Crear usuario
+// =========================
+// POST /usuarios  (crear)
+// =========================
 router.post('/', async (req, res) => {
   let { nombre, usuario, correo, contrasena, rolId, responsableId } = req.body;
 
@@ -43,13 +50,17 @@ router.post('/', async (req, res) => {
       return res.status(403).json({ error: 'No se permite crear usuarios con rol de Administrador.' });
     }
 
+    // evita duplicados entre activos (permite reusar si hay uno eliminado)
     const existente = await prisma.usuario.findFirst({
-      where: { OR: [{ usuario }, { correo }] }
+      where: {
+        estado: true,
+        OR: [{ usuario }, { correo }]
+      }
     });
     if (existente) return res.status(409).json({ error: 'El usuario o correo ya existe.' });
 
     const nuevoUsuario = await prisma.usuario.create({
-      data: { nombre, usuario, correo, contrasena, rolId }
+      data: { nombre, usuario, correo, contrasena, rolId, estado: true }
     });
 
     await prisma.historialModificacion.create({
@@ -70,7 +81,9 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Actualizar usuario
+// =========================
+/** PUT /usuarios/:id (actualizar) */
+// =========================
 router.put('/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   let { nombre, usuario, correo, contrasena, rolId, responsableId } = req.body;
@@ -86,54 +99,44 @@ router.put('/:id', async (req, res) => {
     const anterior = await prisma.usuario.findUnique({ where: { id } });
     if (!anterior) return res.status(404).json({ error: 'Usuario no encontrado.' });
 
-    // Validar que no exista otro usuario con el mismo nombre de usuario o correo
-const existente = await prisma.usuario.findFirst({
-  where: {
-    AND: [
-      { id: { not: id } },
-      {
-        OR: [
-          { usuario: usuario },
-          { correo: correo }
+    // validar duplicados SOLO entre activos distintos del actual
+    const existente = await prisma.usuario.findFirst({
+      where: {
+        estado: true,
+        AND: [
+          { id: { not: id } },
+          { OR: [{ usuario }, { correo }] }
         ]
       }
-    ]
-  }
-});
-if (existente) {
-  return res.status(409).json({ error: 'El usuario o correo ya existe.' });
-}
+    });
+    if (existente) {
+      return res.status(409).json({ error: 'El usuario o correo ya existe.' });
+    }
 
-// Si no hay duplicados, ahora sí actualiza
-const actualizado = await prisma.usuario.update({
-  where: { id },
-  data: {
-    nombre,
-    usuario,
-    correo,
-    rolId,
-    ...(contrasena ? { contrasena } : {})
-  }
-});
+    const actualizado = await prisma.usuario.update({
+      where: { id },
+      data: {
+        nombre,
+        usuario,
+        correo,
+        rolId,
+        ...(contrasena ? { contrasena } : {})
+      }
+    });
 
     const cambios = [];
-
     if (anterior.nombre !== nombre) {
       cambios.push({ campo: 'nombre', valorAnterior: anterior.nombre, valorNuevo: nombre });
     }
-
     if (anterior.usuario !== usuario) {
       cambios.push({ campo: 'usuario', valorAnterior: anterior.usuario, valorNuevo: usuario });
     }
-
     if (anterior.correo !== correo) {
       cambios.push({ campo: 'correo', valorAnterior: anterior.correo, valorNuevo: correo });
     }
-
     if (anterior.contrasena !== contrasena && contrasena) {
       cambios.push({ campo: 'contrasena', valorAnterior: '****', valorNuevo: '****' });
     }
-
     if (anterior.rolId !== rolId) {
       const nuevoRol = await prisma.rol.findUnique({ where: { id: rolId } });
       const anteriorRol = await prisma.rol.findUnique({ where: { id: anterior.rolId } });
@@ -141,14 +144,12 @@ const actualizado = await prisma.usuario.update({
     }
 
     for (const cambio of cambios) {
-      let descripcion = '';
-      if (cambio.campo === 'rol') {
-        descripcion = `Cambio de rol de ${actualizado.nombre} (${actualizado.usuario}): ${cambio.valorAnterior} → ${cambio.valorNuevo}`;
-      } else if (cambio.campo === 'contrasena') {
-        descripcion = `Cambio de contraseña de ${actualizado.nombre} (${actualizado.usuario})`;
-      } else {
-        descripcion = `Cambio en ${cambio.campo} de ${actualizado.nombre} (${actualizado.usuario}): ${cambio.valorAnterior || '—'} → ${cambio.valorNuevo || '—'}`;
-      }
+      const descripcion =
+        cambio.campo === 'rol'
+          ? `Cambio de rol de ${actualizado.nombre} (${actualizado.usuario}): ${cambio.valorAnterior} → ${cambio.valorNuevo}`
+          : cambio.campo === 'contrasena'
+          ? `Cambio de contraseña de ${actualizado.nombre} (${actualizado.usuario})`
+          : `Cambio en ${cambio.campo} de ${actualizado.nombre} (${actualizado.usuario}): ${cambio.valorAnterior || '—'} → ${cambio.valorNuevo || '—'}`;
 
       await prisma.historialModificacion.create({
         data: {
@@ -163,24 +164,26 @@ const actualizado = await prisma.usuario.update({
     }
 
     const usuarioConRol = await prisma.usuario.findUnique({
-  where: { id: actualizado.id },
-  select: {
-    id: true,
-    nombre: true,
-    usuario: true,
-    correo: true,
-    rol: { select: { nombre: true } }
-  }
-});
+      where: { id: actualizado.id },
+      select: {
+        id: true,
+        nombre: true,
+        usuario: true,
+        correo: true,
+        rol: { select: { nombre: true } }
+      }
+    });
 
-res.json({ mensaje: 'Usuario actualizado correctamente', usuario: usuarioConRol });
+    res.json({ mensaje: 'Usuario actualizado correctamente', usuario: usuarioConRol });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al actualizar el usuario.' });
   }
 });
 
-// Eliminar usuario (estado = false)
+// =========================
+/** DELETE /usuarios/:id  (borrado lógico) */
+// =========================
 router.delete('/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   const responsableId = 1;
@@ -209,6 +212,41 @@ router.delete('/:id', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al eliminar usuario.' });
+  }
+});
+
+// =========================
+/** PUT /usuarios/:id/restaurar  (reactivar) */
+// =========================
+router.put('/:id/restaurar', async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { responsableId } = req.body;
+
+  try {
+    const usuario = await prisma.usuario.findUnique({ where: { id } });
+    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado.' });
+    if (usuario.estado === true) return res.status(400).json({ error: 'El usuario ya está activo.' });
+
+    const reactivado = await prisma.usuario.update({
+      where: { id },
+      data: { estado: true }
+    });
+
+    await prisma.historialModificacion.create({
+      data: {
+        usuarioId: id,
+        campo: 'estado',
+        valorAnterior: 'eliminado',
+        valorNuevo: 'activo',
+        accion: `restauración de ${reactivado.nombre} (${reactivado.usuario})`,
+        responsableId: parseInt(responsableId) || 1
+      }
+    });
+
+    res.json({ mensaje: 'Usuario restaurado', usuario: reactivado });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al restaurar usuario.' });
   }
 });
 

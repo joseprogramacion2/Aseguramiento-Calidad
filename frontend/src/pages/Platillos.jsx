@@ -1,10 +1,16 @@
+// src/pages/Platillos.jsx
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+// Header ya existente
+import AdminHeader from '../components/AdminHeader';
+
 // Firebase
 import { storage } from '../firebase';
 import { ref as storageRef, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+
+const API = 'http://localhost:3001';
 
 function Platillos() {
   const [platillos, setPlatillos] = useState([]);
@@ -31,7 +37,7 @@ function Platillos() {
 
   const obtenerPlatillos = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/platillos');
+      const res = await axios.get(`${API}/platillos`);
       setPlatillos(res.data);
     } catch (error) {
       console.error('Error al obtener platillos:', error);
@@ -40,7 +46,7 @@ function Platillos() {
 
   const obtenerCategorias = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/categorias');
+      const res = await axios.get(`${API}/categorias`);
       setCategorias(res.data);
     } catch (error) {
       console.error('Error al obtener categorías:', error);
@@ -59,13 +65,13 @@ function Platillos() {
     }
     try {
       if (modoEdicion) {
-        await axios.put(`http://localhost:3001/platillos/${idEditando}`, {
+        await axios.put(`${API}/platillos/${idEditando}`, {
           ...formData,
           responsableId: responsableId || 1
         });
         alert('Platillo actualizado correctamente');
       } else {
-        await axios.post('http://localhost:3001/platillos', formData);
+        await axios.post(`${API}/platillos`, formData);
         alert('Platillo registrado correctamente');
       }
       setFormData({ nombre: '', precio: '', categoriaId: '' });
@@ -92,7 +98,7 @@ function Platillos() {
     const accion = estadoActual ? 'desactivar' : 'activar';
     if (!window.confirm(`¿Deseas ${accion} este platillo?`)) return;
     try {
-      await axios.patch(`http://localhost:3001/platillos/${id}/disponibilidad`, {
+      await axios.patch(`${API}/platillos/${id}/disponibilidad`, {
         disponible: !estadoActual
       });
       obtenerPlatillos();
@@ -106,7 +112,7 @@ function Platillos() {
   const eliminarPlatillo = async (id) => {
     if (!window.confirm('¿Deseas eliminar permanentemente este platillo?')) return;
     try {
-      await axios.delete(`http://localhost:3001/platillos/${id}`);
+      await axios.delete(`${API}/platillos/${id}`);
       obtenerPlatillos();
       alert('Platillo eliminado correctamente');
     } catch (error) {
@@ -123,7 +129,7 @@ function Platillos() {
 
   const onArchivoSeleccionado = async (e) => {
     const file = e.target.files?.[0];
-    e.target.value = ''; // limpiar input para permitir mismo archivo de nuevo
+    e.target.value = '';
     if (!file) return;
 
     const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
@@ -158,7 +164,7 @@ function Platillos() {
         async () => {
           try {
             const url = await getDownloadURL(task.snapshot.ref);
-            await axios.put(`http://localhost:3001/platillos/${platilloId}/imagen`, {
+            await axios.put(`${API}/platillos/${platilloId}/imagen`, {
               url,
               responsableId: responsableId || 1
             });
@@ -180,8 +186,66 @@ function Platillos() {
     }
   };
 
+  /* ===== estilos iguales a Usuarios ===== */
+  const page = {
+    minHeight: '100vh',
+    backgroundColor: '#f3f6f7',
+    fontFamily: 'Poppins, Segoe UI, sans-serif',
+    paddingBottom: 28
+  };
+
+  const wrap = {
+    padding: '12px 24px 28px',
+    display: 'grid',
+    gridTemplateColumns: '340px 1fr',
+    gap: '24px',
+    alignItems: 'start'
+  };
+
+  const card = {
+    backgroundColor: '#ffffff',
+    padding: '20px',
+    borderRadius: '12px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.06)'
+  };
+
+  const inputStyle = {
+    padding: '0.8rem 1rem',
+    borderRadius: '12px',
+    border: '1.5px solid #d1d5db',
+    outline: 'none',
+    backgroundColor: '#f9fafb',
+    fontSize: '0.95rem',
+    transition: 'all 0.2s ease',
+    boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.05)'
+  };
+
+  const buttonPrimary = {
+    backgroundColor: '#0f766e',
+    color: '#fff',
+    padding: '0.85rem',
+    border: 'none',
+    borderRadius: '10px',
+    fontWeight: 'bold',
+    cursor: 'pointer'
+  };
+
+  const btn = (bg) => ({
+    backgroundColor: bg,
+    color: '#fff',
+    border: 'none',
+    padding: '0.5rem 0.9rem',
+    borderRadius: 8,
+    fontWeight: 700,
+    cursor: 'pointer'
+  });
+
   return (
-    <div style={{ fontFamily: 'Segoe UI, sans-serif', minHeight: '100vh', background: '#f8f9fc', padding: '2rem' }}>
+    <div style={page}>
+      {/* Header ya consistente */}
+      <AdminHeader titulo=" 🍽 Platillos por Categoría" />
+
+      {/* input de archivo oculto */}
       <input
         ref={fileInputRef}
         type="file"
@@ -190,104 +254,173 @@ function Platillos() {
         onChange={onArchivoSeleccionado}
       />
 
-      <div style={{ backgroundColor: '#1b3c59', color: 'white', padding: '1rem 2rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 3px 6px rgba(0,0,0,0.1)' }}>
-        <h2 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>🍽 Platillos por Categoría</h2>
-        <button onClick={() => navigate('/admin')} style={{ backgroundColor: '#15803d', color: 'white', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>
-          ← Volver al Panel
-        </button>
-      </div>
-
-      <div style={{ display: 'flex', marginTop: '2rem', gap: '2rem' }}>
-        <aside style={{ width: '250px', background: 'white', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
-          {categorias.map((cat) => (
-            <div key={cat.id} onClick={() => setCategoriaSeleccionada(cat.id)} style={{
-              marginBottom: '0.5rem',
-              backgroundColor: categoriaSeleccionada === cat.id ? '#e0f2f1' : '#f2f2f2',
-              color: '#333',
-              padding: '0.8rem 1rem',
-              borderRadius: '8px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              border: categoriaSeleccionada === cat.id ? '2px solid #0d9488' : 'none'
-            }}>
-              {cat.nombre}
-            </div>
-          ))}
+      <div style={wrap}>
+        {/* CATEGORÍAS */}
+        <aside style={card}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {categorias.map((cat) => {
+              const active = categoriaSeleccionada === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setCategoriaSeleccionada(cat.id)}
+                  style={{
+                    textAlign: 'left',
+                    padding: '14px 16px',
+                    borderRadius: 12,
+                    border: '1.5px solid ' + (active ? '#0d9488' : '#e5e7eb'),
+                    background: active ? '#e6fffb' : '#f3f4f6',
+                    color: '#334155',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  {cat.nombre}
+                </button>
+              );
+            })}
+          </div>
         </aside>
 
-        <main style={{ flex: 1 }}>
-          <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '12px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', marginBottom: '2rem' }}>
-            <h3 style={{ color: '#1b3c59' }}>{modoEdicion ? 'Editar platillo' : 'Registrar nuevo platillo'}</h3>
-            <form onSubmit={crearPlatillo} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '450px' }}>
-              <input type="text" name="nombre" placeholder="Nombre del platillo" value={formData.nombre} onChange={handleChange} style={inputStyle} required />
-              <input type="number" step="0.01" name="precio" placeholder="Precio" value={formData.precio} onChange={handleChange} style={inputStyle} required />
-              <select name="categoriaId" value={formData.categoriaId} onChange={handleChange} style={inputStyle} required>
+        {/* FORM + LISTA */}
+        <main style={{ display: 'grid', gap: 24 }}>
+          {/* Formulario */}
+          <div style={card}>
+            <h3 style={{ color: '#1e3d59', marginBottom: 16 }}>
+              {modoEdicion ? '✏️ Editar platillo' : '➕ Registrar nuevo platillo'}
+            </h3>
+
+            <form onSubmit={crearPlatillo} style={{ display: 'grid', gap: 12, maxWidth: 520 }}>
+              <input
+                type="text"
+                name="nombre"
+                placeholder="Nombre del platillo"
+                value={formData.nombre}
+                onChange={handleChange}
+                style={inputStyle}
+                required
+              />
+              <input
+                type="number"
+                step="0.01"
+                name="precio"
+                placeholder="Precio"
+                value={formData.precio}
+                onChange={handleChange}
+                style={inputStyle}
+                required
+              />
+              <select
+                name="categoriaId"
+                value={formData.categoriaId}
+                onChange={handleChange}
+                style={inputStyle}
+                required
+              >
                 <option value="">Seleccione una categoría</option>
                 {categorias.map((cat) => (
                   <option key={cat.id} value={cat.id}>{cat.nombre}</option>
                 ))}
               </select>
-              <button type="submit" style={botonStyle}>{modoEdicion ? 'Actualizar Platillo' : 'Registrar Platillo'}</button>
+
+              <div style={{ display: 'flex', gap: 10 }}>
+                <button type="submit" style={buttonPrimary}>
+                  {modoEdicion ? 'Actualizar Platillo' : 'Registrar Platillo'}
+                </button>
+                {modoEdicion && (
+                  <button
+                    type="button"
+                    onClick={() => { setModoEdicion(false); setIdEditando(null); setFormData({ nombre:'', precio:'', categoriaId:'' }); }}
+                    style={{ ...buttonPrimary, backgroundColor: '#94a3b8' }}
+                  >
+                    Cancelar
+                  </button>
+                )}
+              </div>
             </form>
           </div>
 
+          {/* Lista por categoría */}
           {categoriaSeleccionada && (
-            <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
-              <h3 style={{ marginBottom: '1rem', color: '#1b3c59' }}>Platillos de la categoría seleccionada</h3>
-              {platillos.filter(p => p.categoria?.id === categoriaSeleccionada).map((platillo) => {
-                const tieneImagen = Boolean(platillo.imagenUrl);
-                const labelFoto = tieneImagen ? 'Cambiar foto' : 'Subir foto';
-                const mostrandoProgreso = subiendoId === platillo.id;
+            <div style={card}>
+              <h3 style={{ marginBottom: 12, color: '#1e3d59' }}>
+                Platillos de “{categorias.find(c => c.id === categoriaSeleccionada)?.nombre}”
+              </h3>
 
-                return (
-                  <div key={platillo.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '1px solid #ccc', paddingBottom: '0.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                      {/* miniatura antes del nombre */}
-                      {tieneImagen ? (
-                        <img
-                          src={platillo.imagenUrl}
-                          alt={platillo.nombre}
-                          style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8, border: '1px solid #e5e7eb' }}
-                        />
-                      ) : (
-                        <div style={{
-                          width: 48, height: 48, borderRadius: 8, background: '#e5e7eb',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#6b7280'
-                        }}>
-                          Sin foto
-                        </div>
-                      )}
-                      <div>
-                        <strong>{platillo.nombre}</strong> - Q{platillo.precio}
-                        {!platillo.disponible && (
-                          <span style={{ marginLeft: 8, color: '#b91c1c', fontWeight: 'bold' }}>(No disponible)</span>
-                        )}
-                        {mostrandoProgreso && (
-                          <div style={{ marginTop: 6, width: 160, background: '#eee', borderRadius: 6, overflow: 'hidden', height: 8 }}>
-                            <div style={{ width: `${progreso}%`, height: '100%', background: '#0f766e', transition: 'width .2s' }} />
-                          </div>
-                        )}
-                      </div>
-                    </div>
+              {platillos.filter(p => p.categoria?.id === categoriaSeleccionada).length === 0 ? (
+                <p style={{ margin: 0, color: '#64748b' }}>No hay platillos en esta categoría.</p>
+              ) : (
+                platillos
+                  .filter(p => p.categoria?.id === categoriaSeleccionada)
+                  .map((platillo) => {
+                    const tieneImagen = Boolean(platillo.imagenUrl);
+                    const labelFoto = tieneImagen ? 'Cambiar foto' : 'Subir foto';
+                    const mostrandoProgreso = subiendoId === platillo.id;
 
-                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      <button
-                        onClick={() => clickSubirPara(platillo.id)}
-                        disabled={mostrandoProgreso}
-                        style={{ ...btnTeal, opacity: mostrandoProgreso ? 0.7 : 1 }}
-                        title={labelFoto}
+                    return (
+                      <div
+                        key={platillo.id}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          padding: '12px 0',
+                          borderBottom: '1px solid #eef2f7',
+                          gap: 14
+                        }}
                       >
-                        {labelFoto}
-                      </button>
-                      <button onClick={() => editarPlatillo(platillo)} style={btnYellow}>Editar</button>
-                      <button onClick={() => cambiarDisponibilidad(platillo.id, platillo.disponible)} style={btnPurple}>
-                        {platillo.disponible ? 'Desactivar' : 'Activar'}
-                      </button>
-                      <button onClick={() => eliminarPlatillo(platillo.id)} style={btnRed}>Eliminar</button>
-                    </div>
-                  </div>
-                );
-              })}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                          {tieneImagen ? (
+                            <img
+                              src={platillo.imagenUrl}
+                              alt={platillo.nombre}
+                              style={{ width: 52, height: 52, objectFit: 'cover', borderRadius: 10, border: '1px solid #e5e7eb' }}
+                            />
+                          ) : (
+                            <div
+                              style={{
+                                width: 52, height: 52, borderRadius: 10, background: '#e5e7eb',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: 12, color: '#6b7280'
+                              }}
+                            >
+                              Sin foto
+                            </div>
+                          )}
+
+                          <div>
+                            <div style={{ fontWeight: 800, color: '#0f172a' }}>{platillo.nombre}</div>
+                            <div style={{ color: '#334155', fontWeight: 700 }}>Q{platillo.precio}</div>
+                            {!platillo.disponible && (
+                              <span style={{ color: '#b91c1c', fontWeight: 800 }}>(No disponible)</span>
+                            )}
+                            {mostrandoProgreso && (
+                              <div style={{ marginTop: 6, width: 180, background: '#eee', borderRadius: 6, overflow: 'hidden', height: 8 }}>
+                                <div style={{ width: `${progreso}%`, height: '100%', background: '#0f766e', transition: 'width .2s' }} />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                          <button
+                            onClick={() => clickSubirPara(platillo.id)}
+                            disabled={mostrandoProgreso}
+                            style={{ ...btn('#0f766e'), opacity: mostrandoProgreso ? 0.7 : 1 }}
+                            title={labelFoto}
+                          >
+                            {labelFoto}
+                          </button>
+                          <button onClick={() => editarPlatillo(platillo)} style={btn('#f59e0b')}>Editar</button>
+                          <button onClick={() => cambiarDisponibilidad(platillo.id, platillo.disponible)} style={btn('#6b21a8')}>
+                            {platillo.disponible ? 'Desactivar' : 'Activar'}
+                          </button>
+                          <button onClick={() => eliminarPlatillo(platillo.id)} style={btn('#dc2626')}>Eliminar</button>
+                        </div>
+                      </div>
+                    );
+                  })
+              )}
             </div>
           )}
         </main>
@@ -295,64 +428,5 @@ function Platillos() {
     </div>
   );
 }
-
-const inputStyle = {
-  padding: '0.75rem',
-  borderRadius: '8px',
-  border: '1px solid #ccc',
-  fontSize: '1rem',
-  width: '100%'
-};
-
-const botonStyle = {
-  backgroundColor: '#0f766e',
-  color: 'white',
-  border: 'none',
-  padding: '0.75rem',
-  borderRadius: '8px',
-  cursor: 'pointer',
-  fontWeight: 'bold',
-  marginTop: '0.5rem'
-};
-
-const btnRed = {
-  backgroundColor: '#dc2626',
-  color: 'white',
-  border: 'none',
-  padding: '0.5rem 1rem',
-  borderRadius: '6px',
-  fontWeight: 'bold',
-  cursor: 'pointer'
-};
-
-const btnYellow = {
-  backgroundColor: '#f59e0b',
-  color: 'white',
-  border: 'none',
-  padding: '0.5rem 1rem',
-  borderRadius: '6px',
-  fontWeight: 'bold',
-  cursor: 'pointer'
-};
-
-const btnPurple = {
-  backgroundColor: '#6b21a8',
-  color: 'white',
-  border: 'none',
-  padding: '0.5rem 1rem',
-  borderRadius: '6px',
-  fontWeight: 'bold',
-  cursor: 'pointer'
-};
-
-const btnTeal = {
-  backgroundColor: '#0f766e',
-  color: 'white',
-  border: 'none',
-  padding: '0.45rem 0.9rem',
-  borderRadius: '6px',
-  fontWeight: 'bold',
-  cursor: 'pointer'
-};
 
 export default Platillos;
