@@ -1,8 +1,10 @@
 // src/pages/Usuarios.jsx
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AdminHeader from '../components/AdminHeader';
+import ToastMessage from '../components/ToastMessage';
+import { Modal } from 'bootstrap';
 
 const API = 'http://localhost:3001';
 
@@ -25,14 +27,46 @@ function Usuarios() {
   const [editando, setEditando] = useState(null);
   const [viendoEliminados, setViendoEliminados] = useState(false);
 
+  // Toast
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const showToast = (message, type = 'success') => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast(prev => ({ ...prev, show: false })), 3000);
+  };
+
+  // Modal de confirmación
+  const [confirmData, setConfirmData] = useState(null);
+  const modalRef = useRef(null);
+  const modalInstanceRef = useRef(null);
+
+  useEffect(() => {
+    if (!confirmData) return;
+
+    modalInstanceRef.current = new Modal(modalRef.current, { backdrop: true, keyboard: true });
+
+    const node = modalRef.current;
+    const onHidden = () => {
+      setConfirmData(null);
+      modalInstanceRef.current?.dispose();
+      modalInstanceRef.current = null;
+    };
+
+    node.addEventListener('hidden.bs.modal', onHidden);
+    modalInstanceRef.current.show();
+
+    return () => node.removeEventListener('hidden.bs.modal', onHidden);
+  }, [confirmData]);
+
+  const closeModal = () => modalInstanceRef.current?.hide();
+
   const esAdmin = (u) => u?.rol?.nombre?.toLowerCase() === 'administrador';
 
   const obtenerUsuarios = async (inactivos = false) => {
     try {
       const { data } = await axios.get(`${API}/usuarios${inactivos ? '?inactivos=1' : ''}`);
       setUsuarios(data);
-    } catch (error) {
-      console.error('Error al obtener usuarios:', error);
+    } catch {
+      showToast('Error al obtener usuarios', 'danger');
     }
   };
 
@@ -41,8 +75,8 @@ function Usuarios() {
       const { data } = await axios.get(`${API}/roles`);
       const rolesFiltrados = data.filter(r => r.nombre.toLowerCase() !== 'administrador');
       setRoles(rolesFiltrados);
-    } catch (error) {
-      console.error('Error al obtener roles:', error);
+    } catch {
+      showToast('Error al obtener roles', 'danger');
     }
   };
 
@@ -52,9 +86,7 @@ function Usuarios() {
     obtenerRoles();
   }, [navigate, usuarioSesion]);
 
-  const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const handleChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
   const resetForm = () => {
     setFormData({
@@ -70,13 +102,13 @@ function Usuarios() {
   const crearUsuario = async (e) => {
     e.preventDefault();
     try {
-      const payload = { ...formData, responsableId };
+      const payload = { ...formData, responsableId, contrasena: formData.contrasena.trim() };
       await axios.post(`${API}/usuarios`, payload);
       resetForm();
       await obtenerUsuarios(false);
-      alert('Usuario creado correctamente');
+      showToast('Usuario creado correctamente', 'success');
     } catch (error) {
-      alert(error.response?.data?.error || 'Error al crear usuario');
+      showToast(error.response?.data?.error || 'Error al crear usuario', 'danger');
     }
   };
 
@@ -87,7 +119,7 @@ function Usuarios() {
       nombre: usuario.nombre,
       usuario: usuario.usuario,
       correo: usuario.correo,
-      contrasena: '',
+      contrasena: '', // se requerirá nueva contraseña
       rolId: rolCoincidente?.id || '',
       responsableId
     });
@@ -106,149 +138,78 @@ function Usuarios() {
         usuario: formData.usuario,
         correo: formData.correo,
         rolId: formData.rolId,
-        responsableId
+        responsableId,
+        contrasena: formData.contrasena.trim() // ahora siempre obligatoria
       };
-      if (formData.contrasena && formData.contrasena.trim() !== '') {
-        payload.contrasena = formData.contrasena.trim();
-      }
 
       const { data } = await axios.put(`${API}/usuarios/${editando.id}`, payload);
       const actualizado = { ...data.usuario, rol: data.usuario.rol || { nombre: 'Desconocido' } };
       setUsuarios(prev => prev.map(u => (u.id === actualizado.id ? actualizado : u)));
       cancelarEdicion();
-      alert('Usuario actualizado');
+      showToast('Usuario actualizado', 'success');
     } catch (error) {
-      const mensaje = error.response?.data?.error || 'Error al actualizar el usuario';
-      alert(mensaje);
+      showToast(error.response?.data?.error || 'Error al actualizar usuario', 'danger');
     }
   };
 
-  const eliminarUsuario = async (id) => {
-    if (!confirm('¿Eliminar este usuario?')) return;
-    try {
-      await axios.delete(`${API}/usuarios/${id}`);
-      setUsuarios(prev => prev.filter(u => u.id !== id));
-      alert('Usuario eliminado');
-    } catch (error) {
-      alert(error.response?.data?.error || 'Error al eliminar usuario');
-    }
+  const eliminarUsuario = (id) => {
+    setConfirmData({
+      title: 'Confirmar eliminación',
+      message: '¿Estás seguro de que deseas eliminar este usuario?',
+      confirmText: 'Eliminar',
+      confirmVariant: 'danger',
+      onConfirm: async () => {
+        try {
+          await axios.delete(`${API}/usuarios/${id}`);
+          setUsuarios(prev => prev.filter(u => u.id !== id));
+          showToast('Usuario eliminado', 'success');
+        } catch (error) {
+          showToast(error.response?.data?.error || 'Error al eliminar usuario', 'danger');
+        } finally {
+          closeModal();
+        }
+      }
+    });
   };
 
-  const restaurarUsuario = async (id) => {
-    if (!confirm('¿Restaurar este usuario?')) return;
-    try {
-      await axios.put(`${API}/usuarios/${id}/restaurar`, { responsableId });
-      // si quieres volver a la vista de activos automáticamente:
-      // setViendoEliminados(false);
-      await obtenerUsuarios(true);
-      alert('Usuario restaurado');
-    } catch (error) {
-      alert(error.response?.data?.error || 'Error al restaurar usuario');
-    }
+  const restaurarUsuario = (id) => {
+    setConfirmData({
+      title: 'Confirmar restauración',
+      message: '¿Deseas restaurar este usuario?',
+      confirmText: 'Restaurar',
+      confirmVariant: 'primary',
+      onConfirm: async () => {
+        try {
+          await axios.put(`${API}/usuarios/${id}/restaurar`, { responsableId });
+          await obtenerUsuarios(true);
+          showToast('Usuario restaurado', 'success');
+        } catch (error) {
+          showToast(error.response?.data?.error || 'Error al restaurar usuario', 'danger');
+        } finally {
+          closeModal();
+        }
+      }
+    });
   };
 
-  /* ===== estilos coherentes y “pegados” ===== */
-  const page = {
-    minHeight: '100vh',
-    backgroundColor: '#f3f6f7',
-    fontFamily: 'Poppins, Segoe UI, sans-serif',
-  };
-
-  const wrapTop = {
-    padding: '20px 24px 0',
-    display: 'flex',
-    justifyContent: 'flex-end'
-  };
-
-  const toggleBtn = {
-    backgroundColor: '#0f766e',
-    color: '#fff',
-    border: 'none',
-    padding: '0.55rem 0.9rem',
-    borderRadius: 8,
-    fontWeight: 700,
-    cursor: 'pointer'
-  };
-
-  const wrap = {
-    padding: '12px 24px 28px',
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '24px',
-    alignItems: 'start'
-  };
-
-  const card = {
-    backgroundColor: '#ffffff',
-    padding: '20px',
-    borderRadius: '12px',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.06)'
-  };
-
-  const inputStyle = {
-    padding: '0.8rem 1rem',
-    borderRadius: '12px',
-    border: '1.5px solid #d1d5db',
-    outline: 'none',
-    backgroundColor: '#f9fafb',
-    fontSize: '0.95rem',
-    transition: 'all 0.2s ease',
-    boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.05)'
-  };
-
-  const buttonPrimary = {
-    backgroundColor: '#007f5f',
-    color: '#fff',
-    padding: '0.8rem',
-    border: 'none',
-    borderRadius: '8px',
-    fontWeight: 'bold',
-    cursor: 'pointer'
-  };
-
-  const buttonEdit = {
-    backgroundColor: '#f0ad4e',
-    color: '#fff',
-    border: 'none',
-    padding: '0.4rem 0.8rem',
-    borderRadius: '6px',
-    cursor: 'pointer'
-  };
-
-  const buttonDelete = {
-    backgroundColor: '#e63946',
-    color: '#fff',
-    border: 'none',
-    padding: '0.4rem 0.8rem',
-    borderRadius: '6px',
-    cursor: 'pointer'
-  };
-
-  const buttonRestore = {
-    backgroundColor: '#2563eb',
-    color: '#fff',
-    border: 'none',
-    padding: '0.4rem 0.8rem',
-    borderRadius: '6px',
-    cursor: 'pointer'
-  };
-
-  const buttonCancel = {
-    backgroundColor: '#cccccc',
-    color: '#333',
-    padding: '0.8rem',
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer'
-  };
-
+  /* ===== estilos ===== */
+  const page = { minHeight: '100vh', backgroundColor: '#f3f6f7', fontFamily: 'Poppins, Segoe UI, sans-serif' };
+  const wrapTop = { padding: '20px 24px 0', display: 'flex', justifyContent: 'flex-end' };
+  const toggleBtn = { backgroundColor: '#0f766e', color: '#fff', border: 'none', padding: '0.55rem 0.9rem', borderRadius: 8, fontWeight: 700, cursor: 'pointer' };
+  const wrap = { padding: '12px 24px 28px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', alignItems: 'start' };
+  const card = { backgroundColor: '#ffffff', padding: '20px', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.06)' };
+  const inputStyle = { padding: '0.8rem 1rem', borderRadius: '12px', border: '1.5px solid #d1d5db', outline: 'none', backgroundColor: '#f9fafb', fontSize: '0.95rem', transition: 'all 0.2s ease', boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.05)' };
+  const buttonPrimary = { backgroundColor: '#007f5f', color: '#fff', padding: '0.8rem', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' };
+  const buttonEdit = { backgroundColor: '#f0ad4e', color: '#fff', border: 'none', padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: 'pointer' };
+  const buttonDelete = { backgroundColor: '#e63946', color: '#fff', border: 'none', padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: 'pointer' };
+  const buttonRestore = { backgroundColor: '#2563eb', color: '#fff', border: 'none', padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: 'pointer' };
+  const buttonCancel = { backgroundColor: '#cccccc', color: '#333', padding: '0.8rem', border: 'none', borderRadius: '8px', cursor: 'pointer' };
   const tituloLista = viendoEliminados ? 'Usuarios Eliminados' : 'Usuarios Registrados';
 
   return (
     <div style={page}>
       <AdminHeader titulo="👥 Gestión de Usuarios" />
 
-      {/* Botón para ver eliminados / activos */}
       <div style={wrapTop}>
         <button
           style={toggleBtn}
@@ -312,7 +273,7 @@ function Usuarios() {
           )}
         </div>
 
-        {/* Formulario (solo en vista de activos) */}
+        {/* Formulario */}
         {!viendoEliminados && (
           <div style={card}>
             <h3 style={{ marginBottom: 16, color: '#1e3d59' }}>
@@ -323,7 +284,7 @@ function Usuarios() {
               <input type="text" name="nombre" placeholder="Nombre completo" value={formData.nombre} onChange={handleChange} style={inputStyle} required />
               <input type="text" name="usuario" placeholder="Nombre de usuario" value={formData.usuario} onChange={handleChange} style={inputStyle} required />
               <input type="email" name="correo" placeholder="Correo electrónico" value={formData.correo} onChange={handleChange} style={inputStyle} required />
-              <input type="password" name="contrasena" placeholder={editando ? 'Contraseña (opcional)' : 'Contraseña'} value={formData.contrasena} onChange={handleChange} style={inputStyle} />
+              <input type="password" name="contrasena" placeholder="Contraseña" value={formData.contrasena} onChange={handleChange} style={inputStyle} required />
 
               <select name="rolId" value={formData.rolId} onChange={handleChange} style={inputStyle} required>
                 <option value="">Seleccionar un rol</option>
@@ -343,8 +304,44 @@ function Usuarios() {
           </div>
         )}
       </div>
+
+      {/* Toast */}
+      <ToastMessage
+        message={toast.message}
+        type={toast.type}
+        show={toast.show}
+        onClose={() => setToast(prev => ({ ...prev, show: false }))}
+      />
+
+      {/* Modal de confirmación arriba */}
+      {confirmData && (
+        <div className="modal fade" tabIndex="-1" ref={modalRef}>
+          <div className="modal-dialog mt-5">
+            <div className="modal-content border-danger">
+              <div className="modal-header bg-danger text-white">
+                <h5 className="modal-title">{confirmData.title}</h5>
+                <button type="button" className="btn-close btn-close-white" onClick={closeModal}></button>
+              </div>
+              <div className="modal-body">
+                <p>{confirmData.message}</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={closeModal}>Cancelar</button>
+                <button
+                  type="button"
+                  className={`btn btn-${confirmData.confirmVariant || 'danger'}`}
+                  onClick={confirmData.onConfirm}
+                >
+                  {confirmData.confirmText || 'Eliminar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 export default Usuarios;
+

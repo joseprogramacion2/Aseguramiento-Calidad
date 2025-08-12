@@ -2,9 +2,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-// Header ya existente
 import AdminHeader from '../components/AdminHeader';
+
+// Toast + Modal
+import ToastMessage from '../components/ToastMessage';
+import { Modal } from 'bootstrap';
 
 // Firebase
 import { storage } from '../firebase';
@@ -30,6 +32,35 @@ function Platillos() {
   const responsableId = usuarioLogueado?.id;
   const navigate = useNavigate();
 
+  // Toast
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const showToast = (message, type = 'success') => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast(prev => ({ ...prev, show: false })), 3000);
+  };
+
+  // Modal confirmación (reutilizable)
+  const [confirmData, setConfirmData] = useState(null);
+  const modalRef = useRef(null);
+  const modalInstanceRef = useRef(null);
+
+  useEffect(() => {
+    if (!confirmData) return;
+    modalInstanceRef.current = new Modal(modalRef.current, { backdrop: true, keyboard: true });
+
+    const node = modalRef.current;
+    const onHidden = () => {
+      setConfirmData(null);
+      modalInstanceRef.current?.dispose();
+      modalInstanceRef.current = null;
+    };
+    node.addEventListener('hidden.bs.modal', onHidden);
+    modalInstanceRef.current.show();
+    return () => node.removeEventListener('hidden.bs.modal', onHidden);
+  }, [confirmData]);
+
+  const closeModal = () => modalInstanceRef.current?.hide();
+
   useEffect(() => {
     obtenerPlatillos();
     obtenerCategorias();
@@ -41,6 +72,7 @@ function Platillos() {
       setPlatillos(res.data);
     } catch (error) {
       console.error('Error al obtener platillos:', error);
+      showToast('Error al obtener platillos', 'danger');
     }
   };
 
@@ -50,6 +82,7 @@ function Platillos() {
       setCategorias(res.data);
     } catch (error) {
       console.error('Error al obtener categorías:', error);
+      showToast('Error al obtener categorías', 'danger');
     }
   };
 
@@ -60,7 +93,7 @@ function Platillos() {
   const crearPlatillo = async (e) => {
     e.preventDefault();
     if (!formData.nombre || !formData.precio || !formData.categoriaId) {
-      alert('Por favor completa todos los campos');
+      showToast('Completa todos los campos', 'danger');
       return;
     }
     try {
@@ -69,10 +102,10 @@ function Platillos() {
           ...formData,
           responsableId: responsableId || 1
         });
-        alert('Platillo actualizado correctamente');
+        showToast('Platillo actualizado correctamente', 'success');
       } else {
         await axios.post(`${API}/platillos`, formData);
-        alert('Platillo registrado correctamente');
+        showToast('Platillo registrado correctamente', 'success');
       }
       setFormData({ nombre: '', precio: '', categoriaId: '' });
       setModoEdicion(false);
@@ -80,7 +113,7 @@ function Platillos() {
       obtenerPlatillos();
     } catch (error) {
       console.error('Error completo:', error);
-      alert(error.response?.data?.error || 'Error al guardar platillo');
+      showToast(error.response?.data?.error || 'Error al guardar platillo', 'danger');
     }
   };
 
@@ -92,33 +125,35 @@ function Platillos() {
       precio: platillo.precio,
       categoriaId: platillo.categoria?.id || ''
     });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const cambiarDisponibilidad = async (id, estadoActual) => {
-    const accion = estadoActual ? 'desactivar' : 'activar';
-    if (!window.confirm(`¿Deseas ${accion} este platillo?`)) return;
-    try {
-      await axios.patch(`${API}/platillos/${id}/disponibilidad`, {
-        disponible: !estadoActual
-      });
-      obtenerPlatillos();
-      alert(`Platillo ${accion} correctamente`);
-    } catch (error) {
-      console.error(`Error al ${accion} platillo:`, error);
-      alert(`Error al ${accion} el platillo`);
-    }
-  };
-
-  const eliminarPlatillo = async (id) => {
-    if (!window.confirm('¿Deseas eliminar permanentemente este platillo?')) return;
-    try {
-      await axios.delete(`${API}/platillos/${id}`);
-      obtenerPlatillos();
-      alert('Platillo eliminado correctamente');
-    } catch (error) {
-      console.error('Error al eliminar platillo:', error);
-      alert('Error al eliminar el platillo');
-    }
+  // Confirmación para activar/desactivar
+  const pedirConfirmacionDisponibilidad = (platillo) => {
+    const seraInactivar = !!platillo.disponible;
+    setConfirmData({
+      title: seraInactivar ? 'Desactivar platillo' : 'Activar platillo',
+      message: seraInactivar
+        ? `¿Deseas desactivar "${platillo.nombre}"? No aparecerá en el menú.`
+        : `¿Deseas activar "${platillo.nombre}"?`,
+      confirmText: seraInactivar ? 'Desactivar' : 'Activar',
+      // <- ahora rojo como categorías
+      confirmVariant: seraInactivar ? 'danger' : 'primary',
+      onConfirm: async () => {
+        try {
+          await axios.patch(`${API}/platillos/${platillo.id}/disponibilidad`, {
+            disponible: !platillo.disponible
+          });
+          await obtenerPlatillos();
+          showToast(seraInactivar ? 'Platillo desactivado' : 'Platillo activado', 'success');
+        } catch (error) {
+          console.error('Error cambiando disponibilidad:', error);
+          showToast('No se pudo cambiar la disponibilidad', 'danger');
+        } finally {
+          closeModal();
+        }
+      }
+    });
   };
 
   // ---- Subida de imagen ----
@@ -134,13 +169,13 @@ function Platillos() {
 
     const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
     if (!tiposPermitidos.includes(file.type)) {
-      alert(`Formato no permitido (${file.type}). Usa JPG, PNG, WEBP, GIF o SVG.`);
+      showToast(`Formato no permitido (${file.type}). Usa JPG, PNG, WEBP, GIF o SVG.`, 'danger');
       return;
     }
 
     const platilloId = platilloIdParaImagenRef.current;
     if (!platilloId) {
-      alert('No se seleccionó platillo para la imagen.');
+      showToast('No se seleccionó platillo para la imagen.', 'danger');
       return;
     }
 
@@ -158,7 +193,7 @@ function Platillos() {
         (snap) => setProgreso((snap.bytesTransferred / snap.totalBytes) * 100),
         (err) => {
           console.error('Error Storage:', err);
-          alert(err?.message || 'Error subiendo imagen.');
+          showToast(err?.message || 'Error subiendo imagen.', 'danger');
           setSubiendoId(null);
         },
         async () => {
@@ -169,10 +204,10 @@ function Platillos() {
               responsableId: responsableId || 1
             });
             await obtenerPlatillos();
-            alert('Imagen subida y guardada.');
+            showToast('Imagen subida y guardada.', 'success');
           } catch (e2) {
             console.error('Error guardando en backend:', e2);
-            alert(e2.response?.data?.error || 'Error al guardar imagen en la base de datos.');
+            showToast(e2.response?.data?.error || 'Error al guardar imagen en la base de datos.', 'danger');
           } finally {
             setSubiendoId(null);
             setProgreso(0);
@@ -181,12 +216,12 @@ function Platillos() {
       );
     } catch (err) {
       console.error('Error general en subida:', err);
-      alert('Error inesperado subiendo imagen.');
+      showToast('Error inesperado subiendo imagen.', 'danger');
       setSubiendoId(null);
     }
   };
 
-  /* ===== estilos iguales a Usuarios ===== */
+  /* ===== estilos ===== */
   const page = {
     minHeight: '100vh',
     backgroundColor: '#f3f6f7',
@@ -242,7 +277,6 @@ function Platillos() {
 
   return (
     <div style={page}>
-      {/* Header ya consistente */}
       <AdminHeader titulo=" 🍽 Platillos por Categoría" />
 
       {/* input de archivo oculto */}
@@ -412,10 +446,10 @@ function Platillos() {
                             {labelFoto}
                           </button>
                           <button onClick={() => editarPlatillo(platillo)} style={btn('#f59e0b')}>Editar</button>
-                          <button onClick={() => cambiarDisponibilidad(platillo.id, platillo.disponible)} style={btn('#6b21a8')}>
+                          <button onClick={() => pedirConfirmacionDisponibilidad(platillo)} style={btn('#6b21a8')}>
                             {platillo.disponible ? 'Desactivar' : 'Activar'}
                           </button>
-                          <button onClick={() => eliminarPlatillo(platillo.id)} style={btn('#dc2626')}>Eliminar</button>
+                          {/* Botón Eliminar removido */}
                         </div>
                       </div>
                     );
@@ -425,6 +459,41 @@ function Platillos() {
           )}
         </main>
       </div>
+
+      {/* Toast centrado arriba */}
+      <ToastMessage
+        message={toast.message}
+        type={toast.type}
+        show={toast.show}
+        onClose={() => setToast(prev => ({ ...prev, show: false }))}
+      />
+
+      {/* Modal de confirmación (igual que categorías → rojo) */}
+      {confirmData && (
+        <div className="modal fade" tabIndex="-1" ref={modalRef}>
+          <div className="modal-dialog mt-5">
+            <div className="modal-content border-danger">
+              <div className="modal-header bg-danger text-white">
+                <h5 className="modal-title">{confirmData.title}</h5>
+                <button type="button" className="btn-close btn-close-white" onClick={closeModal}></button>
+              </div>
+              <div className="modal-body">
+                <p>{confirmData.message}</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={closeModal}>Cancelar</button>
+                <button
+                  type="button"
+                  className={`btn btn-${confirmData.confirmVariant || 'danger'}`}
+                  onClick={confirmData.onConfirm}
+                >
+                  {confirmData.confirmText || 'Confirmar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

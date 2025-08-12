@@ -1,8 +1,8 @@
-// frontend/src/pages/VistaMesero.jsx
 import React, { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import PageTopBar from '../components/PageTopBar';
+import ToastMessage from '../components/ToastMessage';
 
 const API = 'http://localhost:3001';
 const FALLBACK_IMG = '/no-image.png';
@@ -16,8 +16,11 @@ export default function VistaMesero() {
   const [platillos, setPlatillos] = useState([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
 
-  // cada línea del carrito: { uid, id, nombre, precio, tipo: 'PLATILLO'|'BEBIDA', nota, cantidad }
+  // carrito: NUEVOS items
   const [carrito, setCarrito] = useState([]);
+  // existentes de la orden en edición (solo lectura)
+  const [existentes, setExistentes] = useState([]);
+
   const [mostrarNotas, setMostrarNotas] = useState(false);
   const [platilloActual, setPlatilloActual] = useState(null);
   const [notaTemporal, setNotaTemporal] = useState('');
@@ -29,7 +32,14 @@ export default function VistaMesero() {
   const [ordenEditCodigo, setOrdenEditCodigo] = useState(null);
 
   const navigate = useNavigate();
-  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const usuario = useMemo(() => JSON.parse(localStorage.getItem('usuario')), []);
+
+  // Toast
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const showToast = (message, type = 'success') => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast((prev) => ({ ...prev, show: false })), 3000);
+  };
 
   useEffect(() => {
     const u = JSON.parse(localStorage.getItem('usuario'));
@@ -38,10 +48,11 @@ export default function VistaMesero() {
       navigate('/login', { replace: true });
       return;
     }
-    obtenerCategorias();
-    obtenerPlatillos();
 
-    // Cargar "orden en edición" si viene de OrdenesMesero → Editar
+    obtenerCategoriasVisibles();
+    obtenerPlatillosFiltrados();
+
+    // Si vengo a editar, cargo EXISTENTES como solo lectura
     const raw = localStorage.getItem('ordenEnEdicion');
     if (raw) {
       try {
@@ -50,44 +61,47 @@ export default function VistaMesero() {
         setOrdenEditCodigo(ord.codigo || `#${ord.id}`);
         setMesaSeleccionada(ord.mesa || null);
 
-        // Importante: traer los items existentes respetando tipo (PLATILLO/BEBIDA)
-        const pre = (ord.items || []).map((it) => ({
-          uid: makeUid(),
-          id: it.platilloId || it.id || 0,
+        const ex = (ord.items || []).map((it) => ({
+          uid: `ex_${it.id || Math.random()}`,
+          id: it.id,
           nombre: it.nombre,
           precio: it.precio,
           nota: it.nota || '',
           cantidad: 1,
           tipo: it.tipo === 'BEBIDA' ? 'BEBIDA' : 'PLATILLO',
+          existente: true,
         }));
-        setCarrito(pre);
+        setExistentes(ex);
+        setCarrito([]); // muy importante para NO duplicar
       } catch {}
     }
   }, [navigate]);
 
-  const obtenerCategorias = async () => {
+  const obtenerCategoriasVisibles = async () => {
     try {
-      const res = await axios.get(`${API}/categorias`);
-      setCategorias(res.data || []);
-      if (res.data?.length) setCategoriaSeleccionada(res.data[0].id);
+      const res = await axios.get(`${API}/categorias/visibles`);
+      const cats = res.data || [];
+      setCategorias(cats);
+      if (cats.length) setCategoriaSeleccionada(cats[0].id);
     } catch (error) {
-      console.error('categorias', error);
+      console.error('categorias visibles', error);
+      showToast('Error al cargar categorías', 'danger');
     }
   };
 
-  const obtenerPlatillos = async () => {
+  const obtenerPlatillosFiltrados = async () => {
     try {
-      const res = await axios.get(`${API}/platillos`);
-      setPlatillos((res.data || []).filter((p) => p.disponible));
+      const res = await axios.get(`${API}/platillos?soloDisponibles=1&soloActivas=1`);
+      setPlatillos(res.data || []);
     } catch (error) {
-      console.error('platillos', error);
+      console.error('platillos filtrados', error);
+      showToast('Error al cargar platillos', 'danger');
     }
   };
 
-  // ===== Agregar rápido o con nota =====
+  // ===== Agregar rápido o con nota (NUEVOS) =====
   const agregarDirecto = (p, tipo = 'PLATILLO') => {
     setCarrito((prev) => {
-      // agrupar si ya existe (mismo item, sin nota, mismo tipo)
       const idx = prev.findIndex(
         (it) => it.id === p.id && (it.nota || '') === '' && it.tipo === tipo
       );
@@ -137,28 +151,20 @@ export default function VistaMesero() {
     setNotaTemporal('');
   };
 
-  // ===== Handlers por UID (arregla eliminar/mover/±1) =====
-  const eliminarPorUid = (uid) => {
-    setCarrito((prev) => prev.filter((x) => x.uid !== uid));
-  };
-
-  const incPorUid = (uid) => {
+  // ===== Handlers por UID (solo NUEVOS) =====
+  const eliminarPorUid = (uid) => setCarrito((prev) => prev.filter((x) => x.uid !== uid));
+  const incPorUid = (uid) =>
     setCarrito((prev) =>
       prev.map((x) => (x.uid === uid ? { ...x, cantidad: (x.cantidad || 1) + 1 } : x))
     );
-  };
-
-  const decPorUid = (uid) => {
+  const decPorUid = (uid) =>
     setCarrito((prev) =>
       prev.map((x) =>
         x.uid === uid ? { ...x, cantidad: Math.max(1, (x.cantidad || 1) - 1) } : x
       )
     );
-  };
-
-  const moverATipo = (uid, nuevoTipo) => {
+  const moverATipo = (uid, nuevoTipo) =>
     setCarrito((prev) => prev.map((x) => (x.uid === uid ? { ...x, tipo: nuevoTipo } : x)));
-  };
 
   // ===== Drag & Drop =====
   const onDragStart = (p, tipoDefault = 'PLATILLO') => (e) => {
@@ -176,16 +182,29 @@ export default function VistaMesero() {
 
   // ===== Enviar orden =====
   const total = useMemo(
-    () => carrito.reduce((s, it) => s + it.precio * (it.cantidad || 1), 0),
-    [carrito]
+    () =>
+      [...existentes, ...carrito].reduce((s, it) => s + it.precio * (it.cantidad || 1), 0),
+    [existentes, carrito]
   );
 
   const enviarOrden = async () => {
-    if (!mesaSeleccionada) return alert('Selecciona una mesa');
-    if (carrito.length === 0) return alert('Agrega productos');
+    if (!mesaSeleccionada) {
+      showToast('Selecciona una mesa', 'danger');
+      return;
+    }
+    // Nuevos que sí se envían
+    const nuevos = carrito;
+    if (!ordenEditId && nuevos.length === 0) {
+      showToast('Agrega productos', 'danger');
+      return;
+    }
+    // En edición: si no agregaste nada, no se envía nada
+    if (ordenEditId && nuevos.length === 0) {
+      showToast('No agregaste nuevos ítems.', 'danger');
+      return;
+    }
 
-    // expandir por cantidad; respetar tipo/nota
-    const itemsPlano = carrito.flatMap((item) => {
+    const itemsPlano = nuevos.flatMap((item) => {
       const cantidad = item.cantidad || 1;
       const nota = (item.nota || '').trim();
       return Array.from({ length: cantidad }).map(() => ({
@@ -199,7 +218,7 @@ export default function VistaMesero() {
     try {
       if (ordenEditId) {
         await axios.post(`${API}/ordenes/${ordenEditId}/items`, { items: itemsPlano });
-        alert(`Ítems añadidos a la orden ${ordenEditCodigo}`);
+        showToast(`Ítems añadidos a la orden ${ordenEditCodigo}`, 'success');
         localStorage.removeItem('ordenEnEdicion');
       } else {
         await axios.post(`${API}/ordenes`, {
@@ -207,19 +226,32 @@ export default function VistaMesero() {
           meseroId: usuario.id,
           items: itemsPlano,
         });
-        alert('Orden enviada exitosamente');
+        showToast('Orden enviada exitosamente', 'success');
       }
-      // limpiar y salir
+
+      // limpiar estado local
       setCarrito([]);
+      setExistentes([]);
       setMesaSeleccionada(null);
       setMostrarMesaModal(false);
       setOrdenEditId(null);
       setOrdenEditCodigo(null);
-      navigate('/mesero/ordenes');
+
+      setTimeout(() => {
+        navigate('/mesero/ordenes');
+      }, 700);
     } catch (error) {
       console.error('enviar orden', error);
-      alert(error?.response?.data?.error || 'Error al enviar la orden');
+      showToast(error?.response?.data?.error || 'Error al enviar la orden', 'danger');
     }
+  };
+
+  const chipMesa = {
+    background: '#e0f2fe',
+    color: '#075985',
+    padding: '2px 8px',
+    borderRadius: 999,
+    fontWeight: 700,
   };
 
   // ===== UI =====
@@ -237,7 +269,7 @@ export default function VistaMesero() {
       <PageTopBar title={ordenEditId ? 'Generar Orden (Edición)' : 'Generar Orden'} backTo="/panel" />
 
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden', width: '100%', boxSizing: 'border-box' }}>
-        {/* Sidebar IZQ: Categorías */}
+        {/* Sidebar IZQ: Categorías activas con platillos */}
         <div style={{ flex: '0 0 260px', padding: '1rem', borderRight: '2px solid #ccc', overflowY: 'auto' }}>
           <h2 style={{ fontSize: '1.2rem' }}>Categorías</h2>
           {categorias.map((cat) => (
@@ -262,7 +294,7 @@ export default function VistaMesero() {
           ))}
         </div>
 
-        {/* Centro: Tarjetas de productos */}
+        {/* Centro: Tarjetas (platillos de la categoría seleccionada) */}
         <div style={{ flex: '1 1 auto', minWidth: 0, padding: '1rem', overflowY: 'auto' }}>
           {ordenEditId && (
             <div
@@ -274,7 +306,8 @@ export default function VistaMesero() {
                 marginBottom: '1rem',
               }}
             >
-              <strong>Editando</strong> la orden <b>{ordenEditCodigo}</b>. Lo anexado se sumará a esa orden.
+              <strong>Editando</strong> la orden <b>{ordenEditCodigo}</b>. Solo se enviarán los ítems nuevos (los
+              existentes no se modifican).
             </div>
           )}
 
@@ -331,9 +364,9 @@ export default function VistaMesero() {
           </div>
         </div>
 
-        {/* Panel derecha: Pedido con 2 zonas drop + header sticky con Enviar */}
+        {/* Panel derecha: Pedido */}
         <div style={{ flex: '0 0 420px', padding: '0', borderLeft: '2px solid #ccc', background: '#fff', display: 'flex', flexDirection: 'column' }}>
-          {/* Header sticky sin select; muestra chip de mesa + total + botón para abrir modal */}
+          {/* Header sticky: mesa + total */}
           <div
             style={{
               position: 'sticky',
@@ -378,41 +411,52 @@ export default function VistaMesero() {
                 style={{ background: '#f1f5f9', border: '2px dashed #0f766e', minHeight: 120, borderRadius: 10, padding: 10 }}
               >
                 <h3 style={{ marginTop: 0 }}>🍽️ Platillos (para cocina)</h3>
-                {carrito.filter((i) => i.tipo === 'PLATILLO').length === 0 ? (
+
+                {/* EXISTENTES (solo lectura) */}
+                {existentes.filter((i) => i.tipo === 'PLATILLO').map((item) => (
+                  <div key={item.uid} style={{ marginBottom: '0.6rem', background: '#e2e8f0', padding: '0.6rem', borderRadius: 8 }}>
+                    <strong>{item.nombre}</strong> – Q{item.precio.toFixed(2)}
+                    {item.nota && <div><em>Nota: {item.nota}</em></div>}
+                    <div style={{ fontSize: 12, color: '#64748b' }}>No se modifica</div>
+                  </div>
+                ))}
+
+                {/* NUEVOS del carrito */}
+                {carrito.filter((i) => i.tipo === 'PLATILLO').length === 0 && existentes.filter((i) => i.tipo === 'PLATILLO').length === 0 ? (
                   <p style={{ margin: 0, color: '#64748b' }}>Arrastra aquí o usa “Agregar”.</p>
-                ) : (
-                  carrito
-                    .filter((i) => i.tipo === 'PLATILLO')
-                    .map((item) => {
-                      const cant = item.cantidad || 1;
-                      const sub = item.precio * cant;
-                      return (
-                        <div key={item.uid} style={{ marginBottom: '0.6rem', background: '#e2e8f0', padding: '0.6rem', borderRadius: 8 }}>
-                          <strong>
-                            {item.nombre}
-                            {cant > 1 ? ` x${cant}` : ''}
-                          </strong>
-                          <div>Q{item.precio.toFixed(2)}{cant > 1 ? ` • Subtotal: Q${sub.toFixed(2)}` : ''}</div>
-                          {item.nota && (
-                            <div>
-                              <em>Nota: {item.nota}</em>
-                            </div>
-                          )}
-                          <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
-                            <button onClick={() => incPorUid(item.uid)}>+1</button>
-                            <button onClick={() => decPorUid(item.uid)}>-1</button>
-                            <button
-                              onClick={() => eliminarPorUid(item.uid)}
-                              style={{ background: '#e11d48', color: '#fff', border: 'none', borderRadius: 4, padding: '.2rem .5rem' }}
-                            >
-                              Eliminar
-                            </button>
-                            <button onClick={() => moverATipo(item.uid, 'BEBIDA')}>→ Bebidas</button>
+                ) : null}
+
+                {carrito
+                  .filter((i) => i.tipo === 'PLATILLO')
+                  .map((item) => {
+                    const cant = item.cantidad || 1;
+                    const sub = item.precio * cant;
+                    return (
+                      <div key={item.uid} style={{ marginBottom: '0.6rem', background: '#e2e8f0', padding: '0.6rem', borderRadius: 8 }}>
+                        <strong>
+                          {item.nombre}
+                          {cant > 1 ? ` x${cant}` : ''}
+                        </strong>
+                        <div>Q{item.precio.toFixed(2)}{cant > 1 ? ` • Subtotal: Q${sub.toFixed(2)}` : ''}</div>
+                        {item.nota && (
+                          <div>
+                            <em>Nota: {item.nota}</em>
                           </div>
+                        )}
+                        <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+                          <button onClick={() => incPorUid(item.uid)}>+1</button>
+                          <button onClick={() => decPorUid(item.uid)}>-1</button>
+                          <button
+                            onClick={() => eliminarPorUid(item.uid)}
+                            style={{ background: '#e11d48', color: '#fff', border: 'none', borderRadius: 4, padding: '.2rem .5rem' }}
+                          >
+                            Eliminar
+                          </button>
+                          <button onClick={() => moverATipo(item.uid, 'BEBIDA')}>→ Bebidas</button>
                         </div>
-                      );
-                    })
-                )}
+                      </div>
+                    );
+                  })}
               </div>
 
               {/* Zona bebidas */}
@@ -422,48 +466,67 @@ export default function VistaMesero() {
                 style={{ background: '#fef3c7', border: '2px dashed #ea580c', minHeight: 120, borderRadius: 10, padding: 10 }}
               >
                 <h3 style={{ marginTop: 0 }}>🥤 Bebidas (las prepara el mesero)</h3>
-                {carrito.filter((i) => i.tipo === 'BEBIDA').length === 0 ? (
+
+                {/* EXISTENTES (solo lectura) */}
+                {existentes.filter((i) => i.tipo === 'BEBIDA').map((item) => (
+                  <div key={item.uid} style={{ marginBottom: '0.6rem', background: '#fde68a', padding: '0.6rem', borderRadius: 8 }}>
+                    <strong>{item.nombre}</strong> – Q{item.precio.toFixed(2)}
+                    {item.nota && <div><em>Nota: {item.nota}</em></div>}
+                    <div style={{ fontSize: 12, color: '#a16207' }}>No se modifica</div>
+                  </div>
+                ))}
+
+                {/* NUEVOS del carrito */}
+                {carrito.filter((i) => i.tipo === 'BEBIDA').length === 0 && existentes.filter((i) => i.tipo === 'BEBIDA').length === 0 ? (
                   <p style={{ margin: 0, color: '#a16207' }}>Arrastra aquí si es bebida.</p>
-                ) : (
-                  carrito
-                    .filter((i) => i.tipo === 'BEBIDA')
-                    .map((item) => {
-                      const cant = item.cantidad || 1;
-                      const sub = item.precio * cant;
-                      return (
-                        <div key={item.uid} style={{ marginBottom: '0.6rem', background: '#fde68a', padding: '0.6rem', borderRadius: 8 }}>
-                          <strong>
-                            {item.nombre}
-                            {cant > 1 ? ` x${cant}` : ''}
-                          </strong>
-                          <div>Q{item.precio.toFixed(2)}{cant > 1 ? ` • Subtotal: Q${sub.toFixed(2)}` : ''}</div>
-                          {item.nota && (
-                            <div>
-                              <em>Nota: {item.nota}</em>
-                            </div>
-                          )}
-                          <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
-                            <button onClick={() => incPorUid(item.uid)}>+1</button>
-                            <button onClick={() => decPorUid(item.uid)}>-1</button>
-                            <button
-                              onClick={() => eliminarPorUid(item.uid)}
-                              style={{ background: '#e11d48', color: '#fff', border: 'none', borderRadius: 4, padding: '.2rem .5rem' }}
-                            >
-                              Eliminar
-                            </button>
-                            <button onClick={() => moverATipo(item.uid, 'PLATILLO')}>→ Platillos</button>
+                ) : null}
+
+                {carrito
+                  .filter((i) => i.tipo === 'BEBIDA')
+                  .map((item) => {
+                    const cant = item.cantidad || 1;
+                    const sub = item.precio * cant;
+                    return (
+                      <div key={item.uid} style={{ marginBottom: '0.6rem', background: '#fde68a', padding: '0.6rem', borderRadius: 8 }}>
+                        <strong>
+                          {item.nombre}
+                          {cant > 1 ? ` x${cant}` : ''}
+                        </strong>
+                        <div>Q{item.precio.toFixed(2)}{cant > 1 ? ` • Subtotal: Q${sub.toFixed(2)}` : ''}</div>
+                        {item.nota && (
+                          <div>
+                            <em>Nota: {item.nota}</em>
                           </div>
+                        )}
+                        <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+                          <button onClick={() => incPorUid(item.uid)}>+1</button>
+                          <button onClick={() => decPorUid(item.uid)}>-1</button>
+                          <button
+                            onClick={() => eliminarPorUid(item.uid)}
+                            style={{ background: '#e11d48', color: '#fff', border: 'none', borderRadius: 4, padding: '.2rem .5rem' }}
+                          >
+                            Eliminar
+                          </button>
+                          <button onClick={() => moverATipo(item.uid, 'PLATILLO')}>→ Platillos</button>
                         </div>
-                      );
-                    })
-                )}
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Modal nota — simétrico */}
+      {/* Toast centrado arriba */}
+      <ToastMessage
+        message={toast.message}
+        type={toast.type}
+        show={toast.show}
+        onClose={() => setToast((prev) => ({ ...prev, show: false }))}
+      />
+
+      {/* Modal nota */}
       {mostrarNotas && (
         <div style={modalStyle}>
           <div style={modalContent}>
@@ -517,7 +580,7 @@ export default function VistaMesero() {
 
             <div style={{ display: 'flex', gap: '.5rem', justifyContent: 'flex-end' }}>
               <button onClick={() => setMostrarMesaModal(false)} style={btnGhost}>
-                Cancelar
+                Cerrar
               </button>
               <button onClick={enviarOrden} style={btnConfirm}>
                 {ordenEditId ? 'Anexar ítems' : 'Enviar orden'}
@@ -531,14 +594,6 @@ export default function VistaMesero() {
 }
 
 // ===== Estilos =====
-const chipMesa = {
-  background: '#e0f2fe',
-  color: '#075985',
-  padding: '2px 8px',
-  borderRadius: 999,
-  fontWeight: 700
-};
-
 const modalStyle = {
   position: 'fixed',
   inset: 0,
@@ -546,10 +601,9 @@ const modalStyle = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  zIndex: 999
+  zIndex: 999,
 };
 
-// Caja del modal simétrica (mismos paddings en todos lados)
 const modalContent = {
   background: '#fff',
   padding: '24px',
@@ -557,7 +611,7 @@ const modalContent = {
   width: 460,
   maxWidth: '92vw',
   boxSizing: 'border-box',
-  boxShadow: '0 12px 32px rgba(0,0,0,.18)'
+  boxShadow: '0 12px 32px rgba(0,0,0,.18)',
 };
 
 const textarea = {
@@ -569,13 +623,13 @@ const textarea = {
   borderRadius: 10,
   outline: 'none',
   resize: 'vertical',
-  boxSizing: 'border-box'
+  boxSizing: 'border-box',
 };
 
 const modalActions = {
   display: 'flex',
   justifyContent: 'space-between',
-  marginTop: '16px'
+  marginTop: '16px',
 };
 
 const btnGhost = {
@@ -585,7 +639,7 @@ const btnGhost = {
   border: 'none',
   borderRadius: 8,
   fontWeight: 700,
-  cursor: 'pointer'
+  cursor: 'pointer',
 };
 
 const btnConfirm = {
@@ -595,5 +649,5 @@ const btnConfirm = {
   border: 'none',
   borderRadius: 8,
   fontWeight: 700,
-  cursor: 'pointer'
+  cursor: 'pointer',
 };

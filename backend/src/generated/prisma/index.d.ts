@@ -8880,18 +8880,21 @@ export namespace Prisma {
   export type CategoriaMinAggregateOutputType = {
     id: number | null
     nombre: string | null
+    activo: boolean | null
     creadoEn: Date | null
   }
 
   export type CategoriaMaxAggregateOutputType = {
     id: number | null
     nombre: string | null
+    activo: boolean | null
     creadoEn: Date | null
   }
 
   export type CategoriaCountAggregateOutputType = {
     id: number
     nombre: number
+    activo: number
     creadoEn: number
     _all: number
   }
@@ -8908,18 +8911,21 @@ export namespace Prisma {
   export type CategoriaMinAggregateInputType = {
     id?: true
     nombre?: true
+    activo?: true
     creadoEn?: true
   }
 
   export type CategoriaMaxAggregateInputType = {
     id?: true
     nombre?: true
+    activo?: true
     creadoEn?: true
   }
 
   export type CategoriaCountAggregateInputType = {
     id?: true
     nombre?: true
+    activo?: true
     creadoEn?: true
     _all?: true
   }
@@ -9013,6 +9019,7 @@ export namespace Prisma {
   export type CategoriaGroupByOutputType = {
     id: number
     nombre: string
+    activo: boolean
     creadoEn: Date
     _count: CategoriaCountAggregateOutputType | null
     _avg: CategoriaAvgAggregateOutputType | null
@@ -9038,6 +9045,7 @@ export namespace Prisma {
   export type CategoriaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nombre?: boolean
+    activo?: boolean
     creadoEn?: boolean
     platillos?: boolean | Categoria$platillosArgs<ExtArgs>
     _count?: boolean | CategoriaCountOutputTypeDefaultArgs<ExtArgs>
@@ -9046,22 +9054,25 @@ export namespace Prisma {
   export type CategoriaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nombre?: boolean
+    activo?: boolean
     creadoEn?: boolean
   }, ExtArgs["result"]["categoria"]>
 
   export type CategoriaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nombre?: boolean
+    activo?: boolean
     creadoEn?: boolean
   }, ExtArgs["result"]["categoria"]>
 
   export type CategoriaSelectScalar = {
     id?: boolean
     nombre?: boolean
+    activo?: boolean
     creadoEn?: boolean
   }
 
-  export type CategoriaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nombre" | "creadoEn", ExtArgs["result"]["categoria"]>
+  export type CategoriaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nombre" | "activo" | "creadoEn", ExtArgs["result"]["categoria"]>
   export type CategoriaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     platillos?: boolean | Categoria$platillosArgs<ExtArgs>
     _count?: boolean | CategoriaCountOutputTypeDefaultArgs<ExtArgs>
@@ -9077,6 +9088,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       nombre: string
+      activo: boolean
       creadoEn: Date
     }, ExtArgs["result"]["categoria"]>
     composites: {}
@@ -9504,6 +9516,7 @@ export namespace Prisma {
   interface CategoriaFieldRefs {
     readonly id: FieldRef<"Categoria", 'Int'>
     readonly nombre: FieldRef<"Categoria", 'String'>
+    readonly activo: FieldRef<"Categoria", 'Boolean'>
     readonly creadoEn: FieldRef<"Categoria", 'DateTime'>
   }
     
@@ -9950,12 +9963,14 @@ export namespace Prisma {
   export type OrdenAvgAggregateOutputType = {
     id: number | null
     mesa: number | null
+    durationSec: number | null
     meseroId: number | null
   }
 
   export type OrdenSumAggregateOutputType = {
     id: number | null
     mesa: number | null
+    durationSec: number | null
     meseroId: number | null
   }
 
@@ -9964,6 +9979,8 @@ export namespace Prisma {
     codigo: string | null
     mesa: number | null
     fecha: Date | null
+    finishedAt: Date | null
+    durationSec: number | null
     meseroId: number | null
     estado: string | null
   }
@@ -9973,6 +9990,8 @@ export namespace Prisma {
     codigo: string | null
     mesa: number | null
     fecha: Date | null
+    finishedAt: Date | null
+    durationSec: number | null
     meseroId: number | null
     estado: string | null
   }
@@ -9982,6 +10001,8 @@ export namespace Prisma {
     codigo: number
     mesa: number
     fecha: number
+    finishedAt: number
+    durationSec: number
     meseroId: number
     estado: number
     _all: number
@@ -9991,12 +10012,14 @@ export namespace Prisma {
   export type OrdenAvgAggregateInputType = {
     id?: true
     mesa?: true
+    durationSec?: true
     meseroId?: true
   }
 
   export type OrdenSumAggregateInputType = {
     id?: true
     mesa?: true
+    durationSec?: true
     meseroId?: true
   }
 
@@ -10005,6 +10028,8 @@ export namespace Prisma {
     codigo?: true
     mesa?: true
     fecha?: true
+    finishedAt?: true
+    durationSec?: true
     meseroId?: true
     estado?: true
   }
@@ -10014,6 +10039,8 @@ export namespace Prisma {
     codigo?: true
     mesa?: true
     fecha?: true
+    finishedAt?: true
+    durationSec?: true
     meseroId?: true
     estado?: true
   }
@@ -10023,6 +10050,8 @@ export namespace Prisma {
     codigo?: true
     mesa?: true
     fecha?: true
+    finishedAt?: true
+    durationSec?: true
     meseroId?: true
     estado?: true
     _all?: true
@@ -10119,6 +10148,8 @@ export namespace Prisma {
     codigo: string
     mesa: number
     fecha: Date
+    finishedAt: Date | null
+    durationSec: number | null
     meseroId: number
     estado: string
     _count: OrdenCountAggregateOutputType | null
@@ -10147,6 +10178,8 @@ export namespace Prisma {
     codigo?: boolean
     mesa?: boolean
     fecha?: boolean
+    finishedAt?: boolean
+    durationSec?: boolean
     meseroId?: boolean
     estado?: boolean
     mesero?: boolean | UsuarioDefaultArgs<ExtArgs>
@@ -10159,6 +10192,8 @@ export namespace Prisma {
     codigo?: boolean
     mesa?: boolean
     fecha?: boolean
+    finishedAt?: boolean
+    durationSec?: boolean
     meseroId?: boolean
     estado?: boolean
     mesero?: boolean | UsuarioDefaultArgs<ExtArgs>
@@ -10169,6 +10204,8 @@ export namespace Prisma {
     codigo?: boolean
     mesa?: boolean
     fecha?: boolean
+    finishedAt?: boolean
+    durationSec?: boolean
     meseroId?: boolean
     estado?: boolean
     mesero?: boolean | UsuarioDefaultArgs<ExtArgs>
@@ -10179,11 +10216,13 @@ export namespace Prisma {
     codigo?: boolean
     mesa?: boolean
     fecha?: boolean
+    finishedAt?: boolean
+    durationSec?: boolean
     meseroId?: boolean
     estado?: boolean
   }
 
-  export type OrdenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "codigo" | "mesa" | "fecha" | "meseroId" | "estado", ExtArgs["result"]["orden"]>
+  export type OrdenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "codigo" | "mesa" | "fecha" | "finishedAt" | "durationSec" | "meseroId" | "estado", ExtArgs["result"]["orden"]>
   export type OrdenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     mesero?: boolean | UsuarioDefaultArgs<ExtArgs>
     items?: boolean | Orden$itemsArgs<ExtArgs>
@@ -10207,6 +10246,8 @@ export namespace Prisma {
       codigo: string
       mesa: number
       fecha: Date
+      finishedAt: Date | null
+      durationSec: number | null
       meseroId: number
       estado: string
     }, ExtArgs["result"]["orden"]>
@@ -10638,6 +10679,8 @@ export namespace Prisma {
     readonly codigo: FieldRef<"Orden", 'String'>
     readonly mesa: FieldRef<"Orden", 'Int'>
     readonly fecha: FieldRef<"Orden", 'DateTime'>
+    readonly finishedAt: FieldRef<"Orden", 'DateTime'>
+    readonly durationSec: FieldRef<"Orden", 'Int'>
     readonly meseroId: FieldRef<"Orden", 'Int'>
     readonly estado: FieldRef<"Orden", 'String'>
   }
@@ -11093,17 +11136,17 @@ export namespace Prisma {
   export type OrdenItemAvgAggregateOutputType = {
     id: number | null
     precio: number | null
+    prioridad: number | null
     ordenId: number | null
     chefId: number | null
-    prioridad: number | null
   }
 
   export type OrdenItemSumAggregateOutputType = {
     id: number | null
     precio: number | null
+    prioridad: number | null
     ordenId: number | null
     chefId: number | null
-    prioridad: number | null
   }
 
   export type OrdenItemMinAggregateOutputType = {
@@ -11114,11 +11157,11 @@ export namespace Prisma {
     tipo: string | null
     estado: string | null
     creadoEn: Date | null
-    ordenId: number | null
-    chefId: number | null
     asignadoEn: Date | null
     finalizadoEn: Date | null
     prioridad: number | null
+    ordenId: number | null
+    chefId: number | null
   }
 
   export type OrdenItemMaxAggregateOutputType = {
@@ -11129,11 +11172,11 @@ export namespace Prisma {
     tipo: string | null
     estado: string | null
     creadoEn: Date | null
-    ordenId: number | null
-    chefId: number | null
     asignadoEn: Date | null
     finalizadoEn: Date | null
     prioridad: number | null
+    ordenId: number | null
+    chefId: number | null
   }
 
   export type OrdenItemCountAggregateOutputType = {
@@ -11144,11 +11187,11 @@ export namespace Prisma {
     tipo: number
     estado: number
     creadoEn: number
-    ordenId: number
-    chefId: number
     asignadoEn: number
     finalizadoEn: number
     prioridad: number
+    ordenId: number
+    chefId: number
     _all: number
   }
 
@@ -11156,17 +11199,17 @@ export namespace Prisma {
   export type OrdenItemAvgAggregateInputType = {
     id?: true
     precio?: true
+    prioridad?: true
     ordenId?: true
     chefId?: true
-    prioridad?: true
   }
 
   export type OrdenItemSumAggregateInputType = {
     id?: true
     precio?: true
+    prioridad?: true
     ordenId?: true
     chefId?: true
-    prioridad?: true
   }
 
   export type OrdenItemMinAggregateInputType = {
@@ -11177,11 +11220,11 @@ export namespace Prisma {
     tipo?: true
     estado?: true
     creadoEn?: true
-    ordenId?: true
-    chefId?: true
     asignadoEn?: true
     finalizadoEn?: true
     prioridad?: true
+    ordenId?: true
+    chefId?: true
   }
 
   export type OrdenItemMaxAggregateInputType = {
@@ -11192,11 +11235,11 @@ export namespace Prisma {
     tipo?: true
     estado?: true
     creadoEn?: true
-    ordenId?: true
-    chefId?: true
     asignadoEn?: true
     finalizadoEn?: true
     prioridad?: true
+    ordenId?: true
+    chefId?: true
   }
 
   export type OrdenItemCountAggregateInputType = {
@@ -11207,11 +11250,11 @@ export namespace Prisma {
     tipo?: true
     estado?: true
     creadoEn?: true
-    ordenId?: true
-    chefId?: true
     asignadoEn?: true
     finalizadoEn?: true
     prioridad?: true
+    ordenId?: true
+    chefId?: true
     _all?: true
   }
 
@@ -11309,11 +11352,11 @@ export namespace Prisma {
     tipo: string
     estado: string
     creadoEn: Date
-    ordenId: number
-    chefId: number | null
     asignadoEn: Date | null
     finalizadoEn: Date | null
     prioridad: number | null
+    ordenId: number
+    chefId: number | null
     _count: OrdenItemCountAggregateOutputType | null
     _avg: OrdenItemAvgAggregateOutputType | null
     _sum: OrdenItemSumAggregateOutputType | null
@@ -11343,11 +11386,11 @@ export namespace Prisma {
     tipo?: boolean
     estado?: boolean
     creadoEn?: boolean
-    ordenId?: boolean
-    chefId?: boolean
     asignadoEn?: boolean
     finalizadoEn?: boolean
     prioridad?: boolean
+    ordenId?: boolean
+    chefId?: boolean
     orden?: boolean | OrdenDefaultArgs<ExtArgs>
     chef?: boolean | OrdenItem$chefArgs<ExtArgs>
   }, ExtArgs["result"]["ordenItem"]>
@@ -11360,11 +11403,11 @@ export namespace Prisma {
     tipo?: boolean
     estado?: boolean
     creadoEn?: boolean
-    ordenId?: boolean
-    chefId?: boolean
     asignadoEn?: boolean
     finalizadoEn?: boolean
     prioridad?: boolean
+    ordenId?: boolean
+    chefId?: boolean
     orden?: boolean | OrdenDefaultArgs<ExtArgs>
     chef?: boolean | OrdenItem$chefArgs<ExtArgs>
   }, ExtArgs["result"]["ordenItem"]>
@@ -11377,11 +11420,11 @@ export namespace Prisma {
     tipo?: boolean
     estado?: boolean
     creadoEn?: boolean
-    ordenId?: boolean
-    chefId?: boolean
     asignadoEn?: boolean
     finalizadoEn?: boolean
     prioridad?: boolean
+    ordenId?: boolean
+    chefId?: boolean
     orden?: boolean | OrdenDefaultArgs<ExtArgs>
     chef?: boolean | OrdenItem$chefArgs<ExtArgs>
   }, ExtArgs["result"]["ordenItem"]>
@@ -11394,14 +11437,14 @@ export namespace Prisma {
     tipo?: boolean
     estado?: boolean
     creadoEn?: boolean
-    ordenId?: boolean
-    chefId?: boolean
     asignadoEn?: boolean
     finalizadoEn?: boolean
     prioridad?: boolean
+    ordenId?: boolean
+    chefId?: boolean
   }
 
-  export type OrdenItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nombre" | "precio" | "nota" | "tipo" | "estado" | "creadoEn" | "ordenId" | "chefId" | "asignadoEn" | "finalizadoEn" | "prioridad", ExtArgs["result"]["ordenItem"]>
+  export type OrdenItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nombre" | "precio" | "nota" | "tipo" | "estado" | "creadoEn" | "asignadoEn" | "finalizadoEn" | "prioridad" | "ordenId" | "chefId", ExtArgs["result"]["ordenItem"]>
   export type OrdenItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orden?: boolean | OrdenDefaultArgs<ExtArgs>
     chef?: boolean | OrdenItem$chefArgs<ExtArgs>
@@ -11429,11 +11472,11 @@ export namespace Prisma {
       tipo: string
       estado: string
       creadoEn: Date
-      ordenId: number
-      chefId: number | null
       asignadoEn: Date | null
       finalizadoEn: Date | null
       prioridad: number | null
+      ordenId: number
+      chefId: number | null
     }, ExtArgs["result"]["ordenItem"]>
     composites: {}
   }
@@ -11866,11 +11909,11 @@ export namespace Prisma {
     readonly tipo: FieldRef<"OrdenItem", 'String'>
     readonly estado: FieldRef<"OrdenItem", 'String'>
     readonly creadoEn: FieldRef<"OrdenItem", 'DateTime'>
-    readonly ordenId: FieldRef<"OrdenItem", 'Int'>
-    readonly chefId: FieldRef<"OrdenItem", 'Int'>
     readonly asignadoEn: FieldRef<"OrdenItem", 'DateTime'>
     readonly finalizadoEn: FieldRef<"OrdenItem", 'DateTime'>
     readonly prioridad: FieldRef<"OrdenItem", 'Int'>
+    readonly ordenId: FieldRef<"OrdenItem", 'Int'>
+    readonly chefId: FieldRef<"OrdenItem", 'Int'>
   }
     
 
@@ -13473,6 +13516,7 @@ export namespace Prisma {
   export const CategoriaScalarFieldEnum: {
     id: 'id',
     nombre: 'nombre',
+    activo: 'activo',
     creadoEn: 'creadoEn'
   };
 
@@ -13484,6 +13528,8 @@ export namespace Prisma {
     codigo: 'codigo',
     mesa: 'mesa',
     fecha: 'fecha',
+    finishedAt: 'finishedAt',
+    durationSec: 'durationSec',
     meseroId: 'meseroId',
     estado: 'estado'
   };
@@ -13499,11 +13545,11 @@ export namespace Prisma {
     tipo: 'tipo',
     estado: 'estado',
     creadoEn: 'creadoEn',
-    ordenId: 'ordenId',
-    chefId: 'chefId',
     asignadoEn: 'asignadoEn',
     finalizadoEn: 'finalizadoEn',
-    prioridad: 'prioridad'
+    prioridad: 'prioridad',
+    ordenId: 'ordenId',
+    chefId: 'chefId'
   };
 
   export type OrdenItemScalarFieldEnum = (typeof OrdenItemScalarFieldEnum)[keyof typeof OrdenItemScalarFieldEnum]
@@ -14008,6 +14054,7 @@ export namespace Prisma {
     NOT?: CategoriaWhereInput | CategoriaWhereInput[]
     id?: IntFilter<"Categoria"> | number
     nombre?: StringFilter<"Categoria"> | string
+    activo?: BoolFilter<"Categoria"> | boolean
     creadoEn?: DateTimeFilter<"Categoria"> | Date | string
     platillos?: PlatilloListRelationFilter
   }
@@ -14015,6 +14062,7 @@ export namespace Prisma {
   export type CategoriaOrderByWithRelationInput = {
     id?: SortOrder
     nombre?: SortOrder
+    activo?: SortOrder
     creadoEn?: SortOrder
     platillos?: PlatilloOrderByRelationAggregateInput
   }
@@ -14025,6 +14073,7 @@ export namespace Prisma {
     AND?: CategoriaWhereInput | CategoriaWhereInput[]
     OR?: CategoriaWhereInput[]
     NOT?: CategoriaWhereInput | CategoriaWhereInput[]
+    activo?: BoolFilter<"Categoria"> | boolean
     creadoEn?: DateTimeFilter<"Categoria"> | Date | string
     platillos?: PlatilloListRelationFilter
   }, "id" | "nombre">
@@ -14032,6 +14081,7 @@ export namespace Prisma {
   export type CategoriaOrderByWithAggregationInput = {
     id?: SortOrder
     nombre?: SortOrder
+    activo?: SortOrder
     creadoEn?: SortOrder
     _count?: CategoriaCountOrderByAggregateInput
     _avg?: CategoriaAvgOrderByAggregateInput
@@ -14046,6 +14096,7 @@ export namespace Prisma {
     NOT?: CategoriaScalarWhereWithAggregatesInput | CategoriaScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Categoria"> | number
     nombre?: StringWithAggregatesFilter<"Categoria"> | string
+    activo?: BoolWithAggregatesFilter<"Categoria"> | boolean
     creadoEn?: DateTimeWithAggregatesFilter<"Categoria"> | Date | string
   }
 
@@ -14057,6 +14108,8 @@ export namespace Prisma {
     codigo?: StringFilter<"Orden"> | string
     mesa?: IntFilter<"Orden"> | number
     fecha?: DateTimeFilter<"Orden"> | Date | string
+    finishedAt?: DateTimeNullableFilter<"Orden"> | Date | string | null
+    durationSec?: IntNullableFilter<"Orden"> | number | null
     meseroId?: IntFilter<"Orden"> | number
     estado?: StringFilter<"Orden"> | string
     mesero?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
@@ -14068,6 +14121,8 @@ export namespace Prisma {
     codigo?: SortOrder
     mesa?: SortOrder
     fecha?: SortOrder
+    finishedAt?: SortOrderInput | SortOrder
+    durationSec?: SortOrderInput | SortOrder
     meseroId?: SortOrder
     estado?: SortOrder
     mesero?: UsuarioOrderByWithRelationInput
@@ -14082,6 +14137,8 @@ export namespace Prisma {
     NOT?: OrdenWhereInput | OrdenWhereInput[]
     mesa?: IntFilter<"Orden"> | number
     fecha?: DateTimeFilter<"Orden"> | Date | string
+    finishedAt?: DateTimeNullableFilter<"Orden"> | Date | string | null
+    durationSec?: IntNullableFilter<"Orden"> | number | null
     meseroId?: IntFilter<"Orden"> | number
     estado?: StringFilter<"Orden"> | string
     mesero?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
@@ -14093,6 +14150,8 @@ export namespace Prisma {
     codigo?: SortOrder
     mesa?: SortOrder
     fecha?: SortOrder
+    finishedAt?: SortOrderInput | SortOrder
+    durationSec?: SortOrderInput | SortOrder
     meseroId?: SortOrder
     estado?: SortOrder
     _count?: OrdenCountOrderByAggregateInput
@@ -14110,6 +14169,8 @@ export namespace Prisma {
     codigo?: StringWithAggregatesFilter<"Orden"> | string
     mesa?: IntWithAggregatesFilter<"Orden"> | number
     fecha?: DateTimeWithAggregatesFilter<"Orden"> | Date | string
+    finishedAt?: DateTimeNullableWithAggregatesFilter<"Orden"> | Date | string | null
+    durationSec?: IntNullableWithAggregatesFilter<"Orden"> | number | null
     meseroId?: IntWithAggregatesFilter<"Orden"> | number
     estado?: StringWithAggregatesFilter<"Orden"> | string
   }
@@ -14125,11 +14186,11 @@ export namespace Prisma {
     tipo?: StringFilter<"OrdenItem"> | string
     estado?: StringFilter<"OrdenItem"> | string
     creadoEn?: DateTimeFilter<"OrdenItem"> | Date | string
-    ordenId?: IntFilter<"OrdenItem"> | number
-    chefId?: IntNullableFilter<"OrdenItem"> | number | null
     asignadoEn?: DateTimeNullableFilter<"OrdenItem"> | Date | string | null
     finalizadoEn?: DateTimeNullableFilter<"OrdenItem"> | Date | string | null
     prioridad?: IntNullableFilter<"OrdenItem"> | number | null
+    ordenId?: IntFilter<"OrdenItem"> | number
+    chefId?: IntNullableFilter<"OrdenItem"> | number | null
     orden?: XOR<OrdenScalarRelationFilter, OrdenWhereInput>
     chef?: XOR<UsuarioNullableScalarRelationFilter, UsuarioWhereInput> | null
   }
@@ -14142,11 +14203,11 @@ export namespace Prisma {
     tipo?: SortOrder
     estado?: SortOrder
     creadoEn?: SortOrder
-    ordenId?: SortOrder
-    chefId?: SortOrderInput | SortOrder
     asignadoEn?: SortOrderInput | SortOrder
     finalizadoEn?: SortOrderInput | SortOrder
     prioridad?: SortOrderInput | SortOrder
+    ordenId?: SortOrder
+    chefId?: SortOrderInput | SortOrder
     orden?: OrdenOrderByWithRelationInput
     chef?: UsuarioOrderByWithRelationInput
   }
@@ -14162,11 +14223,11 @@ export namespace Prisma {
     tipo?: StringFilter<"OrdenItem"> | string
     estado?: StringFilter<"OrdenItem"> | string
     creadoEn?: DateTimeFilter<"OrdenItem"> | Date | string
-    ordenId?: IntFilter<"OrdenItem"> | number
-    chefId?: IntNullableFilter<"OrdenItem"> | number | null
     asignadoEn?: DateTimeNullableFilter<"OrdenItem"> | Date | string | null
     finalizadoEn?: DateTimeNullableFilter<"OrdenItem"> | Date | string | null
     prioridad?: IntNullableFilter<"OrdenItem"> | number | null
+    ordenId?: IntFilter<"OrdenItem"> | number
+    chefId?: IntNullableFilter<"OrdenItem"> | number | null
     orden?: XOR<OrdenScalarRelationFilter, OrdenWhereInput>
     chef?: XOR<UsuarioNullableScalarRelationFilter, UsuarioWhereInput> | null
   }, "id">
@@ -14179,11 +14240,11 @@ export namespace Prisma {
     tipo?: SortOrder
     estado?: SortOrder
     creadoEn?: SortOrder
-    ordenId?: SortOrder
-    chefId?: SortOrderInput | SortOrder
     asignadoEn?: SortOrderInput | SortOrder
     finalizadoEn?: SortOrderInput | SortOrder
     prioridad?: SortOrderInput | SortOrder
+    ordenId?: SortOrder
+    chefId?: SortOrderInput | SortOrder
     _count?: OrdenItemCountOrderByAggregateInput
     _avg?: OrdenItemAvgOrderByAggregateInput
     _max?: OrdenItemMaxOrderByAggregateInput
@@ -14202,11 +14263,11 @@ export namespace Prisma {
     tipo?: StringWithAggregatesFilter<"OrdenItem"> | string
     estado?: StringWithAggregatesFilter<"OrdenItem"> | string
     creadoEn?: DateTimeWithAggregatesFilter<"OrdenItem"> | Date | string
-    ordenId?: IntWithAggregatesFilter<"OrdenItem"> | number
-    chefId?: IntNullableWithAggregatesFilter<"OrdenItem"> | number | null
     asignadoEn?: DateTimeNullableWithAggregatesFilter<"OrdenItem"> | Date | string | null
     finalizadoEn?: DateTimeNullableWithAggregatesFilter<"OrdenItem"> | Date | string | null
     prioridad?: IntNullableWithAggregatesFilter<"OrdenItem"> | number | null
+    ordenId?: IntWithAggregatesFilter<"OrdenItem"> | number
+    chefId?: IntNullableWithAggregatesFilter<"OrdenItem"> | number | null
   }
 
   export type CocinaChefWhereInput = {
@@ -14632,6 +14693,7 @@ export namespace Prisma {
 
   export type CategoriaCreateInput = {
     nombre: string
+    activo?: boolean
     creadoEn?: Date | string
     platillos?: PlatilloCreateNestedManyWithoutCategoriaInput
   }
@@ -14639,12 +14701,14 @@ export namespace Prisma {
   export type CategoriaUncheckedCreateInput = {
     id?: number
     nombre: string
+    activo?: boolean
     creadoEn?: Date | string
     platillos?: PlatilloUncheckedCreateNestedManyWithoutCategoriaInput
   }
 
   export type CategoriaUpdateInput = {
     nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
     creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
     platillos?: PlatilloUpdateManyWithoutCategoriaNestedInput
   }
@@ -14652,6 +14716,7 @@ export namespace Prisma {
   export type CategoriaUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
     creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
     platillos?: PlatilloUncheckedUpdateManyWithoutCategoriaNestedInput
   }
@@ -14659,17 +14724,20 @@ export namespace Prisma {
   export type CategoriaCreateManyInput = {
     id?: number
     nombre: string
+    activo?: boolean
     creadoEn?: Date | string
   }
 
   export type CategoriaUpdateManyMutationInput = {
     nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
     creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CategoriaUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
     creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -14677,6 +14745,8 @@ export namespace Prisma {
     codigo?: string
     mesa: number
     fecha?: Date | string
+    finishedAt?: Date | string | null
+    durationSec?: number | null
     estado?: string
     mesero: UsuarioCreateNestedOneWithoutOrdenesMeseroInput
     items?: OrdenItemCreateNestedManyWithoutOrdenInput
@@ -14687,6 +14757,8 @@ export namespace Prisma {
     codigo?: string
     mesa: number
     fecha?: Date | string
+    finishedAt?: Date | string | null
+    durationSec?: number | null
     meseroId: number
     estado?: string
     items?: OrdenItemUncheckedCreateNestedManyWithoutOrdenInput
@@ -14696,6 +14768,8 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    durationSec?: NullableIntFieldUpdateOperationsInput | number | null
     estado?: StringFieldUpdateOperationsInput | string
     mesero?: UsuarioUpdateOneRequiredWithoutOrdenesMeseroNestedInput
     items?: OrdenItemUpdateManyWithoutOrdenNestedInput
@@ -14706,6 +14780,8 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    durationSec?: NullableIntFieldUpdateOperationsInput | number | null
     meseroId?: IntFieldUpdateOperationsInput | number
     estado?: StringFieldUpdateOperationsInput | string
     items?: OrdenItemUncheckedUpdateManyWithoutOrdenNestedInput
@@ -14716,6 +14792,8 @@ export namespace Prisma {
     codigo?: string
     mesa: number
     fecha?: Date | string
+    finishedAt?: Date | string | null
+    durationSec?: number | null
     meseroId: number
     estado?: string
   }
@@ -14724,6 +14802,8 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    durationSec?: NullableIntFieldUpdateOperationsInput | number | null
     estado?: StringFieldUpdateOperationsInput | string
   }
 
@@ -14732,6 +14812,8 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    durationSec?: NullableIntFieldUpdateOperationsInput | number | null
     meseroId?: IntFieldUpdateOperationsInput | number
     estado?: StringFieldUpdateOperationsInput | string
   }
@@ -14758,11 +14840,11 @@ export namespace Prisma {
     tipo: string
     estado: string
     creadoEn?: Date | string
-    ordenId: number
-    chefId?: number | null
     asignadoEn?: Date | string | null
     finalizadoEn?: Date | string | null
     prioridad?: number | null
+    ordenId: number
+    chefId?: number | null
   }
 
   export type OrdenItemUpdateInput = {
@@ -14787,11 +14869,11 @@ export namespace Prisma {
     tipo?: StringFieldUpdateOperationsInput | string
     estado?: StringFieldUpdateOperationsInput | string
     creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    ordenId?: IntFieldUpdateOperationsInput | number
-    chefId?: NullableIntFieldUpdateOperationsInput | number | null
     asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     prioridad?: NullableIntFieldUpdateOperationsInput | number | null
+    ordenId?: IntFieldUpdateOperationsInput | number
+    chefId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type OrdenItemCreateManyInput = {
@@ -14802,11 +14884,11 @@ export namespace Prisma {
     tipo: string
     estado: string
     creadoEn?: Date | string
-    ordenId: number
-    chefId?: number | null
     asignadoEn?: Date | string | null
     finalizadoEn?: Date | string | null
     prioridad?: number | null
+    ordenId: number
+    chefId?: number | null
   }
 
   export type OrdenItemUpdateManyMutationInput = {
@@ -14829,11 +14911,11 @@ export namespace Prisma {
     tipo?: StringFieldUpdateOperationsInput | string
     estado?: StringFieldUpdateOperationsInput | string
     creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    ordenId?: IntFieldUpdateOperationsInput | number
-    chefId?: NullableIntFieldUpdateOperationsInput | number | null
     asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     prioridad?: NullableIntFieldUpdateOperationsInput | number | null
+    ordenId?: IntFieldUpdateOperationsInput | number
+    chefId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type CocinaChefCreateInput = {
@@ -15391,6 +15473,7 @@ export namespace Prisma {
   export type CategoriaCountOrderByAggregateInput = {
     id?: SortOrder
     nombre?: SortOrder
+    activo?: SortOrder
     creadoEn?: SortOrder
   }
 
@@ -15401,56 +15484,19 @@ export namespace Prisma {
   export type CategoriaMaxOrderByAggregateInput = {
     id?: SortOrder
     nombre?: SortOrder
+    activo?: SortOrder
     creadoEn?: SortOrder
   }
 
   export type CategoriaMinOrderByAggregateInput = {
     id?: SortOrder
     nombre?: SortOrder
+    activo?: SortOrder
     creadoEn?: SortOrder
   }
 
   export type CategoriaSumOrderByAggregateInput = {
     id?: SortOrder
-  }
-
-  export type OrdenCountOrderByAggregateInput = {
-    id?: SortOrder
-    codigo?: SortOrder
-    mesa?: SortOrder
-    fecha?: SortOrder
-    meseroId?: SortOrder
-    estado?: SortOrder
-  }
-
-  export type OrdenAvgOrderByAggregateInput = {
-    id?: SortOrder
-    mesa?: SortOrder
-    meseroId?: SortOrder
-  }
-
-  export type OrdenMaxOrderByAggregateInput = {
-    id?: SortOrder
-    codigo?: SortOrder
-    mesa?: SortOrder
-    fecha?: SortOrder
-    meseroId?: SortOrder
-    estado?: SortOrder
-  }
-
-  export type OrdenMinOrderByAggregateInput = {
-    id?: SortOrder
-    codigo?: SortOrder
-    mesa?: SortOrder
-    fecha?: SortOrder
-    meseroId?: SortOrder
-    estado?: SortOrder
-  }
-
-  export type OrdenSumOrderByAggregateInput = {
-    id?: SortOrder
-    mesa?: SortOrder
-    meseroId?: SortOrder
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -15462,6 +15508,67 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type OrdenCountOrderByAggregateInput = {
+    id?: SortOrder
+    codigo?: SortOrder
+    mesa?: SortOrder
+    fecha?: SortOrder
+    finishedAt?: SortOrder
+    durationSec?: SortOrder
+    meseroId?: SortOrder
+    estado?: SortOrder
+  }
+
+  export type OrdenAvgOrderByAggregateInput = {
+    id?: SortOrder
+    mesa?: SortOrder
+    durationSec?: SortOrder
+    meseroId?: SortOrder
+  }
+
+  export type OrdenMaxOrderByAggregateInput = {
+    id?: SortOrder
+    codigo?: SortOrder
+    mesa?: SortOrder
+    fecha?: SortOrder
+    finishedAt?: SortOrder
+    durationSec?: SortOrder
+    meseroId?: SortOrder
+    estado?: SortOrder
+  }
+
+  export type OrdenMinOrderByAggregateInput = {
+    id?: SortOrder
+    codigo?: SortOrder
+    mesa?: SortOrder
+    fecha?: SortOrder
+    finishedAt?: SortOrder
+    durationSec?: SortOrder
+    meseroId?: SortOrder
+    estado?: SortOrder
+  }
+
+  export type OrdenSumOrderByAggregateInput = {
+    id?: SortOrder
+    mesa?: SortOrder
+    durationSec?: SortOrder
+    meseroId?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type OrdenScalarRelationFilter = {
@@ -15477,19 +15584,19 @@ export namespace Prisma {
     tipo?: SortOrder
     estado?: SortOrder
     creadoEn?: SortOrder
-    ordenId?: SortOrder
-    chefId?: SortOrder
     asignadoEn?: SortOrder
     finalizadoEn?: SortOrder
     prioridad?: SortOrder
+    ordenId?: SortOrder
+    chefId?: SortOrder
   }
 
   export type OrdenItemAvgOrderByAggregateInput = {
     id?: SortOrder
     precio?: SortOrder
+    prioridad?: SortOrder
     ordenId?: SortOrder
     chefId?: SortOrder
-    prioridad?: SortOrder
   }
 
   export type OrdenItemMaxOrderByAggregateInput = {
@@ -15500,11 +15607,11 @@ export namespace Prisma {
     tipo?: SortOrder
     estado?: SortOrder
     creadoEn?: SortOrder
-    ordenId?: SortOrder
-    chefId?: SortOrder
     asignadoEn?: SortOrder
     finalizadoEn?: SortOrder
     prioridad?: SortOrder
+    ordenId?: SortOrder
+    chefId?: SortOrder
   }
 
   export type OrdenItemMinOrderByAggregateInput = {
@@ -15515,33 +15622,19 @@ export namespace Prisma {
     tipo?: SortOrder
     estado?: SortOrder
     creadoEn?: SortOrder
-    ordenId?: SortOrder
-    chefId?: SortOrder
     asignadoEn?: SortOrder
     finalizadoEn?: SortOrder
     prioridad?: SortOrder
+    ordenId?: SortOrder
+    chefId?: SortOrder
   }
 
   export type OrdenItemSumOrderByAggregateInput = {
     id?: SortOrder
     precio?: SortOrder
+    prioridad?: SortOrder
     ordenId?: SortOrder
     chefId?: SortOrder
-    prioridad?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type CocinaChefCountOrderByAggregateInput = {
@@ -16147,6 +16240,10 @@ export namespace Prisma {
     connect?: OrdenItemWhereUniqueInput | OrdenItemWhereUniqueInput[]
   }
 
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type UsuarioUpdateOneRequiredWithoutOrdenesMeseroNestedInput = {
     create?: XOR<UsuarioCreateWithoutOrdenesMeseroInput, UsuarioUncheckedCreateWithoutOrdenesMeseroInput>
     connectOrCreate?: UsuarioCreateOrConnectWithoutOrdenesMeseroInput
@@ -16193,10 +16290,6 @@ export namespace Prisma {
     create?: XOR<UsuarioCreateWithoutItemsAsignadosInput, UsuarioUncheckedCreateWithoutItemsAsignadosInput>
     connectOrCreate?: UsuarioCreateOrConnectWithoutItemsAsignadosInput
     connect?: UsuarioWhereUniqueInput
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type OrdenUpdateOneRequiredWithoutItemsNestedInput = {
@@ -16530,6 +16623,8 @@ export namespace Prisma {
     codigo?: string
     mesa: number
     fecha?: Date | string
+    finishedAt?: Date | string | null
+    durationSec?: number | null
     estado?: string
     items?: OrdenItemCreateNestedManyWithoutOrdenInput
   }
@@ -16539,6 +16634,8 @@ export namespace Prisma {
     codigo?: string
     mesa: number
     fecha?: Date | string
+    finishedAt?: Date | string | null
+    durationSec?: number | null
     estado?: string
     items?: OrdenItemUncheckedCreateNestedManyWithoutOrdenInput
   }
@@ -16574,10 +16671,10 @@ export namespace Prisma {
     tipo: string
     estado: string
     creadoEn?: Date | string
-    ordenId: number
     asignadoEn?: Date | string | null
     finalizadoEn?: Date | string | null
     prioridad?: number | null
+    ordenId: number
   }
 
   export type OrdenItemCreateOrConnectWithoutChefInput = {
@@ -16699,6 +16796,8 @@ export namespace Prisma {
     codigo?: StringFilter<"Orden"> | string
     mesa?: IntFilter<"Orden"> | number
     fecha?: DateTimeFilter<"Orden"> | Date | string
+    finishedAt?: DateTimeNullableFilter<"Orden"> | Date | string | null
+    durationSec?: IntNullableFilter<"Orden"> | number | null
     meseroId?: IntFilter<"Orden"> | number
     estado?: StringFilter<"Orden"> | string
   }
@@ -16730,11 +16829,11 @@ export namespace Prisma {
     tipo?: StringFilter<"OrdenItem"> | string
     estado?: StringFilter<"OrdenItem"> | string
     creadoEn?: DateTimeFilter<"OrdenItem"> | Date | string
-    ordenId?: IntFilter<"OrdenItem"> | number
-    chefId?: IntNullableFilter<"OrdenItem"> | number | null
     asignadoEn?: DateTimeNullableFilter<"OrdenItem"> | Date | string | null
     finalizadoEn?: DateTimeNullableFilter<"OrdenItem"> | Date | string | null
     prioridad?: IntNullableFilter<"OrdenItem"> | number | null
+    ordenId?: IntFilter<"OrdenItem"> | number
+    chefId?: IntNullableFilter<"OrdenItem"> | number | null
   }
 
   export type CocinaChefUpsertWithoutChefInput = {
@@ -16761,12 +16860,14 @@ export namespace Prisma {
 
   export type CategoriaCreateWithoutPlatillosInput = {
     nombre: string
+    activo?: boolean
     creadoEn?: Date | string
   }
 
   export type CategoriaUncheckedCreateWithoutPlatillosInput = {
     id?: number
     nombre: string
+    activo?: boolean
     creadoEn?: Date | string
   }
 
@@ -16819,12 +16920,14 @@ export namespace Prisma {
 
   export type CategoriaUpdateWithoutPlatillosInput = {
     nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
     creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CategoriaUncheckedUpdateWithoutPlatillosInput = {
     id?: IntFieldUpdateOperationsInput | number
     nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
     creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -17396,10 +17499,10 @@ export namespace Prisma {
     tipo: string
     estado: string
     creadoEn?: Date | string
-    chefId?: number | null
     asignadoEn?: Date | string | null
     finalizadoEn?: Date | string | null
     prioridad?: number | null
+    chefId?: number | null
   }
 
   export type OrdenItemCreateOrConnectWithoutOrdenInput = {
@@ -17474,6 +17577,8 @@ export namespace Prisma {
     codigo?: string
     mesa: number
     fecha?: Date | string
+    finishedAt?: Date | string | null
+    durationSec?: number | null
     estado?: string
     mesero: UsuarioCreateNestedOneWithoutOrdenesMeseroInput
   }
@@ -17483,6 +17588,8 @@ export namespace Prisma {
     codigo?: string
     mesa: number
     fecha?: Date | string
+    finishedAt?: Date | string | null
+    durationSec?: number | null
     meseroId: number
     estado?: string
   }
@@ -17543,6 +17650,8 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    durationSec?: NullableIntFieldUpdateOperationsInput | number | null
     estado?: StringFieldUpdateOperationsInput | string
     mesero?: UsuarioUpdateOneRequiredWithoutOrdenesMeseroNestedInput
   }
@@ -17552,6 +17661,8 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    durationSec?: NullableIntFieldUpdateOperationsInput | number | null
     meseroId?: IntFieldUpdateOperationsInput | number
     estado?: StringFieldUpdateOperationsInput | string
   }
@@ -17703,6 +17814,8 @@ export namespace Prisma {
     codigo?: string
     mesa: number
     fecha?: Date | string
+    finishedAt?: Date | string | null
+    durationSec?: number | null
     estado?: string
   }
 
@@ -17714,10 +17827,10 @@ export namespace Prisma {
     tipo: string
     estado: string
     creadoEn?: Date | string
-    ordenId: number
     asignadoEn?: Date | string | null
     finalizadoEn?: Date | string | null
     prioridad?: number | null
+    ordenId: number
   }
 
   export type HistorialModificacionUpdateWithoutUsuarioInput = {
@@ -17788,6 +17901,8 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    durationSec?: NullableIntFieldUpdateOperationsInput | number | null
     estado?: StringFieldUpdateOperationsInput | string
     items?: OrdenItemUpdateManyWithoutOrdenNestedInput
   }
@@ -17797,6 +17912,8 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    durationSec?: NullableIntFieldUpdateOperationsInput | number | null
     estado?: StringFieldUpdateOperationsInput | string
     items?: OrdenItemUncheckedUpdateManyWithoutOrdenNestedInput
   }
@@ -17806,6 +17923,8 @@ export namespace Prisma {
     codigo?: StringFieldUpdateOperationsInput | string
     mesa?: IntFieldUpdateOperationsInput | number
     fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    durationSec?: NullableIntFieldUpdateOperationsInput | number | null
     estado?: StringFieldUpdateOperationsInput | string
   }
 
@@ -17830,10 +17949,10 @@ export namespace Prisma {
     tipo?: StringFieldUpdateOperationsInput | string
     estado?: StringFieldUpdateOperationsInput | string
     creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    ordenId?: IntFieldUpdateOperationsInput | number
     asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     prioridad?: NullableIntFieldUpdateOperationsInput | number | null
+    ordenId?: IntFieldUpdateOperationsInput | number
   }
 
   export type OrdenItemUncheckedUpdateManyWithoutChefInput = {
@@ -17844,10 +17963,10 @@ export namespace Prisma {
     tipo?: StringFieldUpdateOperationsInput | string
     estado?: StringFieldUpdateOperationsInput | string
     creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    ordenId?: IntFieldUpdateOperationsInput | number
     asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     prioridad?: NullableIntFieldUpdateOperationsInput | number | null
+    ordenId?: IntFieldUpdateOperationsInput | number
   }
 
   export type HistorialModificacionCreateManyPlatilloInput = {
@@ -18029,10 +18148,10 @@ export namespace Prisma {
     tipo: string
     estado: string
     creadoEn?: Date | string
-    chefId?: number | null
     asignadoEn?: Date | string | null
     finalizadoEn?: Date | string | null
     prioridad?: number | null
+    chefId?: number | null
   }
 
   export type OrdenItemUpdateWithoutOrdenInput = {
@@ -18056,10 +18175,10 @@ export namespace Prisma {
     tipo?: StringFieldUpdateOperationsInput | string
     estado?: StringFieldUpdateOperationsInput | string
     creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    chefId?: NullableIntFieldUpdateOperationsInput | number | null
     asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     prioridad?: NullableIntFieldUpdateOperationsInput | number | null
+    chefId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type OrdenItemUncheckedUpdateManyWithoutOrdenInput = {
@@ -18070,10 +18189,10 @@ export namespace Prisma {
     tipo?: StringFieldUpdateOperationsInput | string
     estado?: StringFieldUpdateOperationsInput | string
     creadoEn?: DateTimeFieldUpdateOperationsInput | Date | string
-    chefId?: NullableIntFieldUpdateOperationsInput | number | null
     asignadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalizadoEn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     prioridad?: NullableIntFieldUpdateOperationsInput | number | null
+    chefId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
 

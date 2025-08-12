@@ -165,21 +165,31 @@ router.patch("/items/:itemId/listo", async (req, res) => {
 });
 
 // ===== Historial
-router.get("/historial", async (req, res) => {
-  const chefId = Number(req.query?.chefId);
-  if (!chefId) return res.status(400).json({ error: "chefId requerido" });
+router.get('/historial', async (req, res) => {
+  const chefId = Number(req.query.chefId || req.headers['x-chef-id']);
+  if (!chefId) return res.status(400).json({ error: 'chefId requerido' });
 
   try {
     const items = await prisma.ordenItem.findMany({
-      where: { chefId, tipo: "PLATILLO", estado: "LISTO" },
-      orderBy: { finalizadoEn: "desc" },
-      include: { orden: { select: { codigo: true, mesa: true, fecha: true } } },
-      take: 200
+      where: { chefId, estado: 'LISTO' },
+      orderBy: { finalizadoEn: 'desc' },
+      include: {
+        orden: {
+          select: {
+            id: true,
+            codigo: true,
+            mesa: true,
+            finishedAt: true,     // <- para que el front lo muestre si quieres
+            durationSec: true,    // <- ESTA ES LA CLAVE
+          },
+        },
+      },
     });
+
     res.json(items);
   } catch (e) {
-    console.error("GET /historial ->", e?.message);
-    res.status(500).json({ error: "No se pudo obtener historial" });
+    console.error('GET /cocina/historial', e);
+    res.status(500).json({ error: 'Error al obtener historial' });
   }
 });
 

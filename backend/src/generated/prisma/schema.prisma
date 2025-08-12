@@ -42,8 +42,7 @@ model Platillo {
   precio     Float
   creadoEn   DateTime @default(now())
   disponible Boolean  @default(true)
-
-  imagenUrl String?
+  imagenUrl  String?
 
   categoriaId Int
   categoria   Categoria @relation(fields: [categoriaId], references: [id])
@@ -99,6 +98,7 @@ model HistorialModificacion {
 model Categoria {
   id        Int        @id @default(autoincrement())
   nombre    String     @unique
+  activo    Boolean    @default(true)
   creadoEn  DateTime   @default(now())
   platillos Platillo[]
 }
@@ -110,13 +110,20 @@ model Orden {
   // Código alfanumérico de 5 caracteres generado por la BD (ej: A1F3B)
   codigo String @unique @default(dbgenerated("upper(substr(md5(random()::text),1,5))")) @db.VarChar(5)
 
-  mesa     Int
-  fecha    DateTime    @default(now())
+  mesa        Int
+  fecha       DateTime  @default(now()) // (creación)
+  finishedAt  DateTime? // <-- NUEVO: momento en que se terminó
+  durationSec Int? // <-- NUEVO: duración total en segundos
+
   meseroId Int
-  mesero   Usuario     @relation("OrdenesDelMesero", fields: [meseroId], references: [id])
-  items    OrdenItem[]
+  mesero   Usuario @relation("OrdenesDelMesero", fields: [meseroId], references: [id])
+
+  items OrdenItem[]
 
   estado String @default("En espera")
+
+  @@index([fecha])
+  @@index([finishedAt])
 }
 
 // 7) OrdenItem (detalle)
@@ -132,27 +139,30 @@ enum OrdenItemTipo {
   BEBIDA
 }
 
-//8)
+// 8) OrdenItem
 model OrdenItem {
   id     Int     @id @default(autoincrement())
   nombre String
   precio Float
   nota   String?
-  tipo   String
-  estado String
+  // Mantengo string para no romper migraciones tuyas previas:
+  tipo   String // (valores esperados: "PLATILLO" | "BEBIDA")
+  estado String // (valores esperados: "PENDIENTE" | "ASIGNADO" | "PREPARANDO" | "LISTO")
 
   creadoEn DateTime @default(now())
-  ordenId  Int
-  orden    Orden    @relation(fields: [ordenId], references: [id])
-
-  chefId Int?
-  chef   Usuario? @relation("AsignadoAlChef", fields: [chefId], references: [id])
 
   asignadoEn   DateTime?
   finalizadoEn DateTime?
   prioridad    Int?
 
+  ordenId Int
+  orden   Orden @relation(fields: [ordenId], references: [id])
+
+  chefId Int?
+  chef   Usuario? @relation("AsignadoAlChef", fields: [chefId], references: [id])
+
   @@index([chefId, estado])
+  @@index([ordenId, tipo, estado])
 }
 
 // 9) Actividad de chefs (quién está activo en cocina)

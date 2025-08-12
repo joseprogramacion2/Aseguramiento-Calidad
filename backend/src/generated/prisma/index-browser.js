@@ -174,6 +174,7 @@ exports.Prisma.HistorialModificacionScalarFieldEnum = {
 exports.Prisma.CategoriaScalarFieldEnum = {
   id: 'id',
   nombre: 'nombre',
+  activo: 'activo',
   creadoEn: 'creadoEn'
 };
 
@@ -182,6 +183,8 @@ exports.Prisma.OrdenScalarFieldEnum = {
   codigo: 'codigo',
   mesa: 'mesa',
   fecha: 'fecha',
+  finishedAt: 'finishedAt',
+  durationSec: 'durationSec',
   meseroId: 'meseroId',
   estado: 'estado'
 };
@@ -194,11 +197,11 @@ exports.Prisma.OrdenItemScalarFieldEnum = {
   tipo: 'tipo',
   estado: 'estado',
   creadoEn: 'creadoEn',
-  ordenId: 'ordenId',
-  chefId: 'chefId',
   asignadoEn: 'asignadoEn',
   finalizadoEn: 'finalizadoEn',
-  prioridad: 'prioridad'
+  prioridad: 'prioridad',
+  ordenId: 'ordenId',
+  chefId: 'chefId'
 };
 
 exports.Prisma.CocinaChefScalarFieldEnum = {

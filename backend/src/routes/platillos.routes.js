@@ -46,18 +46,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Eliminar un platillo
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    await prisma.platillo.delete({ where: { id: parseInt(id) } });
-    res.json({ mensaje: 'Platillo eliminado correctamente' });
-  } catch (error) {
-    console.error('Error al eliminar platillo:', error);
-    res.status(500).json({ error: 'Error al eliminar el platillo.' });
-  }
-});
-
 // Actualizar un platillo y registrar en historial
 router.put('/:id', async (req, res) => {
   const { id } = req.params;

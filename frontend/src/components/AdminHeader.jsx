@@ -2,18 +2,23 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import React from 'react';
 
-export default function AdminHeader({ titulo = 'Panel' }) {
+export default function AdminHeader({ titulo = 'Panel', backTo }) {
   const navigate = useNavigate();
   const location = useLocation();
 
   const usuario = JSON.parse(localStorage.getItem('usuario'));
   const rol = usuario?.rol?.nombre || 'Administrador';
+  const isAdmin = (rol || '').trim().toUpperCase().startsWith('ADMIN');
+
+  // Si no se pasa backTo, decidimos por rol
+  const defaultBack = isAdmin ? '/admin' : '/panel';
+  const goBackTo = backTo || defaultBack;
 
   const enPanelAdmin = location.pathname === '/admin';
 
   const cerrarSesion = () => {
     localStorage.removeItem('usuario');
-    navigate('/');
+    navigate('/login', { replace: true });
   };
 
   return (
@@ -31,25 +36,26 @@ export default function AdminHeader({ titulo = 'Panel' }) {
           {rol}
         </span>
 
-        {/* Si no estamos en /admin, mostrar "Volver al Panel" */}
-        {!enPanelAdmin ? (
-          <Link to="/admin" style={backBtn}>← Volver al Panel</Link>
-        ) : (
+        {/* Si estamos en /admin y eres admin -> mostrar cerrar sesión.
+            En cualquier otra vista, mostrar "Volver al Panel" a la ruta correcta por rol */}
+        {enPanelAdmin && isAdmin ? (
           <button onClick={cerrarSesion} style={backBtnRed}>Cerrar sesión</button>
+        ) : (
+          <button onClick={() => navigate(goBackTo)} style={backBtn}>← Volver al Panel</button>
         )}
       </div>
     </header>
   );
 }
 
-/* === Estilos idénticos a PageTopBar === */
+/* === Estilos === */
 const wrap = {
   position: 'sticky',
   top: 0,
   zIndex: 1000,
-  width: '100vw',           // full‑bleed
+  width: '100vw',
   boxSizing: 'border-box',
-  background: '#13354B',    // mismo azul
+  background: '#13354B',
   color: 'white',
   padding: '14px 20px',
   display: 'flex',
@@ -61,17 +67,8 @@ const wrap = {
   fontSize: '20px',
 };
 
-const left = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '10px',
-};
-
-const right = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '12px',
-};
+const left = { display: 'flex', alignItems: 'center', gap: '10px' };
+const right = { display: 'flex', alignItems: 'center', gap: '12px' };
 
 const roleBadge = {
   display: 'inline-flex',
@@ -85,7 +82,7 @@ const roleBadge = {
 };
 
 const backBtn = {
-  background: '#0F7A65',    // mismo verde del botón
+  background: '#0F7A65',
   color: 'white',
   textDecoration: 'none',
   padding: '10px 16px',
@@ -99,7 +96,4 @@ const backBtn = {
   transition: 'transform .06s ease',
 };
 
-const backBtnRed = {
-  ...backBtn,
-  background: '#e63946',
-};
+const backBtnRed = { ...backBtn, background: '#e63946' };
