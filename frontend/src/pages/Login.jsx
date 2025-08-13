@@ -1,12 +1,8 @@
-// src/pages/Login.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-/* === Helpers de normalización ===
-   - normalizePermKeys: convierte cualquier forma de permiso a STRING MAYÚSCULA con _.
-   - normalizeUserForStorage: asegura que usuario.permisos exista como array de strings normalizados.
-   - normalizeRoleName: compara roles sin problemas de mayúsculas/espacios. */
+/* === Helpers de normalización === */
 function normalizePermKeys(list) {
   if (!Array.isArray(list)) return [];
   const toKey = (p) => {
@@ -21,20 +17,11 @@ function normalizePermKeys(list) {
 
 function normalizeUserForStorage(u) {
   if (!u || typeof u !== 'object') return null;
-
-  // Fuente de permisos: primero usuario.permisos; si no, rol.permisos.
   const srcPerms = Array.isArray(u?.permisos) && u.permisos.length
     ? u.permisos
     : (Array.isArray(u?.rol?.permisos) ? u.rol.permisos : []);
-
   const perms = normalizePermKeys(srcPerms);
-
-  // Devolvemos una copia con permisos ya normalizados (strings).
   return { ...u, permisos: perms };
-}
-
-function normalizeRoleName(name) {
-  return String(name || '').trim().toUpperCase();
 }
 
 /* ======================= Componente ======================= */
@@ -55,29 +42,16 @@ function Login() {
 
     try {
       const res = await axios.post('http://localhost:3001/login', credenciales);
-
-      // Validaciones defensivas
       const usuarioSrv = res?.data?.usuario;
-      if (!usuarioSrv) {
-        throw new Error('Respuesta inválida del servidor (sin usuario).');
-      }
+      if (!usuarioSrv) throw new Error('Respuesta inválida del servidor (sin usuario).');
 
-      // Normalizar antes de guardar (clave para que PanelPorRol reconozca permisos)
       const usuarioOK = normalizeUserForStorage(usuarioSrv);
-      if (!usuarioOK) {
-        throw new Error('No fue posible normalizar los datos de usuario.');
-      }
+      if (!usuarioOK) throw new Error('No fue posible normalizar los datos de usuario.');
 
       localStorage.setItem('usuario', JSON.stringify(usuarioOK));
 
-      // Redirección por rol (case-insensitive)
-      const roleName = normalizeRoleName(usuarioOK?.rol?.nombre);
-      if (roleName === 'ADMINISTRADOR' || roleName === 'ADMIN') {
-        navigate('/admin', { replace: true });
-      } else {
-        // Tu flujo usa /panel para no-admin; PanelPorRol redirige admin a /admin
-        navigate('/panel', { replace: true });
-      }
+      // 👉 SIEMPRE al panel; desde ahí las vistas se habilitan por permisos
+      navigate('/panel', { replace: true });
     } catch (err) {
       console.error(err);
       const msg = err?.response?.data?.error || err?.message || 'Error al iniciar sesión';
@@ -106,17 +80,8 @@ function Login() {
         animation: 'fadeIn 0.4s ease-in-out'
       }}>
         <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-          <div style={{
-            fontSize: '2.5rem',
-            marginBottom: '0.5rem',
-            color: '#006666'
-          }}>
-            🔐
-          </div>
-          <h2 style={{
-            margin: 0,
-            color: '#333'
-          }}>Iniciar Sesión</h2>
+          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem', color: '#006666' }}>🔐</div>
+          <h2 style={{ margin: 0, color: '#333' }}>Iniciar Sesión</h2>
         </div>
 
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -151,11 +116,6 @@ function Login() {
             </p>
           )}
         </form>
-
-        {/* Espacio para enlaces auxiliares, si luego los necesitas
-        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
-          <a href="#" style={{ color: '#006666' }}>¿Olvidaste tu contraseña?</a>
-        </div> */}
       </div>
     </div>
   );

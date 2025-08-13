@@ -40,11 +40,7 @@ export default function OrdenesMesero() {
   const listSig = (arr) => (arr || []).map(orderSig).sort().join('|');
 
   useEffect(() => {
-    const u = JSON.parse(localStorage.getItem('usuario'));
-    if (!u || (u.rol?.nombre || '').toUpperCase() !== 'MESERO') {
-      navigate('/login', { replace: true });
-      return;
-    }
+
 
     cargar({ background: false });
 

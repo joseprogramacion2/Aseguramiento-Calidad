@@ -42,12 +42,6 @@ export default function VistaMesero() {
   };
 
   useEffect(() => {
-    const u = JSON.parse(localStorage.getItem('usuario'));
-    const role = String(u?.rol?.nombre || '').trim().toUpperCase();
-    if (!u || role !== 'MESERO') {
-      navigate('/login', { replace: true });
-      return;
-    }
 
     obtenerCategoriasVisibles();
     obtenerPlatillosFiltrados();
@@ -75,7 +69,7 @@ export default function VistaMesero() {
         setCarrito([]); // muy importante para NO duplicar
       } catch {}
     }
-  }, [navigate]);
+  }, []);
 
   const obtenerCategoriasVisibles = async () => {
     try {
