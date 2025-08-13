@@ -17,10 +17,7 @@ const historialRoutes      = require("./routes/historial.routes");
 const platillosRoutes      = require("./routes/platillos.routes");
 const categoriaRoutes      = require("./routes/categoria.routes");
 const permisosRoutes       = require("./routes/permisos.routes");
-
 const ordenesMeseroRoutes  = require("./routes/ordenes.mesero.routes");
-// Router de cocina (SIN prefijo interno)
-// (usa endpoints: /heartbeat, /desactivar, /mis, /items/:id/aceptar, /items/:id/rechazar, /items/:id/listo, /historial)
 const ordenesCocinaRoutes  = require("./routes/ordenes.cocina.routes");
 
 // Prefijos “oficiales”
@@ -31,14 +28,14 @@ app.use("/historial", historialRoutes);
 app.use("/platillos", platillosRoutes);
 app.use("/categorias", categoriaRoutes);
 app.use("/permisos", permisosRoutes);
-
 app.use("/ordenes", ordenesMeseroRoutes);
 
 // Cocina: nuevo prefijo y alias para compatibilidad
-app.use("/cocina", ordenesCocinaRoutes);         // para el front actualizado
-app.use("/ordenes/cocina", ordenesCocinaRoutes); // alias para llamadas antiguas
+app.use("/cocina", ordenesCocinaRoutes);
+app.use("/ordenes/cocina", ordenesCocinaRoutes);
 
-// ===== Healthcheck =====
+// ===== Healthchecks =====
+app.get("/health", (_req, res) => res.status(200).json({ ok: true }));
 app.get("/", (_req, res) => res.send("Backend corriendo 🚀"));
 
 // ===== 404 =====
@@ -52,7 +49,12 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: "Error interno del servidor" });
 });
 
-// ===== Start =====
-app.listen(PORT, () => {
-  console.log(`Servidor backend en http://localhost:${PORT}`);
-});
+// ===== Start (solo si se ejecuta directamente) =====
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Servidor backend en http://localhost:${PORT}`);
+  });
+}
+
+// Exporta la app para pruebas
+module.exports = app;

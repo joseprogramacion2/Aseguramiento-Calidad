@@ -1,5 +1,12 @@
 {
   "dependencies": {
     "bootstrap": "^5.3.7"
+  },
+  "devDependencies": {
+    "jest": "^30.0.5",
+    "jest-html-reporters": "^3.1.7",
+    "jest-junit": "^16.0.0",
+    "nyc": "^17.1.0",
+    "supertest": "^7.1.4"
   }
 }
